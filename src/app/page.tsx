@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { OpeningIntro } from "@/components/ui/OpeningIntro";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { QuoteModal } from "@/components/ui/QuoteModal";
@@ -23,9 +22,6 @@ export default function Home() {
 
   return (
     <>
-      {/* 1. Cinematic Opening Intro Sequence */}
-      <OpeningIntro />
-
       {/* Main Page Container */}
       <div className="min-h-screen flex flex-col bg-[#F6F2EA] text-[#171717] relative selection:bg-[#9A5C2F] selection:text-white">
         {/* Navigation Bar */}
