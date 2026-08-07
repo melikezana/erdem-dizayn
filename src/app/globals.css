@@ -1,26 +1,134 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --navy: #102B49;
+    --navy-dark: #0A1B2E;
+    --navy-light: #16365C;
+    --copper: #9A5C2F;
+    --copper-light: #B8733E;
+    --copper-dark: #7A4723;
+    --bronze: #875128;
+    --ivory: #F6F2EA;
+    --softwhite: #FBFAF7;
+    --white: #FFFFFF;
+    --charcoal: #171717;
+    --charcoal-light: #2A2A2A;
+    --muted-gray: #6B7280;
   }
 }
 
+@theme {
+  --color-navy: var(--navy);
+  --color-navy-dark: var(--navy-dark);
+  --color-navy-light: var(--navy-light);
+  --color-copper: var(--copper);
+  --color-copper-light: var(--copper-light);
+  --color-copper-dark: var(--copper-dark);
+  --color-bronze: var(--bronze);
+  --color-ivory: var(--ivory);
+  --color-softwhite: var(--softwhite);
+  --color-white: var(--white);
+  --color-charcoal: var(--charcoal);
+  --color-charcoal-light: var(--charcoal-light);
+  --color-muted-gray: var(--muted-gray);
+  --font-serif: var(--font-cinzel), serif;
+  --font-sans: var(--font-plus-jakarta), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #F6F2EA;
+  color: #171717;
+  font-family: var(--font-sans);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #F6F2EA;
+  color: #171717;
+  selection-background-color: #9A5C2F;
+  selection-color: #FFFFFF;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F6F2EA;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9A5C2F;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #875128;
+}
+
+/* Faint Architectural Blueprint Grid Pattern (3-6% opacity) */
+.bg-blueprint-light {
+  background-image: 
+    linear-gradient(to right, rgba(16, 43, 73, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 43, 73, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-blueprint-dense-light {
+  background-image: 
+    linear-gradient(to right, rgba(154, 92, 47, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(154, 92, 47, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Blueprint for dark navy contrast sections */
+.bg-blueprint-dark {
+  background-image: 
+    linear-gradient(to right, rgba(246, 242, 234, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(246, 242, 234, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Editorial Typography Rules */
+.hero-headline {
+  font-size: clamp(3.5rem, 6.5vw, 7.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.section-title {
+  font-size: clamp(2.3rem, 4.5vw, 5.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+/* Light Architectural Glassmorphism */
+.glass-ivory {
+  background: rgba(246, 242, 234, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 43, 73, 0.08);
+}
+
+.glass-nav {
+  background: rgba(251, 250, 247, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(16, 43, 73, 0.08);
+}
+
+.glass-card-light {
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 43, 73, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(16, 43, 73, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-light:hover {
+  border-color: rgba(154, 92, 47, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(154, 92, 47, 0.12);
 }
