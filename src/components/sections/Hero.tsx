@@ -1,109 +1,111 @@
 "use client";
 
-import React, { useState } from "react";
-import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-
-const HeroScene = dynamic(
-  () => import("../three/HeroScene").then((mod) => mod.HeroScene),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-full min-h-[420px] sm:min-h-[540px] flex flex-col items-center justify-center bg-[#F6F2EA] text-[#102B49] p-6 text-center">
-        <div className="w-10 h-10 rounded-full border-2 border-[#9A5C2F] border-t-transparent animate-spin mb-3" />
-        <p className="font-serif text-sm text-[#102B49]">Mimari Model Yükleniyor...</p>
-      </div>
-    ),
-  }
-);
+import React from "react";
+import { ArrowDownRight, ArrowRight } from "lucide-react";
+import { HeroScene } from "@/components/three/HeroScene";
 
 interface HeroProps {
-  onOpenQuote: () => void;
+  isTechnicalMode?: boolean;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenQuote }) => {
-  const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
-
+export const Hero: React.FC<HeroProps> = ({ isTechnicalMode = false }) => {
   return (
-    <section
-      id="hero"
-      className="relative min-h-svh pt-28 pb-12 lg:pt-32 lg:pb-16 flex items-center bg-[#F6F2EA] text-[#171717] overflow-hidden"
-    >
-      {/* Subtle Blueprint Technical Grid (3-5% opacity) */}
-      <div className="absolute inset-0 bg-blueprint-light opacity-60 pointer-events-none" />
+    <section id="hero" className="relative w-full min-h-[calc(100vh-70px)] flex flex-col justify-between pt-24 sm:pt-28 pb-10 px-6 sm:px-12 lg:px-16 bg-[#F6F2EA] overflow-hidden">
+      {/* Subtle Architectural Blueprint Grid Pattern (opacity max 0.03) */}
+      <div className="absolute inset-0 bg-blueprint-light opacity-[0.035] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-          
-          {/* LEFT CONTENT (Cols 1-5 / ~38-40%) */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 space-y-6 sm:space-y-7"
-          >
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#102B49]/5 border border-[#102B49]/10">
-              <span className="w-2 h-2 rounded-full bg-[#9A5C2F]" />
-              <span className="text-[11px] font-mono tracking-[0.2em] uppercase font-semibold text-[#102B49]">
-                ERDEM DİZAYN & MEKANİK
-              </span>
+      {/* Main Two-Column Layout */}
+      <div className="max-w-[1600px] mx-auto w-full my-auto py-4 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        {/* LEFT COLUMN: Editorial Typography & CTAs (Desktop: ~42% width) */}
+        <div className="lg:col-span-5 flex flex-col justify-center z-10 order-1">
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-mono tracking-[0.25em] text-[#9A5C2F] uppercase font-semibold mb-5">
+            <span className="w-2 h-2 rounded-full bg-[#9A5C2F]" />
+            <span>ERDEM DİZAYN & MEKANİK</span>
+          </div>
+
+          {/* Headline - Exact required text & semantic line breaks */}
+          <h1 className="font-serif font-bold text-[#102B49] tracking-tight text-[clamp(2.4rem,4.2vw,4.5rem)] leading-[1.08] mb-6">
+            Bir yapıyı yalnızca tasarlamıyoruz.<br className="hidden sm:inline" />{" "}
+            <span>Nasıl yaşayacağını da kurguluyoruz.</span>
+          </h1>
+
+          {/* Desktop Paragraph Description */}
+          <p className="hidden lg:block text-[18px] sm:text-[19px] text-[#102B49]/80 font-sans leading-[1.55] font-normal mb-8 max-w-xl">
+            Erdem Dizayn & Mekanik; mimari tasarım, mühendislik ve uygulamayı aynı proje disiplini içinde buluşturur. Estetik kararları, yapının işleyişiyle birlikte ele alır.
+          </p>
+
+          {/* Desktop Tagline & Buttons */}
+          <div className="hidden lg:block space-y-6">
+            <div className="text-xs font-mono tracking-[0.2em] text-[#9A5C2F] uppercase font-semibold flex items-center gap-2">
+              <span>TASARIM · MÜHENDİSLİK · UYGULAMA</span>
             </div>
 
-            {/* Main Statement Headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#102B49] leading-[1.06]">
-              Hayal edilen mekânı,{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9A5C2F] to-[#875128] italic font-normal">
-                çalışan bir sisteme
-              </span>{" "}
-              dönüştürüyoruz.
-            </h1>
-
-            {/* Supporting Copy */}
-            <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-sans max-w-xl">
-              Mimari tasarım ile mühendisliği aynı çizgide buluşturuyor; fikrin ilk eskizinden uygulamanın son detayına kadar bütüncül çözümler üretiyoruz.
-            </p>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
-                href="#projects"
-                className="px-7 py-4 rounded-xl bg-[#102B49] hover:bg-[#16365C] text-white font-mono text-xs tracking-wider uppercase font-semibold flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all group"
+                href="#statement-1"
+                className="px-7 py-3.5 rounded-full bg-[#102B49] text-[#F6F2EA] hover:bg-[#9A5C2F] text-sm font-mono tracking-wider uppercase font-semibold flex items-center gap-3 transition-all duration-300 shadow-xs"
               >
-                <span>Projeleri Keşfet</span>
-                <ArrowDown className="w-4 h-4 text-[#9A5C2F] group-hover:translate-y-1 transition-transform" />
+                <span>Yapıyı Keşfet</span>
+                <ArrowDownRight className="w-4 h-4" />
               </a>
 
-              <button
-                onClick={onOpenQuote}
-                className="px-7 py-4 rounded-xl bg-transparent border border-[#9A5C2F] text-[#9A5C2F] hover:bg-[#9A5C2F] hover:text-white font-mono text-xs tracking-wider uppercase font-semibold flex items-center justify-center gap-2.5 transition-all cursor-pointer group"
+              <a
+                href="#projects"
+                className="px-7 py-3.5 rounded-full border border-[#102B49]/30 hover:border-[#102B49] text-[#102B49] hover:bg-[#102B49]/5 text-sm font-mono tracking-wider uppercase font-semibold flex items-center gap-3 transition-all duration-300"
               >
-                <span>Projenizi Konuşalım</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
+                <span>Projeleri Gör</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
-
-            {/* Small Architectural Statement */}
-            <div className="pt-4 border-t border-[#102B49]/10 text-[11px] font-mono tracking-[0.25em] text-[#9A5C2F] font-semibold uppercase">
-              TASARIM · MÜHENDİSLİK · UYGULAMA
-            </div>
-          </motion.div>
-
-          {/* RIGHT 3D SHOWROOM (Cols 6-12 / ~60-62%) - NO VISIBLE CARD CONTAINER! */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-7 h-[460px] sm:h-[580px] lg:h-[660px] relative w-full"
-          >
-            <HeroScene
-              activeHotspot={activeHotspot}
-              setActiveHotspot={setActiveHotspot}
-            />
-          </motion.div>
-
+          </div>
         </div>
+
+        {/* RIGHT COLUMN: 3D Villa Interactive Viewport (Desktop: ~58% width) */}
+        <div className="lg:col-span-7 w-full h-[360px] sm:h-[460px] lg:h-[600px] xl:h-[660px] relative rounded-2xl overflow-hidden border border-[#102B49]/08 bg-[#FBFAF7]/60 shadow-xs order-2">
+          <HeroScene isTechnicalMode={isTechnicalMode} />
+        </div>
+
+        {/* MOBILE / TABLET DISPLAY: Paragraph description & CTAs rendered below 3D Model */}
+        <div className="lg:hidden col-span-1 space-y-6 pt-2 order-3">
+          <p className="text-[17px] text-[#102B49]/80 font-sans leading-[1.55] font-normal">
+            Erdem Dizayn & Mekanik; mimari tasarım, mühendislik ve uygulamayı aynı proje disiplini içinde buluşturur. Estetik kararları, yapının işleyişiyle birlikte ele alır.
+          </p>
+
+          <div className="text-xs font-mono tracking-[0.2em] text-[#9A5C2F] uppercase font-semibold flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#9A5C2F]" />
+            <span>TASARIM · MÜHENDİSLİK · UYGULAMA</span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <a
+              href="#statement-1"
+              className="px-7 py-3.5 rounded-full bg-[#102B49] text-[#F6F2EA] hover:bg-[#9A5C2F] text-sm font-mono tracking-wider uppercase font-semibold flex items-center justify-center gap-3 transition-all duration-300"
+            >
+              <span>Yapıyı Keşfet</span>
+              <ArrowDownRight className="w-4 h-4" />
+            </a>
+
+            <a
+              href="#projects"
+              className="px-7 py-3.5 rounded-full border border-[#102B49]/30 hover:border-[#102B49] text-[#102B49] text-sm font-mono tracking-wider uppercase font-semibold flex items-center justify-center gap-3 transition-all duration-300"
+            >
+              <span>Projeleri Gör</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Bottom Scroll Indicator Bar */}
+      <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between border-t border-[#102B49]/10 pt-4 text-xs font-mono tracking-widest text-[#102B49]/50 uppercase">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#9A5C2F] animate-pulse" />
+          <span>AŞAĞI KAYDIRIN</span>
+        </div>
+        <span className="hidden sm:inline">ESTETİK & İŞLEV BÜTÜNLÜĞÜ</span>
       </div>
     </section>
   );

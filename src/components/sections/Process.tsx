@@ -1,129 +1,61 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
-import { PROCESS_STEPS, ProcessStep } from "@/data/process";
-import { CheckCircle2 } from "lucide-react";
+import React from "react";
+
+const PROCESS_STEPS = [
+  { step: "01", title: "Keşif", desc: "Mekânın, arazi ve ihtiyaçların sahada yerinde incelenmesi" },
+  { step: "02", title: "Analiz", desc: "İklimsel, yapısal ve teknik gereksinimlerin modellenmesi" },
+  { step: "03", title: "Konsept", desc: "Estetik kütle ve mimari dil kararlarının netleştirilmesi" },
+  { step: "04", title: "Projelendirme", desc: "Ruhsat ve mimari uygulama paftalarının hazırlanması" },
+  { step: "05", title: "Mühendislik", desc: "3D BIM tabanlı mekanik tesisat ve HVAC hesapları" },
+  { step: "06", title: "Uygulama", desc: "Uzman mühendis denetiminde eksiksiz saha imalatı" },
+  { step: "07", title: "Teslim", desc: "Test, ayar, komisyonlama sonrası kusursuz teslimat" },
+];
 
 export const Process: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"],
-  });
-
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   return (
-    <section
-      id="process"
-      ref={containerRef}
-      className="py-24 bg-[#FBFAF7] text-[#171717] relative overflow-hidden border-t border-[#102B49]/10"
-    >
-      {/* Blueprint background grid */}
-      <div className="absolute inset-0 bg-blueprint-light opacity-50 pointer-events-none" />
+    <section id="process" className="relative w-full py-32 px-6 sm:px-12 lg:px-20 border-t border-[#102B49]/10">
+      {/* Background Blueprint Grid */}
+      <div className="absolute inset-0 bg-blueprint-light opacity-25 pointer-events-none" />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-20 space-y-3">
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#9A5C2F] font-semibold block">
-            PROJE SÜRECİ
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#102B49] tracking-tight">
-            İlk çizgiden son detaya.
-          </h2>
-          <p className="text-sm sm:text-base text-gray-700 font-sans italic font-serif">
-            &quot;Her aşama, bir sonraki kararın temelini oluşturur.&quot;
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20 pb-8 border-b border-[#102B49]/10">
+          <div>
+            <div className="inline-flex items-center gap-3 px-3.5 py-1 rounded-full border border-[#102B49]/20 font-mono text-[10px] tracking-[0.25em] uppercase text-[#9A5C2F] mb-4">
+              <span>05 / ÇALIŞMA SÜRECİ</span>
+            </div>
+            <h2 className="section-title font-serif font-bold text-[#102B49] tracking-tight">
+              Her iyi yapı,<br />
+              <span className="italic font-normal text-[#9A5C2F]">doğru bir süreçle</span> başlar.
+            </h2>
+          </div>
+
+          <p className="text-sm font-mono text-[#102B49]/70 uppercase tracking-widest max-w-xs">
+            Disiplinli 7 aşamalı metodoloji
           </p>
         </div>
 
-        {/* Timeline Container */}
-        <div className="relative">
-          
-          {/* Animated Progress Line */}
-          <div className="absolute left-6 sm:left-1/2 top-0 bottom-0 w-[2px] bg-[#102B49]/10 -translate-x-1/2">
-            <motion.div
-              style={{ scaleY, transformOrigin: "top" }}
-              className="w-full h-full bg-gradient-to-b from-[#9A5C2F] via-[#875128] to-[#102B49]"
-            />
-          </div>
+        {/* Minimal Editorial Process Timeline */}
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-6 relative">
+          {PROCESS_STEPS.map((item) => (
+            <div key={item.step} className="group flex flex-col justify-between py-6 border-t border-[#102B49]/20 hover:border-[#9A5C2F] transition-colors">
+              <div>
+                <span className="font-serif text-3xl sm:text-4xl font-bold text-[#9A5C2F]/50 group-hover:text-[#9A5C2F] transition-colors block mb-4">
+                  {item.step}
+                </span>
 
-          {/* Process Steps */}
-          <div className="space-y-12 sm:space-y-16">
-            {PROCESS_STEPS.map((stepItem: ProcessStep, index: number) => {
-              const isEven = index % 2 === 0;
+                <h3 className="font-serif text-lg font-bold text-[#102B49] tracking-wide mb-2">
+                  {item.title}
+                </h3>
+              </div>
 
-              return (
-                <motion.div
-                  key={stepItem.step}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.5 }}
-                  className={`relative flex flex-col sm:flex-row items-start ${
-                    isEven ? "sm:flex-row-reverse" : ""
-                  }`}
-                >
-                  {/* Step Center Node */}
-                  <div className="absolute left-6 sm:left-1/2 -translate-x-1/2 top-0 z-20 flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-white border-2 border-[#9A5C2F] text-[#102B49] font-mono text-xs font-bold flex items-center justify-center shadow-xs">
-                      {stepItem.step}
-                    </div>
-                  </div>
-
-                  {/* Content Card */}
-                  <div className="ml-16 sm:ml-0 sm:w-1/2 sm:px-8 pt-1 sm:pt-0">
-                    <div
-                      className={`p-6 rounded-2xl bg-white border border-[#102B49]/10 shadow-xs space-y-3 hover:border-[#9A5C2F] transition-all ${
-                        isEven ? "sm:text-right" : "sm:text-left"
-                      }`}
-                    >
-                      <span className="font-mono text-xs text-[#9A5C2F] tracking-widest uppercase font-semibold block">
-                        {stepItem.subtitle}
-                      </span>
-
-                      <h3 className="font-serif text-2xl font-bold text-[#102B49]">
-                        {stepItem.title}
-                      </h3>
-
-                      <p className="text-xs text-gray-700 leading-relaxed font-sans">
-                        {stepItem.description}
-                      </p>
-
-                      {/* Deliverables List */}
-                      <div className="pt-3 border-t border-[#102B49]/10 space-y-1.5">
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500 block">
-                          Teslim Edilenler:
-                        </span>
-                        <div className={`flex flex-wrap gap-1.5 ${isEven ? "sm:justify-end" : "sm:justify-start"}`}>
-                          {stepItem.deliverables.map((del, idx) => (
-                            <span
-                              key={idx}
-                              className="px-2 py-0.5 rounded bg-[#F6F2EA] border border-[#102B49]/10 text-[10px] font-mono text-gray-700 flex items-center gap-1"
-                            >
-                              <CheckCircle2 className="w-3 h-3 text-[#9A5C2F]" />
-                              {del}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Spacer Column for Desktop */}
-                  <div className="hidden sm:block sm:w-1/2" />
-                </motion.div>
-              );
-            })}
-          </div>
-
+              <p className="text-xs text-[#102B49]/70 font-sans font-light leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
-
       </div>
     </section>
   );

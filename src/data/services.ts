@@ -1,84 +1,115 @@
 export interface ServiceItem {
+  id: string;
   number: string;
   title: string;
-  category: "Mimari" | "Mekanik" | "Uygulama";
-  shortDesc: string;
-  fullDesc: string;
-  features: string[];
-  deliverables: string[];
+  description: string;
+  discipline: string;
+  details: string[];
 }
 
 export const SERVICES_DATA: ServiceItem[] = [
   {
+    id: "mimari-tasarim",
     number: "01",
-    title: "Mimari Tasarım",
-    category: "Mimari",
-    shortDesc: "Mekânın karakterini; işlev, oran ve malzeme üzerinden kuruyoruz.",
-    fullDesc: "Estetik vizyonu mühendislik gerçekleriyle birleştiren bütüncül mimari projeler üretiyoruz. Mekân kurgusu, kütle etüdü, iklimsel yerleşim ve BIM tabanlı 3D modelleme ile projelerinizin sarsılmaz temellerini atıyoruz.",
-    features: ["Konsept & Avam Mimari Proje", "Ruhsat & Uygulama Çizimleri", "BIM 3D Modelleme", "Cephe & Kütle Tasarımı"],
-    deliverables: ["Mimari Uygulama Paftaları", "Fotogerçekçi Renderlar", "Ruhsat Dosyaları"]
+    title: "MİMARİ TASARIM",
+    description: "Mekânın karakterini; işlev, oran ve malzeme üzerinden kuruyoruz.",
+    discipline: "Mimari",
+    details: [
+      "Bütüncül konsept geliştirme",
+      "Kütle ve oran etütleri",
+      "Biyoklimatik ve çevresel mimari",
+      "BIM (Yapı Bilgi Modellemesi)"
+    ]
   },
   {
+    id: "ic-mimari",
     number: "02",
-    title: "İç Mimari",
-    category: "Mimari",
-    shortDesc: "İnsan ölçeğini merkeze alan, rafine ve yaşanabilir iç mekânlar tasarlıyoruz.",
-    fullDesc: "İç mekânlarda estetik zarafet ile görünmeyen iklimlendirme ve havalandırma altyapısını milimetrik olarak gizliyoruz. Malzeme kalitesi, akustik konfor ve ışık kurgusu ile yaşanabilir alanlar yaratıyoruz.",
-    features: ["İç Mekân Konsept & Moodboard", "Detay & İmalat Çizimleri", "Aydınlatma & Akustik Tasarım", "Gizli Menfez & Tesisat Entegrasyonu"],
-    deliverables: ["Detay İmalat Paftaları", "Malzeme Metraj Listeleri", "Özel Mobilya Çizimleri"]
+    title: "İÇ MİMARİ",
+    description: "İç mekânı yalnızca görünen yüzeylerle değil, kullanım deneyimiyle tasarlıyoruz.",
+    discipline: "Tasarım",
+    details: [
+      "Mekânsal kurgu ve sirkülasyon",
+      "Aydınlatma ve akustik tasarımı",
+      "Özel mobilya ve detay üretimi",
+      "Malzeme ve doku paletleri"
+    ]
   },
   {
+    id: "mekanik-projelendirme",
     number: "03",
-    title: "Mekanik Projelendirme",
-    category: "Mekanik",
-    shortDesc: "Yapının görünmeyen altyapısını doğru mühendislik kararlarıyla planlıyoruz.",
-    fullDesc: "Binaların yaşam kalitesini ve sürdürülebilirliğini belirleyen mekanik tesisat projelerini çiziyoruz. ASHRAE standartlarında ısı kaybı, hidrolik ve yük hesaplamaları ile çakışmasız BIM modelleri geliştiriyoruz.",
-    features: ["Isı Kaybı & Kazancı Hesapları", "BIM Clash (Çakışma) Analizi", "Enerji Verimliliği Simülasyonu", "Mekanik Şartname Hazırlığı"],
-    deliverables: ["Mekanik Ruhsat & Uygulama Projesi", "Hesap Raporları & Metraj"]
+    title: "MEKANİK PROJELENDİRME",
+    description: "Yapının görünmeyen sistemlerini daha ilk çizgide çözüyoruz.",
+    discipline: "Mühendislik",
+    details: [
+      "3D Disiplinlerarası çakışma analizi",
+      "Enerji simülasyonu ve verimlilik",
+      "Ruhsat ve uygulama projeleri",
+      "BİM LOD 400 detaylandırma"
+    ]
   },
   {
+    id: "isitma-sogutma",
     number: "04",
-    title: "Isıtma ve Soğutma",
-    category: "Mekanik",
-    shortDesc: "Konfor ile enerji verimliliğini birlikte gözeten sistemler geliştiriyoruz.",
-    fullDesc: "Mevsim koşulları ne olursa olsun optimum enerji tüketimli ve yüksek konforlu iklimlendirme sistemleri tasarlıyoruz. VRV/VRF, ısı pompası ve merkezi chiller soğutma sistemlerinde uçtan uca mühendislik sunuyoruz.",
-    features: ["VRV / VRF İklimlendirme", "Yüksek Verimli Isı Pompaları", "Chiller Soğutma Grupları", "Yerden Isıtma & Fan-Coil"],
-    deliverables: ["Kapasite & Borulama Şemaları", "Cihaz Seçim Föyü"]
+    title: "ISITMA VE SOĞUTMA",
+    description: "Konfor ile enerji verimliliğini aynı mühendislik yaklaşımı içinde ele alıyoruz.",
+    discipline: "HVAC",
+    details: [
+      "VRV / VRF İklimlendirme sistemleri",
+      "Chiller ve merkezi soğutma grupları",
+      "Toprak / hava kaynaklı ısı pompaları",
+      "Düşük sıcaklıklı radyan ısıtma"
+    ]
   },
   {
+    id: "havalandirma",
     number: "05",
-    title: "Havalandırma",
-    category: "Mekanik",
-    shortDesc: "Sağlıklı ve dengeli iç ortam koşulları için doğru hava yönetimini sağlıyoruz.",
-    fullDesc: "İç mekan hava kalitesini en üst düzeyde tutan taze hava santralleri, nem kontrolü, ısı geri kazanım üniteleri (HRV) ve sessiz kanal tasarımları kurguluyoruz.",
-    features: ["Isı Geri Kazanımlı Taze Hava", "Hijyenik Klima Santralleri", "Otopark Ezoz & Jet-Fan", "Sessiz Hava Kanalı Hesabı"],
-    deliverables: ["Hava Kanalı Şemaları", "TAB Dengeleme Şartnamesi"]
+    title: "HAVALANDIRMA",
+    description: "Sağlıklı iç ortam koşulları için hava yönetimini doğru tasarlıyoruz.",
+    discipline: "İklimlendirme",
+    details: [
+      "%100 Taze havalı klima santralleri",
+      "Yüksek verimli ısı geri kazanım",
+      "Otopark duman tahliye sistemleri",
+      "Temiz oda ve hijyenik havalandırma"
+    ]
   },
   {
+    id: "sihhi-tesisat",
     number: "06",
-    title: "Sıhhi Tesisat",
-    category: "Mekanik",
-    shortDesc: "Güvenilir, sürdürülebilir ve uygulanabilir altyapı çözümleri oluşturuyoruz.",
-    fullDesc: "Kesintisiz kullanım suyu tedariki, basınçlandırma, arıtma ve sessiz atık su tahliyesi için modern mühendislik standartlarında altyapı projeleri çiziyoruz.",
-    features: ["Basınçlı Kullanım Suyu & Hidrofor", "Sessiz Atık Su Borulama", "Gri Su & Yağmur Suyu Kazanımı", "Kullanım Suyu Arıtma"],
-    deliverables: ["Sıhhi Tesisat Paftaları", "Hidrofor & Pompa Hesapları"]
+    title: "SIHHİ TESİSAT",
+    description: "Güvenilir ve sürdürülebilir altyapıyı, uygulama gerçekleriyle birlikte planlıyoruz.",
+    discipline: "Tesisat",
+    details: [
+      "Temiz ve atık su altyapı çözümleri",
+      "Gri su ve yağmur suyu geri kazanımı",
+      "Sessiz borulama ve akustik yalıtım",
+      "Merkezi sıcak su hidronik kurgu"
+    ]
   },
   {
+    id: "yangin-sistemleri",
     number: "07",
-    title: "Yangın Sistemleri",
-    category: "Mekanik",
-    shortDesc: "Yapının güvenliğini proje aşamasından uygulamaya kadar bütüncül ele alıyoruz.",
-    fullDesc: "NFPA ve Türkiye Yangın Yönetmeliği standartlarına tam uyumlu otomatik sulu söndürme (sprinkler), gazlı söndürme ve duman tahliye sistemleri kurguluyoruz.",
-    features: ["Otomatik Sprinkler Hatları", "FM200 & Novec Gazlı Söndürme", "Yangın Dolapları & Hydrant", "Duman Tahliye & Basınçlandırma"],
-    deliverables: ["Yangın Senaryo & Hidrolik Hesabı", "Söndürme Projeleri"]
+    title: "YANGIN SİSTEMLERİ",
+    description: "Güvenliği sonradan eklenen bir unsur değil, tasarımın ayrılmaz parçası olarak görüyoruz.",
+    discipline: "Güvenlik",
+    details: [
+      "NFPA & Türkiye Yangın Yönetmeliği",
+      "Sulu ve gazlı otomasyonlu söndürme",
+      "Duman kontrol ve basınçlandırma",
+      "Yangın pompalama ve rezerv depoları"
+    ]
   },
   {
+    id: "uygulama-taahhut",
     number: "08",
-    title: "Uygulama ve Taahhüt",
-    category: "Uygulama",
-    shortDesc: "Projeyi çizimde bırakmıyor; sahada doğru uygulamayla tamamlıyoruz.",
-    fullDesc: "Tasarlanan tüm mimari ve mekanik projeleri uzman şantiye mimar ve mühendislerimizle zamanında, bütçesinde ve milimetrik imalat kalitesiyle hayata geçiriyoruz.",
-    features: ["Anahtar Teslim Şantiye Yönetimi", "Test, Ayar & Komisyonlama (TAB)", "As-Built Proje Çizimleri", "İşletme & Bakım Tesisatı"],
-    deliverables: ["As-Built Çizimler", "Komisyonlama Raporu", "Garanti & Kullanım Kılavuzu"]
+    title: "UYGULAMA VE TAAHHÜT",
+    description: "Projeyi çizimde bırakmıyor; sahada doğru uygulamayla tamamlıyoruz.",
+    discipline: "Saha",
+    details: [
+      "Anahtar teslim mimari & mekanik taahhüt",
+      "Saha şantiye yönetimi ve denetim",
+      "Test, ayar ve dengeleme (TAB)",
+      "İşletmeye alma ve as-built teslimi"
+    ]
   }
 ];
