@@ -1,17 +1,26 @@
 "use client";
 
-import React, { Suspense, useState, useRef, useSyncExternalStore } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { ContactShadows } from "@react-three/drei";
+import React, { Suspense, useRef, useSyncExternalStore } from "react";
+import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { ArchitecturalModel } from "./ArchitecturalModel";
+import { ArchitecturalModel, type VillaPointerState } from "./ArchitecturalModel";
 
 interface HeroSceneProps {
   isTechnicalMode?: boolean;
   isIntroActive?: boolean;
 }
 
+const MOBILE_QUERY = "(max-width: 767px)";
 const emptySubscribe = () => () => {};
+
+function subscribeToMobileQuery(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+
+  const media = window.matchMedia(MOBILE_QUERY);
+  media.addEventListener("change", callback);
+
+  return () => media.removeEventListener("change", callback);
+}
 
 function checkWebGLSupport(): boolean {
   if (typeof window === "undefined") return true;
@@ -25,52 +34,16 @@ function checkWebGLSupport(): boolean {
   }
 }
 
-// Camera transition controller: Top-plan view -> 3/4 architectural perspective
-function AnimatedCamera({ isIntroActive = true }: { isIntroActive?: boolean }) {
-  const animTimeRef = useRef(0);
-
-  useFrame((state, delta) => {
-    const targetPos = new THREE.Vector3(6.8, 3.4, 8.2);
-
-    if (!isIntroActive) {
-      state.camera.position.lerp(targetPos, 0.12);
-      state.camera.lookAt(0, 0, 0);
-      return;
-    }
-
-    animTimeRef.current += delta;
-    const time = animTimeRef.current;
-
-    // Timeline:
-    // 0.0s - 2.8s: Overhead top-plan view [0, 11, 1.2]
-    // 2.8s - 5.8s: Smooth transition to 3/4 perspective [6.8, 3.4, 8.2]
-    const startTime = 2.8;
-    const duration = 3.0;
-
-    let progress = 0;
-    if (time > startTime) {
-      progress = Math.min((time - startTime) / duration, 1);
-    }
-
-    const ease = 1 - Math.pow(1 - progress, 3.2);
-
-    const startPos = new THREE.Vector3(0, 11, 1.2);
-
-    state.camera.position.x = THREE.MathUtils.lerp(startPos.x, targetPos.x, ease);
-    state.camera.position.y = THREE.MathUtils.lerp(startPos.y, targetPos.y, ease);
-    state.camera.position.z = THREE.MathUtils.lerp(startPos.z, targetPos.z, ease);
-
-    state.camera.lookAt(0, 0, 0);
-  });
-
-  return null;
+function getIsMobileViewport(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(MOBILE_QUERY).matches;
 }
 
 function SceneFallback() {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-[#F6F2EA] text-[#102B49] p-6 text-center">
-      <div className="w-8 h-8 rounded-full border border-[#9A5C2F] border-t-transparent animate-spin mb-3" />
-      <span className="font-mono text-xs text-[#102B49]/70 uppercase tracking-widest">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-[#F6F2EA] p-6 text-center text-[#102B49]">
+      <div className="mb-3 h-8 w-8 animate-spin rounded-full border border-[#9A5C2F] border-t-transparent" />
+      <span className="font-mono text-xs uppercase tracking-widest text-[#102B49]/70">
         MİMARİ MODEL YÜKLENİYOR
       </span>
     </div>
@@ -79,9 +52,14 @@ function SceneFallback() {
 
 export const HeroScene: React.FC<HeroSceneProps> = ({
   isTechnicalMode = false,
-  isIntroActive = true,
+  isIntroActive = false,
 }) => {
-  const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 });
+  const pointerRef = useRef<VillaPointerState>({
+    x: 0,
+    targetInfluence: 0,
+    influence: 0,
+    yawOffset: 0,
+  });
 
   const isMounted = useSyncExternalStore(
     emptySubscribe,
@@ -95,24 +73,34 @@ export const HeroScene: React.FC<HeroSceneProps> = ({
     () => true
   );
 
+  const isMobileViewport = useSyncExternalStore(
+    subscribeToMobileQuery,
+    getIsMobileViewport,
+    () => false
+  );
+
+  const maxDpr = isMobileViewport ? 1.25 : 1.5;
+  const enableRealtimeShadows = !isMobileViewport;
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-    setPointerPos({ x, y });
+    pointerRef.current.x = x;
+    pointerRef.current.targetInfluence = 1;
   };
 
   const handleMouseLeave = () => {
-    setPointerPos({ x: 0, y: 0 });
+    pointerRef.current.x = 0;
+    pointerRef.current.targetInfluence = 0;
   };
 
   if (!isMounted) return <SceneFallback />;
 
   if (!hasWebGL) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-[#F6F2EA] text-[#102B49] p-8 text-center border border-[#102B49]/10">
-        <h3 className="font-serif text-lg font-bold mb-2 uppercase">2D Mimari Sunum</h3>
-        <p className="text-xs text-gray-600 max-w-sm font-mono">
+      <div className="flex h-full w-full flex-col items-center justify-center border border-[#102B49]/10 bg-[#F6F2EA] p-8 text-center text-[#102B49]">
+        <h3 className="mb-2 font-serif text-lg font-bold uppercase">2D Mimari Sunum</h3>
+        <p className="max-w-sm font-mono text-xs text-gray-600">
           Cihazınızda 3D hızlandırma aktif olmadığından 2D mimari projemiz gösterilmektedir.
         </p>
       </div>
@@ -123,66 +111,54 @@ export const HeroScene: React.FC<HeroSceneProps> = ({
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="w-full h-full relative select-none"
+      className="relative h-full w-full select-none"
     >
       <Canvas
-        shadows
-        dpr={[1, 2]}
-        camera={{ position: [0, 11, 1.2], fov: 35 }}
+        shadows={enableRealtimeShadows}
+        dpr={[1, maxDpr]}
+        frameloop="always"
+        camera={{ position: [6.2, 3.1, 7.2], fov: 37 }}
         gl={{
           antialias: true,
           alpha: true,
           powerPreference: "high-performance",
-          localClippingEnabled: true,
         }}
-        className="w-full h-full"
+        onCreated={({ camera, gl }) => {
+          gl.setClearColor(0x000000, 0);
+          gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          camera.lookAt(0, 0, 0);
+        }}
+        className="h-full w-full"
       >
-        <AnimatedCamera isIntroActive={isIntroActive} />
+        <ambientLight intensity={1.15} color="#FAF8F5" />
 
-        {/* Bright Architectural Studio Lighting Rig */}
-        <ambientLight intensity={1.1} color="#FAF8F5" />
+        <hemisphereLight args={["#FFFFFF", "#EAE5DC", 0.9]} />
 
-        <hemisphereLight
-          args={["#FFFFFF", "#EAE5DC", 0.9]}
-        />
-
-        {/* Neutral Key Light */}
         <directionalLight
-          position={[12, 18, 10]}
-          intensity={2.2}
+          position={[10, 16, 9]}
+          intensity={2.15}
           color="#FFFFFF"
-          castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
+          castShadow={enableRealtimeShadows}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
           shadow-bias={-0.0001}
         />
 
-        {/* Warm Architectural Rim & Fill Light */}
         <directionalLight
-          position={[-12, 10, -8]}
-          intensity={0.9}
+          position={[-12, 9, -8]}
+          intensity={0.85}
           color="#E6C5A8"
         />
 
         <Suspense fallback={null}>
           <ArchitecturalModel
-            pointerPos={pointerPos}
+            pointerRef={pointerRef}
             isTechnicalMode={isTechnicalMode}
             isIntroActive={isIntroActive}
-          />
-
-          {/* Soft Floor Shadows */}
-          <ContactShadows
-            position={[0, -1.8, 0]}
-            opacity={0.35}
-            scale={14}
-            blur={2.0}
-            far={4}
-            color="#102B49"
+            enableRealtimeShadows={enableRealtimeShadows}
           />
         </Suspense>
       </Canvas>
     </div>
   );
 };
-

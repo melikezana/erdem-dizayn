@@ -6,16 +6,20 @@ import { BUSINESS_CONTACT } from "@/lib/contact";
 
 interface NavbarProps {
   onOpenAppointment: () => void;
+  onOpenProjectTracking: () => void;
 }
 
 const NAV_LINKS = [
   { label: "Projeler", href: "#projects" },
   { label: "Hizmetler", href: "#services" },
-  { label: "Hakkımızda", href: "#about" },
+  { label: "Projem Nerede?", action: "project-tracking" },
   { label: "İletişim", href: "#contact" },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenAppointment }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenAppointment,
+  onOpenProjectTracking,
+}) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -61,13 +65,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAppointment }) => {
 
         <nav className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="min-h-11 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#102B49]/72 transition-colors hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
-            >
-              {link.label}
-            </a>
+            "href" in link ? (
+              <a
+                key={link.label}
+                href={link.href}
+                className="min-h-11 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#102B49]/72 transition-colors hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <button
+                key={link.label}
+                type="button"
+                onClick={onOpenProjectTracking}
+                className="min-h-11 cursor-pointer py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#102B49]/72 transition-colors hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+              >
+                {link.label}
+              </button>
+            )
           ))}
         </nav>
 
@@ -107,14 +122,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAppointment }) => {
           <div className="mx-4 mt-3 rounded-xl border border-[#102B49]/10 bg-[#FBFAF7] p-4 shadow-xl">
             <nav className="flex flex-col">
               {NAV_LINKS.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={closeMobileMenu}
-                  className="min-h-12 border-b border-[#102B49]/10 px-2 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
-                >
-                  {link.label}
-                </a>
+                "href" in link ? (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={closeMobileMenu}
+                    className="min-h-12 border-b border-[#102B49]/10 px-2 py-3 text-left text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <button
+                    key={link.label}
+                    type="button"
+                    onClick={() => {
+                      closeMobileMenu();
+                      onOpenProjectTracking();
+                    }}
+                    className="min-h-12 cursor-pointer border-b border-[#102B49]/10 px-2 py-3 text-left text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
+                  >
+                    {link.label}
+                  </button>
+                )
               ))}
             </nav>
 

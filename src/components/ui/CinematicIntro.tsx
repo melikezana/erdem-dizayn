@@ -1,7 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { motion } from "framer-motion";
 import { SkipForward } from "lucide-react";
 
 interface CinematicIntroProps {
@@ -9,12 +15,25 @@ interface CinematicIntroProps {
   onComplete: () => void;
 }
 
+const INTRO_SESSION_KEY = "erdem_intro_played";
+const FADE_DURATION_MS = 900;
+const FADE_START_SECONDS_FROM_END = 1;
+
 const emptySubscribe = () => () => {};
+
+function shouldForceIntroReplay(): boolean {
+  if (typeof window === "undefined") return false;
+  if (process.env.NODE_ENV !== "development") return false;
+
+  return new URLSearchParams(window.location.search).get("intro") === "1";
+}
 
 function getIntroPlayedState(): boolean {
   if (typeof window === "undefined") return false;
+  if (shouldForceIntroReplay()) return false;
+
   try {
-    return sessionStorage.getItem("erdem_intro_played") === "true";
+    return sessionStorage.getItem(INTRO_SESSION_KEY) === "true";
   } catch {
     return false;
   }
@@ -25,8 +44,9 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
   onComplete,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const finishStartedRef = useRef(false);
+  const finishTimerRef = useRef<number | null>(null);
   const [videoOpacity, setVideoOpacity] = useState(1);
-  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const hasAlreadyPlayed = useSyncExternalStore(
     emptySubscribe,
@@ -34,28 +54,36 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
     () => false
   );
 
-  // If intro was already played in this session, trigger completion callback once
   useEffect(() => {
     if (hasAlreadyPlayed) {
       onComplete();
     }
   }, [hasAlreadyPlayed, onComplete]);
 
-  // Skip / Finish Handler
+  useEffect(() => {
+    return () => {
+      if (finishTimerRef.current) {
+        window.clearTimeout(finishTimerRef.current);
+      }
+    };
+  }, []);
+
   const handleFinish = useCallback(() => {
+    if (finishStartedRef.current) return;
+    finishStartedRef.current = true;
+
     try {
-      sessionStorage.setItem("erdem_intro_played", "true");
+      sessionStorage.setItem(INTRO_SESSION_KEY, "true");
     } catch {
-      // Ignore storage error
+      // Storage can fail in private browsing modes; the intro should still finish.
     }
-    setIsFadingOut(true);
+
     setVideoOpacity(0);
-    setTimeout(() => {
+    finishTimerRef.current = window.setTimeout(() => {
       onComplete();
-    }, 850);
+    }, FADE_DURATION_MS);
   }, [onComplete]);
 
-  // Keyboard listeners (Escape or Space to skip)
   useEffect(() => {
     if (!isIntroActive || hasAlreadyPlayed) return;
 
@@ -70,12 +98,16 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isIntroActive, hasAlreadyPlayed, handleFinish]);
 
-  // Video Playback & Handoff timing (last 1.0s cross-fade over ~850ms)
   const handleTimeUpdate = () => {
     const video = videoRef.current;
-    if (!video || isFadingOut) return;
+    if (!video || finishStartedRef.current || Number.isNaN(video.duration)) {
+      return;
+    }
 
-    if (video.duration > 0 && video.currentTime >= video.duration - 1.0) {
+    if (
+      video.duration > 0 &&
+      video.currentTime >= video.duration - FADE_START_SECONDS_FROM_END
+    ) {
       handleFinish();
     }
   };
@@ -83,62 +115,57 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
   if (hasAlreadyPlayed || !isIntroActive) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: videoOpacity }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed inset-0 z-50 bg-[#F6F2EA] flex items-center justify-center overflow-hidden pointer-events-auto"
-      >
-        {/* Fullscreen Background Intro Video */}
-        <video
-          ref={videoRef}
-          src="/videos/erdem-intro.mp4"
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={handleFinish}
-          onError={handleFinish}
-          className="w-full h-full object-cover transition-opacity duration-850"
-        />
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{ opacity: videoOpacity }}
+      transition={{
+        duration: FADE_DURATION_MS / 1000,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#F6F2EA] pointer-events-auto"
+    >
+      <video
+        ref={videoRef}
+        src="/videos/erdem-intro.mp4"
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleFinish}
+        onError={handleFinish}
+        className="h-full w-full object-cover"
+      />
 
-        {/* HUD Overlay: Title & Skip Button */}
-        <div className="absolute inset-0 pointer-events-none p-6 sm:p-10 flex flex-col justify-between z-10">
-          {/* Top Bar HUD */}
-          <div className="w-full flex items-center justify-between pointer-events-auto">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#F6F2EA]/90 border border-[#102B49]/15 backdrop-blur-md shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#9A5C2F] animate-pulse" />
-              <span className="text-xs font-mono tracking-[0.2em] text-[#102B49] uppercase font-bold">
-                ERDEM DİZAYN & MEKANİK
-              </span>
-            </div>
-
-            {/* "Geç" Skip Button */}
-            <button
-              onClick={handleFinish}
-              className="px-4 py-2 rounded-full border border-[#102B49]/20 bg-[#F6F2EA]/95 backdrop-blur-md text-[#102B49] hover:bg-[#102B49] hover:text-[#F6F2EA] text-xs font-mono tracking-wider uppercase font-semibold transition-all duration-300 shadow-sm flex items-center gap-2 cursor-pointer pointer-events-auto"
-              aria-label="Giriş animasyonunu geç"
-            >
-              <span>Geç</span>
-              <SkipForward className="w-3.5 h-3.5 text-[#9A5C2F]" />
-            </button>
-          </div>
-
-          {/* Bottom HUD Bar */}
-          <div className="w-full flex justify-between items-end text-xs font-mono tracking-widest text-[#102B49]/70 uppercase pointer-events-none">
-            <div className="bg-[#F6F2EA]/90 px-4 py-1.5 rounded-full backdrop-blur-md border border-[#102B49]/10 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#9A5C2F]" />
-              <span>SİNEMATİK MİMARİ TANITIM</span>
-            </div>
-            <span className="hidden sm:inline bg-[#F6F2EA]/90 px-4 py-1.5 rounded-full backdrop-blur-md border border-[#102B49]/10">
-              ÇİZGİ → PLAN → YAPI
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-6 sm:p-10">
+        <div className="flex w-full items-center justify-between pointer-events-auto">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-[#102B49]/15 bg-[#F6F2EA]/90 px-4 py-2 shadow-xs backdrop-blur-md">
+            <span className="h-2 w-2 rounded-full bg-[#9A5C2F] animate-pulse" />
+            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#102B49]">
+              {"ERDEM D\u0130ZAYN & MEKAN\u0130K"}
             </span>
           </div>
+
+          <button
+            onClick={handleFinish}
+            className="flex cursor-pointer items-center gap-2 rounded-full border border-[#102B49]/20 bg-[#F6F2EA]/95 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#102B49] shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-[#102B49] hover:text-[#F6F2EA]"
+            aria-label={"Giri\u015f animasyonunu ge\u00e7"}
+          >
+            <span>{"Ge\u00e7"}</span>
+            <SkipForward className="h-3.5 w-3.5 text-[#9A5C2F]" />
+          </button>
         </div>
-      </motion.div>
-    </AnimatePresence>
+
+        <div className="flex w-full items-end justify-between font-mono text-xs uppercase tracking-widest text-[#102B49]/70 pointer-events-none">
+          <div className="flex items-center gap-2 rounded-full border border-[#102B49]/10 bg-[#F6F2EA]/90 px-4 py-1.5 backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#9A5C2F]" />
+            <span>{"S\u0130NEMAT\u0130K M\u0130MAR\u0130 TANITIM"}</span>
+          </div>
+          <span className="hidden rounded-full border border-[#102B49]/10 bg-[#F6F2EA]/90 px-4 py-1.5 backdrop-blur-md sm:inline">
+            {"\u00c7\u0130ZG\u0130 \u2192 PLAN \u2192 YAPI"}
+          </span>
+        </div>
+      </div>
+    </motion.div>
   );
 };
