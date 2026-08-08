@@ -42,7 +42,7 @@ export const LoadingScreen: React.FC = () => {
               transition={{ duration: 0.6 }}
               className="flex items-center gap-3 mb-6"
             >
-              <div className="w-10 h-10 rounded border border-[#102B49]/20 flex items-center justify-center bg-[#102B49] text-white font-serif font-bold text-base tracking-tighter shadow-sm">
+              <div className="w-10 h-10 rounded border border-[#102B49]/20 flex items-center justify-center bg-[#102B49] text-white font-serif font-bold text-base shadow-sm">
                 ED
               </div>
               <div className="text-left">

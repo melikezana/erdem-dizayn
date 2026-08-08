@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Cinzel } from "next/font/google";
+import { Cinzel, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -10,32 +10,30 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Erdem Dizayn & Mekanik | Tasarımdan Uygulamaya Güvenilir Çözümler",
   description:
-    "Mimari tasarım ile mühendisliği aynı çizgide buluşturuyor; fikrin ilk eskizinden uygulamanın son detayına kadar bütüncül çözümler üretiyoruz. Kurucu: Erdem Çeken.",
+    "İç mimari tasarım, mekanik çözümler, tadilat ve anahtar teslim uygulama süreçlerini tek elden yöneten premium tasarım ve uygulama hizmeti.",
   keywords: [
     "Erdem Dizayn",
     "Erdem Mekanik",
     "Erdem Çeken",
-    "Mimari Tasarım",
-    "Mekanik Mühendislik",
     "İç Mimari",
-    "HVAC",
-    "VRV İklimlendirme",
-    "Sıhhi Tesisat",
-    "Yangın Sistemleri",
-    "Uygulama ve Taahhüt",
-    "3D Mimari Showroom"
+    "Mekanik Çözümler",
+    "Tadilat",
+    "Yenileme",
+    "Anahtar Teslim",
+    "Uygulama",
+    "Mekân Tasarımı",
   ],
   authors: [{ name: "Erdem Çeken" }],
   openGraph: {
-    title: "Erdem Dizayn & Mekanik | Mimari & Mekanik Mühendislik",
-    description: "Tasarımdan Uygulamaya Güvenilir Çözümler.",
+    title: "Erdem Dizayn & Mekanik | Tasarım · Mekanik · Uygulama",
+    description: "Tasarımdan uygulamaya güvenilir çözümler.",
     url: "https://erdemdizaynmekanik.com",
     siteName: "Erdem Dizayn & Mekanik",
     locale: "tr_TR",
@@ -51,9 +49,9 @@ export default function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${plusJakartaSans.variable} ${cinzel.variable} scroll-smooth h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${cinzel.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#F6F2EA] text-[#171717] font-sans selection:bg-[#9A5C2F] selection:text-white">
+      <body className="flex min-h-full flex-col bg-[#F6F2EA] font-sans text-[#171717] selection:bg-[#9A5C2F] selection:text-white">
         {children}
       </body>
     </html>

@@ -1,20 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowUpRight, Camera, Menu, X } from "lucide-react";
+import { BUSINESS_CONTACT } from "@/lib/contact";
 
 interface NavbarProps {
-  onOpenQuote: () => void;
+  onOpenAppointment: () => void;
 }
 
 const NAV_LINKS = [
-  { label: "Hakkımızda", href: "#statement-1" },
-  { label: "Hizmetler", href: "#services" },
   { label: "Projeler", href: "#projects" },
+  { label: "Hizmetler", href: "#services" },
+  { label: "Hakkımızda", href: "#about" },
   { label: "İletişim", href: "#contact" },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenQuote }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenAppointment }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -22,89 +23,124 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuote }) => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#F6F2EA]/90 backdrop-blur-md border-b border-[#102B49]/08 py-4"
-          : "bg-transparent py-6 sm:py-8"
+          ? "border-b border-[#102B49]/10 bg-[#F6F2EA]/90 py-3 shadow-sm backdrop-blur-md"
+          : "bg-transparent py-5 sm:py-7"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
-        {/* Brand Logo / Typography */}
-        <a href="#hero" className="flex items-baseline gap-2 group">
-          <span className="font-serif text-lg sm:text-xl font-bold tracking-wider text-[#102B49] leading-none">
-            ERDEM
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
+        <a
+          href="#hero"
+          className="group flex min-h-11 items-center gap-3"
+          onClick={closeMobileMenu}
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded border border-[#102B49]/15 bg-[#102B49] font-serif text-sm font-bold text-[#F6F2EA]">
+            ED
           </span>
-          <span className="text-[10px] sm:text-xs tracking-[0.24em] text-[#9A5C2F] uppercase font-mono font-semibold">
-            DİZAYN & MEKANİK
+          <span className="flex flex-col leading-none">
+            <span className="font-serif text-base font-bold text-[#102B49] sm:text-lg">
+              ERDEM
+            </span>
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9A5C2F]">
+              Dizayn & Mekanik
+            </span>
           </span>
         </a>
 
-        {/* Minimal Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-10">
+        <nav className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-xs font-mono tracking-[0.2em] uppercase text-[#102B49]/70 hover:text-[#102B49] font-medium transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-[#9A5C2F] hover:after:w-full after:transition-all"
+              className="min-h-11 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#102B49]/72 transition-colors hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center">
-          <button
-            onClick={onOpenQuote}
-            className="px-5 py-2.5 rounded-full border border-[#102B49]/20 hover:border-[#102B49] bg-[#102B49] hover:bg-[#9A5C2F] text-white text-xs font-mono tracking-wider uppercase font-semibold flex items-center gap-2 transition-all shadow-xs cursor-pointer"
+        <div className="hidden items-center gap-3 md:flex">
+          <a
+            href={BUSINESS_CONTACT.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram profilini aç"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#102B49]/15 text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
           >
-            <span>Projenizi Konuşalım</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            <Camera className="h-4 w-4" />
+          </a>
+          <button
+            type="button"
+            onClick={onOpenAppointment}
+            className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full bg-[#102B49] px-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          >
+            <span>Randevu Oluştur</span>
+            <ArrowUpRight className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-[#102B49] focus:outline-none"
-          aria-label="Menüyü Aç"
+          type="button"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[#102B49]/10 bg-[#F6F2EA]/80 text-[#102B49] transition-colors hover:border-[#9A5C2F] md:hidden"
+          aria-label={mobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+          aria-expanded={mobileMenuOpen}
         >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#F6F2EA] border-b border-[#102B49]/10 px-8 py-8 space-y-6">
-          <div className="flex flex-col space-y-4">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-mono tracking-widest uppercase text-[#102B49] py-2 border-b border-[#102B49]/10"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
+        <div className="md:hidden">
+          <div className="mx-4 mt-3 rounded-xl border border-[#102B49]/10 bg-[#FBFAF7] p-4 shadow-xl">
+            <nav className="flex flex-col">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={closeMobileMenu}
+                  className="min-h-12 border-b border-[#102B49]/10 px-2 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
 
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenQuote();
-            }}
-            className="w-full py-3.5 rounded-full bg-[#102B49] text-white font-mono text-xs tracking-wider uppercase font-semibold flex items-center justify-center gap-2"
-          >
-            <span>Projenizi Konuşalım</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </button>
+            <div className="mt-4 grid grid-cols-[1fr_auto] gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu();
+                  onOpenAppointment();
+                }}
+                className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-5 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F]"
+              >
+                <span>Randevu Oluştur</span>
+                <ArrowUpRight className="h-4 w-4" />
+              </button>
+              <a
+                href={BUSINESS_CONTACT.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram profilini aç"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-[#102B49]/15 text-[#102B49]"
+              >
+                <Camera className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
         </div>
       )}
     </header>

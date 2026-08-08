@@ -95,27 +95,39 @@ body {
 
 /* Editorial Typography Rules */
 .opening-display-text {
-  font-size: clamp(4rem, 16vw, 18rem);
+  font-size: 6rem;
   line-height: 0.85;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .hero-headline {
-  font-size: clamp(2.5rem, 5.5vw, 6.2rem);
+  font-size: 4rem;
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .statement-headline {
-  font-size: clamp(2.2rem, 5vw, 5.5rem);
+  font-size: 3.5rem;
   line-height: 1.1;
-  letter-spacing: -0.015em;
+  letter-spacing: 0;
 }
 
 .section-title {
-  font-size: clamp(2rem, 4vw, 4.2rem);
+  font-size: 3rem;
   line-height: 1.08;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .opening-display-text {
+    font-size: 4rem;
+  }
+
+  .hero-headline,
+  .statement-headline,
+  .section-title {
+    font-size: 2.75rem;
+  }
 }
 
 /* Architectural Clip & Mask Reveal Animation Classes */
@@ -136,4 +148,3 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(16, 43, 73, 0.08);
 }
-

@@ -1,133 +1,76 @@
 "use client";
 
 import React from "react";
-import { ArrowUpRight, MapPin, Phone, Mail, Globe } from "lucide-react";
+import { ArrowUpRight, Camera, MessageCircle, Phone } from "lucide-react";
+import { BUSINESS_CONTACT, createWhatsAppUrl } from "@/lib/contact";
+
+const FOOTER_LINKS = [
+  { label: "Projeler", href: "#projects" },
+  { label: "Hizmetler", href: "#services" },
+  { label: "İletişim", href: "#contact" },
+];
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#0A1B2E] border-t border-[#9A5C2F]/20 text-[#F6F2EA] relative overflow-hidden">
-      {/* Blueprint Dark background */}
-      <div className="absolute inset-0 bg-blueprint-dark opacity-20 pointer-events-none" />
+    <footer className="relative overflow-hidden border-t border-[#9A5C2F]/20 bg-[#0A1B2E] px-5 pb-28 pt-14 text-[#F6F2EA] sm:px-10 md:pb-12 lg:px-20">
+      <div className="absolute inset-0 bg-blueprint-dark opacity-[0.18] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-12 border-b border-[#9A5C2F]/15">
-          {/* Brand Info (Cols 1-5) */}
-          <div className="md:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded border border-[#9A5C2F] flex items-center justify-center bg-[#102B49] text-[#9A5C2F] font-serif font-bold text-base tracking-tighter">
-                ED
-              </div>
-              <div>
-                <h3 className="font-serif text-xl font-bold tracking-wider text-white">
-                  ERDEM DİZAYN & MEKANİK
-                </h3>
-                <p className="text-[10px] tracking-[0.22em] text-[#9A5C2F] uppercase font-mono font-semibold">
-                  Mimarlık & Mekanik Mühendislik
-                </p>
-              </div>
-            </div>
-
-            <p className="text-xs text-gray-300 font-serif italic max-w-md leading-relaxed">
-              &quot;Tasarımdan Uygulamaya Güvenilir Çözümler.&quot;
-            </p>
-
-            <p className="text-xs text-gray-400 max-w-sm leading-relaxed font-sans">
-              Mimari konsept tasarımdan iç mekana, VRV/VRF iklimlendirmeden yangın otomasyonu ve anahtar teslim taahhüt süreçlerine bütüncül mühendislik yaklaşımı.
-            </p>
-
-            <div className="pt-2 text-xs font-mono text-[#9A5C2F]">
-              Kurucu & Yönetici: <span className="text-white font-semibold">Erdem Çeken</span>
-            </div>
-          </div>
-
-          {/* Quick Navigation (Cols 6-8) */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-[#9A5C2F] font-semibold">
-              Hızlı Navigasyon
-            </h4>
-            <ul className="space-y-2 text-xs text-gray-300">
-              <li>
-                <a href="#hero" className="hover:text-[#9A5C2F] transition-colors flex items-center gap-1">
-                  <span>Ana Sayfa</span>
-                </a>
-              </li>
-              <li>
-                <a href="#philosophy" className="hover:text-[#9A5C2F] transition-colors flex items-center gap-1">
-                  <span>Hakkımızda & Felsefemiz</span>
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-[#9A5C2F] transition-colors flex items-center gap-1">
-                  <span>Uzmanlık Alanları</span>
-                </a>
-              </li>
-              <li>
-                <a href="#projects" className="hover:text-[#9A5C2F] transition-colors flex items-center gap-1">
-                  <span>Seçili Projeler</span>
-                </a>
-              </li>
-              <li>
-                <a href="#process" className="hover:text-[#9A5C2F] transition-colors flex items-center gap-1">
-                  <span>Proje Süreci</span>
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="hover:text-[#9A5C2F] transition-colors flex items-center gap-1">
-                  <span>İletişim & Teklif</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Summary (Cols 9-12) */}
-          <div className="md:col-span-4 space-y-4">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-[#9A5C2F] font-semibold">
-              Stüdyo & Merkez
-            </h4>
-            <ul className="space-y-3 text-xs text-gray-300 font-sans">
-              <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#9A5C2F] shrink-0 mt-0.5" />
-                <span>Maslak Mahallesi, Büyükdere Caddesi No:245, Sarıyer / İstanbul</span>
-              </li>
-              <li className="flex items-center gap-2.5 font-mono">
-                <Phone className="w-4 h-4 text-[#9A5C2F] shrink-0" />
-                <a href="tel:+902120000000" className="hover:text-white transition-colors">
-                  +90 (212) 000 00 00
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5 font-mono">
-                <Mail className="w-4 h-4 text-[#9A5C2F] shrink-0" />
-                <a href="mailto:info@erdemdizayn.com" className="hover:text-white transition-colors">
-                  info@erdemdizayn.com
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5 font-mono">
-                <Globe className="w-4 h-4 text-[#9A5C2F] shrink-0" />
-                <span>www.erdemdizaynmekanik.com</span>
-              </li>
-            </ul>
-
-            <div className="pt-2">
-              <a
-                href="https://wa.me/905320000000"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[#9A5C2F] hover:text-white transition-colors"
-              >
-                <span>WhatsApp İletişim Hattı</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-400 font-mono gap-4">
-          <p>© {new Date().getFullYear()} Erdem Dizayn & Mekanik. Tüm hakları saklıdır.</p>
-          <p>
-            Kurucu: <span className="text-gray-200 font-semibold">Erdem Çeken</span>
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 border-b border-white/10 pb-10 md:grid-cols-12">
+        <div className="md:col-span-6">
+          <h2 className="font-serif text-2xl font-bold text-white">
+            ERDEM DİZAYN & MEKANİK
+          </h2>
+          <p className="mt-3 max-w-md text-sm leading-7 text-white/68">
+            Tasarımdan uygulamaya güvenilir çözümler.
           </p>
+          <a
+            href={BUSINESS_CONTACT.phoneHref}
+            className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E]"
+          >
+            <Phone className="h-4 w-4 text-[#B8733E]" />
+            <span>{BUSINESS_CONTACT.phoneDisplay}</span>
+          </a>
         </div>
+
+        <nav className="flex flex-col gap-3 md:col-span-3">
+          {FOOTER_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="min-h-8 text-sm font-semibold text-white/72 transition-colors hover:text-[#B8733E]"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex flex-col items-start gap-3 md:col-span-3">
+          <a
+            href={createWhatsAppUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E]"
+          >
+            <MessageCircle className="h-4 w-4 text-[#B8733E]" />
+            <span>WhatsApp</span>
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+          <a
+            href={BUSINESS_CONTACT.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E]"
+          >
+            <Camera className="h-4 w-4 text-[#B8733E]" />
+            <span>Instagram</span>
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-3 pt-7 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+        <p>© {new Date().getFullYear()} Erdem Dizayn & Mekanik.</p>
+        <p>İç Mimari · Mekanik · Uygulama</p>
       </div>
     </footer>
   );

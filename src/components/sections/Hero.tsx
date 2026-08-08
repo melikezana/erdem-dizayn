@@ -2,16 +2,21 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDownRight, ArrowRight } from "lucide-react";
+import { ArrowDownRight, ArrowRight, CalendarDays, MessageCircle } from "lucide-react";
 import { HeroScene } from "@/components/three/HeroScene";
 import { ArchitecturalPlanSVG } from "@/components/ui/ArchitecturalPlanSVG";
 import { CinematicIntro } from "@/components/ui/CinematicIntro";
+import { createWhatsAppUrl } from "@/lib/contact";
 
 interface HeroProps {
   isTechnicalMode?: boolean;
+  onOpenAppointment: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ isTechnicalMode = false }) => {
+export const Hero: React.FC<HeroProps> = ({
+  isTechnicalMode = false,
+  onOpenAppointment,
+}) => {
   const [isIntroActive, setIsIntroActive] = useState(true);
 
   const handleIntroComplete = () => {
@@ -21,147 +26,122 @@ export const Hero: React.FC<HeroProps> = ({ isTechnicalMode = false }) => {
   return (
     <section
       id="hero"
-      className="relative w-full min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-8 px-6 sm:px-12 lg:px-16 bg-[#F6F2EA] overflow-hidden select-none"
+      className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-[#F6F2EA] px-5 pb-8 pt-24 text-[#102B49] sm:px-10 sm:pt-28 lg:px-16"
     >
-      {/* 0. Cinematic Video Opening Intro & Handoff */}
       <CinematicIntro
         isIntroActive={isIntroActive}
         onComplete={handleIntroComplete}
       />
 
-      {/* 1. Architectural Paper Base Texture & Blueprint SVG Overlay */}
-      <div className="absolute inset-0 bg-blueprint-light opacity-[0.035] pointer-events-none -z-10" />
+      <div className="absolute inset-0 -z-10 bg-blueprint-light opacity-[0.035] pointer-events-none" />
       <ArchitecturalPlanSVG isIntroActive={isIntroActive} />
 
-      {/* 2. Main Horizontal Composition (Desktop: Editorial text ~38%, 3D architecture ~62%) */}
-      <div className="max-w-[1700px] mx-auto w-full my-auto py-2 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center z-10">
-        
-        {/* LEFT COLUMN: Editorial Typography & CTAs */}
-        <div className="lg:col-span-5 flex flex-col justify-center order-1">
-          {/* Eyebrow */}
+      <div className="z-10 mx-auto grid w-full max-w-[1700px] grid-cols-1 items-center gap-8 py-3 lg:grid-cols-12 lg:gap-10">
+        <div className="order-1 flex flex-col justify-center lg:col-span-5">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: isIntroActive ? 5.2 : 0.1 }}
-            className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-mono tracking-[0.25em] text-[#9A5C2F] uppercase font-semibold mb-5"
+            className="mb-5 inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.24em] text-[#9A5C2F] sm:text-sm"
           >
-            <span className="w-2 h-2 rounded-full bg-[#9A5C2F]" />
+            <span className="h-2 w-2 rounded-full bg-[#9A5C2F]" />
             <span>ERDEM DİZAYN & MEKANİK</span>
           </motion.div>
 
-          {/* Headline with exact Turkish typography & semantic line breaks */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: isIntroActive ? 5.4 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="font-serif font-bold text-[#102B49] tracking-tight text-[clamp(2.5rem,5vw,5.5rem)] leading-[1.08] mb-6"
+            transition={{
+              duration: 0.9,
+              delay: isIntroActive ? 5.4 : 0.2,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="mb-6 font-serif text-4xl font-bold leading-[1.08] text-[#102B49] sm:text-5xl lg:text-6xl xl:text-7xl"
           >
-            Her yapı bir çizgiyle başlar.<br className="hidden sm:inline" />{" "}
-            <span className="text-[#102B49]/90 font-normal">
-              Biz o çizgiyi yaşanabilir bir sisteme dönüştürüyoruz.
+            Hayal ettiğiniz mekânı,
+            <br className="hidden sm:block" />
+            <span className="font-normal text-[#102B49]/90">
+              {" "}
+              birlikte gerçeğe dönüştürelim.
             </span>
           </motion.h1>
 
-          {/* Desktop Paragraph Description */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: isIntroActive ? 5.6 : 0.3 }}
-            className="hidden lg:block text-[18px] xl:text-[20px] text-[#102B49]/80 font-sans leading-[1.6] font-normal mb-8 max-w-xl"
+            className="max-w-xl text-base leading-8 text-[#102B49]/80 sm:text-lg lg:text-xl"
           >
-            Erdem Dizayn & Mekanik; mimari tasarım, mühendislik ve uygulamayı aynı proje bütünlüğü içinde ele alır. Fikirden ilk çizgiye, ilk çizgiden yapının son detayına kadar estetik ile işlevi birlikte tasarlarız.
+            İç mimari tasarımdan mekanik uygulamalara kadar, mekânınızı
+            ihtiyaçlarınıza göre planlıyor; tasarımdan uygulamaya süreci tek
+            elden yönetiyoruz.
           </motion.p>
 
-          {/* Desktop Tagline & Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: isIntroActive ? 5.8 : 0.4 }}
-            className="hidden lg:block space-y-6"
+            className="mt-8 space-y-6"
           >
-            <div className="text-xs font-mono tracking-[0.2em] text-[#9A5C2F] uppercase font-semibold flex items-center gap-2">
-              <span>MİMARİ · MÜHENDİSLİK · UYGULAMA</span>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#9A5C2F]">
+              <span>İÇ MİMARİ · MEKANİK · UYGULAMA</span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 pt-1">
-              <a
-                href="#statement-1"
-                className="px-8 py-4 rounded-full bg-[#102B49] text-[#F6F2EA] hover:bg-[#9A5C2F] text-sm font-mono tracking-wider uppercase font-semibold flex items-center gap-3 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <button
+                type="button"
+                onClick={onOpenAppointment}
+                className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full bg-[#102B49] px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] shadow-md transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
               >
-                <span>Yapıyı Keşfet</span>
-                <ArrowDownRight className="w-4 h-4" />
-              </a>
+                <CalendarDays className="h-4 w-4" />
+                <span>Randevu Oluştur</span>
+              </button>
 
               <a
                 href="#projects"
-                className="px-8 py-4 rounded-full border border-[#102B49]/30 hover:border-[#102B49] text-[#102B49] hover:bg-[#102B49]/5 text-sm font-mono tracking-wider uppercase font-semibold flex items-center gap-3 transition-all duration-300"
+                className="inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#102B49]/25 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
               >
                 <span>Projeleri İncele</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" />
               </a>
             </div>
+
+            <a
+              href={createWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+            >
+              <MessageCircle className="h-4 w-4 text-[#9A5C2F]" />
+              <span>WhatsApp&apos;tan Yaz</span>
+              <ArrowRight className="h-4 w-4" />
+            </a>
           </motion.div>
         </div>
 
-        {/* RIGHT COLUMN: 3D Villa Interactive Viewport (Desktop: ~62% width, Integrated with paper) */}
-        <div className="lg:col-span-7 w-full h-[380px] sm:h-[480px] lg:h-[620px] xl:h-[680px] relative overflow-hidden order-2">
+        <div className="relative order-2 h-[360px] w-full overflow-hidden sm:h-[480px] lg:col-span-7 lg:h-[620px] xl:h-[680px]">
           <HeroScene
             isTechnicalMode={isTechnicalMode}
             isIntroActive={isIntroActive}
           />
         </div>
-
-        {/* MOBILE / TABLET DISPLAY: Sequence (Description -> Subline -> CTAs rendered below 3D Model) */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: isIntroActive ? 5.8 : 0.4 }}
-          className="lg:hidden col-span-1 space-y-5 pt-2 order-3"
-        >
-          <p className="text-[17px] text-[#102B49]/80 font-sans leading-[1.55] font-normal">
-            Erdem Dizayn & Mekanik; mimari tasarım, mühendislik ve uygulamayı aynı proje bütünlüğü içinde ele alır. Fikirden ilk çizgiye, ilk çizgiden yapının son detayına kadar estetik ile işlevi birlikte tasarlarız.
-          </p>
-
-          <div className="text-xs font-mono tracking-[0.2em] text-[#9A5C2F] uppercase font-semibold flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#9A5C2F]" />
-            <span>MİMARİ · MÜHENDİSLİK · UYGULAMA</span>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
-            <a
-              href="#statement-1"
-              className="px-7 py-3.5 rounded-full bg-[#102B49] text-[#F6F2EA] hover:bg-[#9A5C2F] text-sm font-mono tracking-wider uppercase font-semibold flex items-center justify-center gap-3 transition-all duration-300"
-            >
-              <span>Yapıyı Keşfet</span>
-              <ArrowDownRight className="w-4 h-4" />
-            </a>
-
-            <a
-              href="#projects"
-              className="px-7 py-3.5 rounded-full border border-[#102B49]/30 hover:border-[#102B49] text-[#102B49] text-sm font-mono tracking-wider uppercase font-semibold flex items-center justify-center gap-3 transition-all duration-300"
-            >
-              <span>Projeleri İncele</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-        </motion.div>
-
       </div>
 
-      {/* 3. Bottom Architectural Paper Indicator Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: isIntroActive ? 6.0 : 0.5, duration: 0.8 }}
-        className="max-w-[1700px] mx-auto w-full flex items-center justify-between border-t border-[#102B49]/10 pt-4 text-xs font-mono tracking-widest text-[#102B49]/50 uppercase z-10"
+        className="z-10 mx-auto flex w-full max-w-[1700px] items-center justify-between border-t border-[#102B49]/10 pt-4 text-xs uppercase tracking-[0.18em] text-[#102B49]/55"
       >
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#9A5C2F] animate-pulse" />
-          <span>AŞAĞI KAYDIRIN</span>
+          <span className="h-1.5 w-1.5 rounded-full bg-[#9A5C2F]" />
+          <span>Aşağı kaydırın</span>
         </div>
-        <span className="hidden sm:inline">ÇİZGİ → PLAN → HACİM → YAPI → YAŞAM</span>
+        <span className="hidden sm:inline">
+          Tasarım · Planlama · Uygulama · Teslim
+        </span>
+        <ArrowDownRight className="h-4 w-4 sm:hidden" />
       </motion.div>
     </section>
   );
 };
-

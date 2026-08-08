@@ -252,7 +252,7 @@ export const ArchitecturalPlanSVG: React.FC<ArchitecturalPlanSVGProps> = ({
             <line x1="825" y1="625" x2="825" y2="660" stroke="#102B49" strokeWidth="0.5" />
 
             <text x="712" y="586" fontSize="10" fontFamily="sans-serif" fontWeight="bold" fill="#102B49" letterSpacing="0.1em">ERDEM DİZAYN & MEKANİK</text>
-            <text x="712" y="612" fontSize="9" fontFamily="monospace" fill="#9A5C2F" fontWeight="bold">PROJE: VİLLA ERDEM / MİMARİ MÜHENDİSLİK</text>
+            <text x="712" y="612" fontSize="9" fontFamily="monospace" fill="#9A5C2F" fontWeight="bold">PROJE: VİLLA ERDEM / TASARIM UYGULAMA</text>
 
             <text x="712" y="642" fontSize="8" fontFamily="monospace" fill="#102B49">ÖLÇEK: 1:100</text>
             <text x="712" y="653" fontSize="8" fontFamily="monospace" fill="#102B49">TARİH: 2026</text>
@@ -265,4 +265,3 @@ export const ArchitecturalPlanSVG: React.FC<ArchitecturalPlanSVGProps> = ({
     </div>
   );
 };
-

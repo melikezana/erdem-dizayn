@@ -3,66 +3,41 @@
 import React, { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { QuoteModal } from "@/components/ui/QuoteModal";
+import { AppointmentModal } from "@/components/ui/AppointmentModal";
+import { ConversionActions } from "@/components/ui/ConversionActions";
 import { Hero } from "@/components/sections/Hero";
 import { StatementOne } from "@/components/sections/StatementOne";
-import { TechnicalReveal } from "@/components/sections/TechnicalReveal";
-import { StatementTwo } from "@/components/sections/StatementTwo";
 import { Services } from "@/components/sections/Services";
 import { Projects } from "@/components/sections/Projects";
 import { Process } from "@/components/sections/Process";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 
 export default function Home() {
-  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
-  const [isTechnicalMode, setIsTechnicalMode] = useState(false);
+  const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
 
-  const handleOpenQuote = () => setIsQuoteOpen(true);
-  const handleCloseQuote = () => setIsQuoteOpen(false);
+  const handleOpenAppointment = () => setIsAppointmentOpen(true);
+  const handleCloseAppointment = () => setIsAppointmentOpen(false);
 
   return (
-    <>
-      {/* Main Page Container */}
-      <div className="min-h-screen flex flex-col bg-[#F6F2EA] text-[#171717] relative selection:bg-[#9A5C2F] selection:text-white">
-        {/* Navigation Bar */}
-        <Navbar onOpenQuote={handleOpenQuote} />
+    <div className="relative flex min-h-screen flex-col bg-[#F6F2EA] text-[#171717] selection:bg-[#9A5C2F] selection:text-white">
+      <Navbar onOpenAppointment={handleOpenAppointment} />
 
-        {/* Editorial Scroll Narrative */}
-        <main className="relative z-10 flex-grow">
-          {/* Hero Section */}
-          <Hero isTechnicalMode={isTechnicalMode} />
+      <main className="relative z-10 flex-grow">
+        <Hero onOpenAppointment={handleOpenAppointment} />
+        <StatementOne />
+        <Services onOpenAppointment={handleOpenAppointment} />
+        <Projects onOpenAppointment={handleOpenAppointment} />
+        <Process />
+        <ContactCTA onOpenAppointment={handleOpenAppointment} />
+      </main>
 
-          {/* Statement 01 */}
-          <StatementOne />
+      <Footer />
 
-          {/* Technical Reveal / Blueprint View */}
-          <TechnicalReveal
-            isTechnicalMode={isTechnicalMode}
-            setIsTechnicalMode={setIsTechnicalMode}
-          />
-
-          {/* Statement 02 */}
-          <StatementTwo />
-
-          {/* Editorial Services 01-08 */}
-          <Services onOpenQuote={handleOpenQuote} />
-
-          {/* Selected Projects */}
-          <Projects />
-
-          {/* Minimal Process 01-07 */}
-          <Process />
-
-          {/* Final Deep Navy CTA */}
-          <ContactCTA onOpenQuote={handleOpenQuote} />
-        </main>
-
-        {/* Footer */}
-        <Footer />
-
-        {/* Proposal / Contact Modal */}
-        <QuoteModal isOpen={isQuoteOpen} onClose={handleCloseQuote} />
-      </div>
-    </>
+      <AppointmentModal
+        isOpen={isAppointmentOpen}
+        onClose={handleCloseAppointment}
+      />
+      <ConversionActions onOpenAppointment={handleOpenAppointment} />
+    </div>
   );
 }
