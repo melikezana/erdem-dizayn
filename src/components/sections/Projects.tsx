@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PROJECTS_DATA } from "@/data/projects";
 
@@ -35,7 +36,11 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenAppointment }) => {
 
         <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
           {PROJECTS_DATA.map((project, index) => (
-            <figure key={project.id} className="group">
+            <Link
+              key={project.id}
+              href={`/projeler/${project.slug}`}
+              className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+            >
               <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#102B49]/10 bg-[#102B49]/5">
                 <Image
                   src={project.image}
@@ -47,7 +52,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenAppointment }) => {
                 />
               </div>
 
-              <figcaption className="grid grid-cols-1 gap-3 border-b border-[#102B49]/10 py-5 sm:grid-cols-[1fr_auto] sm:items-end">
+              <div className="grid grid-cols-1 gap-3 border-b border-[#102B49]/10 py-5 sm:grid-cols-[1fr_auto] sm:items-end">
                 <div>
                   <h3 className="font-serif text-2xl font-bold text-[#102B49] sm:text-3xl">
                     {project.title}
@@ -57,8 +62,8 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenAppointment }) => {
                   </p>
                 </div>
                 <p className="text-sm text-[#102B49]/68">{project.location}</p>
-              </figcaption>
-            </figure>
+              </div>
+            </Link>
           ))}
         </div>
 

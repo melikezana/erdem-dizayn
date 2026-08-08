@@ -1,13 +1,21 @@
+import { CONTACT_CONFIG, WHATSAPP_MESSAGES } from "@/config/contact";
+
 export const BUSINESS_CONTACT = {
-  phoneDisplay: "+90 553 983 14 20",
-  phoneHref: "tel:+905539831420",
-  whatsappBaseUrl: "https://wa.me/905539831420",
-  instagramUrl: "https://www.instagram.com/erdem.dizayn.mekanik/",
+  ...CONTACT_CONFIG,
+  phoneHref: `tel:${CONTACT_CONFIG.phoneInternational}`,
+  whatsappBaseUrl: `https://wa.me/${CONTACT_CONFIG.whatsappNumber}`,
 };
 
-export const QUICK_WHATSAPP_MESSAGE =
-  "Merhaba Erdem Bey, web siteniz üzerinden projem hakkında bilgi almak istiyorum.";
+export const QUICK_WHATSAPP_MESSAGE = WHATSAPP_MESSAGES.quick;
 
 export function createWhatsAppUrl(message: string = QUICK_WHATSAPP_MESSAGE) {
   return `${BUSINESS_CONTACT.whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
+}
+
+export function createProjectTrackingWhatsAppUrl(projectCode: string) {
+  return createWhatsAppUrl(WHATSAPP_MESSAGES.projectTracking(projectCode));
+}
+
+export function createAppointmentFollowUpWhatsAppUrl() {
+  return createWhatsAppUrl(WHATSAPP_MESSAGES.appointmentFollowUp);
 }

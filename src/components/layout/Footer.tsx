@@ -7,6 +7,7 @@ import { BUSINESS_CONTACT, createWhatsAppUrl } from "@/lib/contact";
 const FOOTER_LINKS = [
   { label: "Projeler", href: "#projects" },
   { label: "Hizmetler", href: "#services" },
+  { label: "Projem Nerede?", href: "#project-tracking" },
   { label: "İletişim", href: "#contact" },
 ];
 
@@ -25,7 +26,7 @@ export const Footer: React.FC = () => {
           </p>
           <a
             href={BUSINESS_CONTACT.phoneHref}
-            className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E]"
+            className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
             <Phone className="h-4 w-4 text-[#B8733E]" />
             <span>{BUSINESS_CONTACT.phoneDisplay}</span>
@@ -37,7 +38,7 @@ export const Footer: React.FC = () => {
             <a
               key={link.label}
               href={link.href}
-              className="min-h-8 text-sm font-semibold text-white/72 transition-colors hover:text-[#B8733E]"
+              className="min-h-8 text-sm font-semibold text-white/72 transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
             >
               {link.label}
             </a>
@@ -49,7 +50,7 @@ export const Footer: React.FC = () => {
             href={createWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E]"
+            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
             <MessageCircle className="h-4 w-4 text-[#B8733E]" />
             <span>WhatsApp</span>
@@ -59,7 +60,7 @@ export const Footer: React.FC = () => {
             href={BUSINESS_CONTACT.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E]"
+            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
             <Camera className="h-4 w-4 text-[#B8733E]" />
             <span>Instagram</span>

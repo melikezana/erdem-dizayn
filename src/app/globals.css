@@ -38,9 +38,14 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
   background-color: #F6F2EA;
   color: #171717;
   font-family: var(--font-sans);
+}
+
+section[id] {
+  scroll-margin-top: 96px;
 }
 
 body {

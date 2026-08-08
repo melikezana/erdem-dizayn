@@ -22,8 +22,11 @@ export const ProjectTrackingTeaser: React.FC<ProjectTrackingTeaserProps> = ({
           <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9A5C2F]">
             PROJEM NEREDE?
           </span>
-          <p className="mt-3 max-w-xl font-serif text-2xl font-bold leading-tight text-[#102B49] sm:text-3xl">
-            Projenizin hangi aşamada olduğunu tek bakışta görün.
+          <h2 className="mt-3 max-w-xl font-serif text-2xl font-bold leading-tight text-[#102B49] sm:text-3xl">
+            Projeniz hangi aşamada?
+          </h2>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-[#102B49]/68">
+            Planlamadan teslime kadar süreci tek bakışta takip edin.
           </p>
         </div>
 
