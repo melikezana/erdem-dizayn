@@ -16,13 +16,16 @@ SUPABASE_SERVICE_ROLE_KEY=
 
 ## Database
 
-Run `supabase/migrations/001_initial_schema.sql` in Supabase. It creates:
+Run the SQL files in `supabase/migrations/` in order. They create:
 
 - `appointments`
 - `projects`
 - `project_updates`
+- `project_code_sequences`
 
-RLS is enabled on all three tables. The migration intentionally creates no public table policies; public visitors use controlled API routes only.
+RLS is enabled on all application tables. The migration intentionally creates no public table policies; public visitors use controlled API routes only.
+
+Project codes are generated server-side by `public.create_project(...)` with the format `ERD-YYNNN`. The RPC does not accept a `project_code` argument, updates a per-year sequence atomically, uppercases the generated code, and relies on the database `UNIQUE` constraint on `projects.project_code` for collision safety.
 
 Optional local/demo data lives in `supabase/seed.sql` and inserts `ERD-24018`.
 

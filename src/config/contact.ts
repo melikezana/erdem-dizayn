@@ -12,4 +12,6 @@ export const WHATSAPP_MESSAGES = {
     "Merhaba Erdem Bey,\nweb siteniz üzerinden randevu talebi oluşturdum.",
   projectTracking: (projectCode: string) =>
     `Merhaba Erdem Bey,\n${projectCode} kodlu projem hakkında bilgi almak istiyorum.`,
+  projectCodeShare: (projectCode: string) =>
+    `Merhaba,\n\nErdem Dizayn & Mekanik projenizin takip kodu:\n\n${projectCode}\n\nProjenizin güncel durumunu web sitemizdeki\n‘Projem Nerede?’ alanından takip edebilirsiniz.`,
 } as const;
