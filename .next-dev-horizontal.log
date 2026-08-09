@@ -1,0 +1,19 @@
+
+> erdem-dizayn@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3000
+
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+✓ Ready in 821ms
+✓ Running next.config.ts took 47ms
+
+ GET / 200 in 829ms (next.js: 337ms, application-code: 492ms)
+ GET / 200 in 1515ms (next.js: 71ms, application-code: 1444ms)
+ HEAD / 200 in 418ms (next.js: 81ms, application-code: 337ms)
+○ Compiling /api/projects/[projectCode] ...
+ GET /api/projects/ERD-00000 500 in 47s (next.js: 38.5s, application-code: 8.6s)
+ GET / 200 in 581ms (next.js: 87ms, application-code: 494ms)
+✓ Compiled in 267ms
+ GET / 200 in 462ms (next.js: 83ms, application-code: 379ms)
+ GET / 200 in 253ms (next.js: 31ms, application-code: 222ms)

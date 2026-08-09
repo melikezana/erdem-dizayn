@@ -4,21 +4,25 @@ import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Camera, Menu, X } from "lucide-react";
 import { BUSINESS_CONTACT } from "@/lib/contact";
 
+type NavigationTarget = "hero" | "services" | "projects" | "tracking" | "contact";
+
 interface NavbarProps {
+  activeSection?: NavigationTarget;
+  onNavigate?: (target: NavigationTarget) => void;
   onOpenAppointment: () => void;
-  onOpenProjectTracking: () => void;
 }
 
-const NAV_LINKS = [
-  { label: "Projeler", href: "#projects" },
-  { label: "Hizmetler", href: "#services" },
-  { label: "Projem Nerede?", action: "project-tracking" },
-  { label: "İletişim", href: "#contact" },
+const NAV_LINKS: { label: string; target: NavigationTarget }[] = [
+  { label: "Projeler", target: "projects" },
+  { label: "Hizmetler", target: "services" },
+  { label: "Projem Nerede?", target: "tracking" },
+  { label: "İletişim", target: "contact" },
 ];
 
 export const Navbar: React.FC<NavbarProps> = ({
+  activeSection = "hero",
+  onNavigate,
   onOpenAppointment,
-  onOpenProjectTracking,
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,6 +40,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
+  const handleNavigate = (
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+    target: NavigationTarget
+  ) => {
+    if (onNavigate) {
+      event.preventDefault();
+      onNavigate(target);
+    }
+
+    closeMobileMenu();
+  };
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
@@ -44,11 +60,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           : "bg-transparent py-5 sm:py-7"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto flex max-w-[1900px] items-center justify-between px-5 sm:px-8 lg:px-12">
         <a
           href="#hero"
           className="group flex min-h-11 items-center gap-3"
-          onClick={closeMobileMenu}
+          onClick={(event) => handleNavigate(event, "hero")}
         >
           <span className="flex h-10 w-10 items-center justify-center rounded border border-[#102B49]/15 bg-[#102B49] font-serif text-sm font-bold text-[#F6F2EA]">
             ED
@@ -63,27 +79,26 @@ export const Navbar: React.FC<NavbarProps> = ({
           </span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            "href" in link ? (
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Ana menü">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.target;
+
+            return (
               <a
                 key={link.label}
-                href={link.href}
-                className="min-h-11 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#102B49]/72 transition-colors hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+                href={`#${link.target}`}
+                aria-current={isActive ? "page" : undefined}
+                onClick={(event) => handleNavigate(event, link.target)}
+                className={`min-h-11 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F] ${
+                  isActive
+                    ? "text-[#102B49]"
+                    : "text-[#102B49]/64 hover:text-[#102B49]"
+                }`}
               >
                 {link.label}
               </a>
-            ) : (
-              <button
-                key={link.label}
-                type="button"
-                onClick={onOpenProjectTracking}
-                className="min-h-11 cursor-pointer py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#102B49]/72 transition-colors hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
-              >
-                {link.label}
-              </button>
-            )
-          ))}
+            );
+          })}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -120,30 +135,16 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="md:hidden">
           <div className="mx-4 mt-3 rounded-xl border border-[#102B49]/10 bg-[#FBFAF7] p-4 shadow-xl">
-            <nav className="flex flex-col">
+            <nav className="flex flex-col" aria-label="Mobil menü">
               {NAV_LINKS.map((link) => (
-                "href" in link ? (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={closeMobileMenu}
-                    className="min-h-12 border-b border-[#102B49]/10 px-2 py-3 text-left text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <button
-                    key={link.label}
-                    type="button"
-                    onClick={() => {
-                      closeMobileMenu();
-                      onOpenProjectTracking();
-                    }}
-                    className="min-h-12 cursor-pointer border-b border-[#102B49]/10 px-2 py-3 text-left text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
-                  >
-                    {link.label}
-                  </button>
-                )
+                <a
+                  key={link.label}
+                  href={`#${link.target}`}
+                  onClick={(event) => handleNavigate(event, link.target)}
+                  className="min-h-12 border-b border-[#102B49]/10 px-2 py-3 text-left text-sm font-semibold uppercase tracking-[0.16em] text-[#102B49]"
+                >
+                  {link.label}
+                </a>
               ))}
             </nav>
 

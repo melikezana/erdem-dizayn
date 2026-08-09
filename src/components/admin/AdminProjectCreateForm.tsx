@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { LoaderCircle, Save } from "lucide-react";
 import { PROJECT_STAGES } from "@/data/project-tracking";
+import { PROJECT_TYPE_OPTIONS } from "@/lib/admin/project-management";
 import {
   createAdminProjectAction,
   type AdminProjectFormState,
@@ -13,10 +14,11 @@ const initialState: AdminProjectFormState = {
   message: "",
   fieldErrors: {},
   values: {
+    id: "",
     title: "",
     customerName: "",
     phone: "",
-    projectType: "",
+    projectType: PROJECT_TYPE_OPTIONS[0],
     location: "",
     startDate: "",
     estimatedCompletion: "",
@@ -103,13 +105,14 @@ export function AdminProjectCreateForm() {
     createAdminProjectAction,
     initialState
   );
+  const typeErrorId = "projectType-error";
   const stageErrorId = "currentStage-error";
   const noteErrorId = "publicNote-error";
 
   return (
     <form
       action={formAction}
-      className="mt-8 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 shadow-sm sm:p-8"
+      className="mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 shadow-sm sm:p-6"
     >
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <TextInput
@@ -134,19 +137,32 @@ export function AdminProjectCreateForm() {
           label="Telefon"
           name="phone"
           type="tel"
-          required
-          minLength={5}
           maxLength={30}
           autoComplete="tel"
           state={state}
         />
-        <TextInput
-          label="Proje Türü"
-          name="projectType"
-          maxLength={100}
-          autoComplete="off"
-          state={state}
-        />
+        <label className="block">
+          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+            Proje Türü
+          </span>
+          <select
+            name="projectType"
+            required
+            defaultValue={state.values.projectType}
+            aria-invalid={Boolean(state.fieldErrors.projectType?.length)}
+            aria-describedby={
+              state.fieldErrors.projectType?.length ? typeErrorId : undefined
+            }
+            className="min-h-12 w-full rounded-lg border border-[#102B49]/15 bg-white px-4 text-sm font-semibold text-[#102B49] shadow-xs transition-colors focus:border-[#9A5C2F] focus:outline-none focus:ring-2 focus:ring-[#9A5C2F]/20"
+          >
+            {PROJECT_TYPE_OPTIONS.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          <FieldError id={typeErrorId} errors={state.fieldErrors.projectType} />
+        </label>
         <TextInput
           label="Konum"
           name="location"
@@ -186,10 +202,7 @@ export function AdminProjectCreateForm() {
               </option>
             ))}
           </select>
-          <FieldError
-            id={stageErrorId}
-            errors={state.fieldErrors.currentStage}
-          />
+          <FieldError id={stageErrorId} errors={state.fieldErrors.currentStage} />
         </label>
         <TextInput
           label="İlerleme Yüzdesi"

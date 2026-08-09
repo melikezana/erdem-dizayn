@@ -20,7 +20,10 @@ export function normalizeWhatsAppNumber(value: string) {
   }
 
   if (digits.startsWith("00")) {
-    return digits.slice(2);
+    const international = digits.slice(2);
+    return international.length >= 10 && international.length <= 15
+      ? international
+      : null;
   }
 
   if (digits.startsWith("0") && digits.length === 11) {
@@ -31,7 +34,15 @@ export function normalizeWhatsAppNumber(value: string) {
     return `90${digits}`;
   }
 
-  return digits;
+  if (digits.startsWith("90") && digits.length === 12) {
+    return digits;
+  }
+
+  if (digits.length >= 11 && digits.length <= 15) {
+    return digits;
+  }
+
+  return null;
 }
 
 export function createWhatsAppUrlForNumber(phone: string, message: string) {

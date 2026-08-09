@@ -1,9 +1,51 @@
 import Link from "next/link";
-import { CalendarDays, FolderKanban } from "lucide-react";
+import {
+  AlertCircle,
+  CalendarDays,
+  FolderKanban,
+  Gauge,
+  Plus,
+  TimerReset,
+} from "lucide-react";
 import { AdminLockedState } from "@/components/admin/AdminLockedState";
+import { AdminShell } from "@/components/admin/AdminShell";
 import { requireAdminAccess } from "@/lib/admin/auth";
+import { getAdminDashboardData } from "@/lib/admin/dashboard";
 
 export const dynamic = "force-dynamic";
+
+function formatDate(value: string | null) {
+  if (!value) {
+    return "Belirtilmedi";
+  }
+
+  const date = new Date(`${value}T00:00:00`);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
+
+function formatDateTime(value: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
 
 export default async function AdminPage() {
   const access = await requireAdminAccess();
@@ -11,33 +53,185 @@ export default async function AdminPage() {
   if (!access.allowed) {
     return (
       <AdminLockedState
-        title="Yönetim paneli korumada."
-        description="Bu alan herkese açık düzenleme ekranı olarak yayınlanmaz. Supabase Auth oturum doğrulaması tamamlanana kadar proje ve randevu verileri görüntülenmez ya da düzenlenmez."
+        title="Yönetim paneli kullanılamıyor."
+        description={access.message}
       />
     );
   }
 
+  let dashboard:
+    | Awaited<ReturnType<typeof getAdminDashboardData>>
+    | null = null;
+  let loadError = "";
+
+  try {
+    dashboard = await getAdminDashboardData();
+  } catch (error) {
+    console.error("Admin dashboard could not be loaded", error);
+    loadError =
+      "Supabase bağlantısı kurulamadı veya admin verileri şu anda yüklenemedi.";
+  }
+
   return (
-    <main className="min-h-screen bg-[#F6F2EA] px-5 py-10 text-[#102B49] sm:px-10 lg:px-20">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="font-serif text-4xl font-bold">Admin</h1>
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Link
-            href="/admin/projects"
-            className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 transition-colors hover:border-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
-          >
-            <FolderKanban className="h-5 w-5 text-[#9A5C2F]" />
-            <span className="mt-4 block font-semibold">Projeler</span>
-          </Link>
-          <Link
-            href="/admin/appointments"
-            className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 transition-colors hover:border-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
-          >
-            <CalendarDays className="h-5 w-5 text-[#9A5C2F]" />
-            <span className="mt-4 block font-semibold">Randevular</span>
-          </Link>
+    <AdminShell userEmail={access.user.email}>
+      <div className="flex flex-col gap-5 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
+            Genel Bakış
+          </p>
+          <h1 className="mt-2 font-serif text-4xl font-bold text-[#102B49]">
+            Yönetim Paneli
+          </h1>
         </div>
+        <Link
+          href="/admin/projects/new"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Yeni Proje Oluştur</span>
+        </Link>
       </div>
-    </main>
+
+      {loadError || !dashboard ? (
+        <div
+          role="alert"
+          className="mt-6 flex gap-3 rounded-lg border border-[#9A3D2F]/20 bg-[#FFF7F4] p-4 text-sm font-semibold text-[#8A2E24]"
+        >
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+          <p>{loadError}</p>
+        </div>
+      ) : (
+        <div className="mt-6 space-y-8">
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {[
+              {
+                label: "Aktif Projeler",
+                value: dashboard.activeProjects,
+                icon: FolderKanban,
+              },
+              {
+                label: "Yeni Randevu Talepleri",
+                value: dashboard.newAppointments,
+                icon: CalendarDays,
+              },
+              {
+                label: "Teslime Yaklaşan Projeler",
+                value: dashboard.approachingProjects.length,
+                icon: TimerReset,
+              },
+            ].map(({ label, value, icon: Icon }) => (
+              <div
+                key={label}
+                className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5"
+              >
+                <Icon className="h-5 w-5 text-[#9A5C2F]" />
+                <p className="mt-4 text-sm font-semibold text-[#102B49]/65">
+                  {label}
+                </p>
+                <p className="mt-2 font-serif text-4xl font-bold text-[#102B49]">
+                  {value}
+                </p>
+              </div>
+            ))}
+          </section>
+
+          <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
+            <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+              <TimerReset className="h-4 w-4" />
+              <span>Teslime Yaklaşan Projeler</span>
+            </div>
+            {dashboard.approachingProjects.length ? (
+              <ul className="divide-y divide-[#102B49]/10">
+                {dashboard.approachingProjects.map((project) => (
+                  <li
+                    key={project.id}
+                    className="grid grid-cols-1 gap-2 py-3 sm:grid-cols-[1fr_auto] sm:items-center"
+                  >
+                    <div>
+                      <Link
+                        href={`/admin/projects/${project.id}`}
+                        className="font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
+                      >
+                        {project.title}
+                      </Link>
+                      <p className="mt-1 text-sm text-[#102B49]/62">
+                        {project.customerName} · {project.projectCode}
+                      </p>
+                    </div>
+                    <span className="text-sm font-semibold text-[#9A5C2F]">
+                      {formatDate(project.estimatedCompletion)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm leading-6 text-[#102B49]/68">
+                Yaklaşan teslim tarihi olan aktif proje bulunmuyor.
+              </p>
+            )}
+          </section>
+
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+            <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
+              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+                <Gauge className="h-4 w-4" />
+                <span>Son Projeler</span>
+              </div>
+              {dashboard.recentProjects.length ? (
+                <ul className="divide-y divide-[#102B49]/10">
+                  {dashboard.recentProjects.map((project) => (
+                    <li key={project.id} className="py-3">
+                      <Link
+                        href={`/admin/projects/${project.id}`}
+                        className="font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
+                      >
+                        {project.title}
+                      </Link>
+                      <p className="mt-1 text-sm text-[#102B49]/62">
+                        {project.projectCode} · {project.currentStageLabel} ·{" "}
+                        {formatDate(project.startDate)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm leading-6 text-[#102B49]/68">
+                  Henüz proje oluşturulmadı.
+                </p>
+              )}
+            </section>
+
+            <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
+              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+                <CalendarDays className="h-4 w-4" />
+                <span>Son Randevular</span>
+              </div>
+              {dashboard.recentAppointments.length ? (
+                <ul className="divide-y divide-[#102B49]/10">
+                  {dashboard.recentAppointments.map((appointment) => (
+                    <li key={appointment.id} className="py-3">
+                      <Link
+                        href="/admin/appointments"
+                        className="font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
+                      >
+                        {appointment.fullName}
+                      </Link>
+                      <p className="mt-1 text-sm text-[#102B49]/62">
+                        {appointment.projectType} · {appointment.preferredTime} ·{" "}
+                        {formatDateTime(appointment.createdAt)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm leading-6 text-[#102B49]/68">
+                  Yeni randevu talebi bulunmuyor.
+                </p>
+              )}
+            </section>
+          </div>
+        </div>
+      )}
+    </AdminShell>
   );
 }

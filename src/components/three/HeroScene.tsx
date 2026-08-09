@@ -125,7 +125,7 @@ export const HeroScene: React.FC<HeroSceneProps> = ({
         }}
         onCreated={({ camera, gl }) => {
           gl.setClearColor(0x000000, 0);
-          gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          gl.shadowMap.type = THREE.PCFShadowMap;
           camera.lookAt(0, 0, 0);
         }}
         className="h-full w-full"

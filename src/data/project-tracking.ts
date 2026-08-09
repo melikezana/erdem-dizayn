@@ -62,13 +62,14 @@ export const PROJECT_STAGES: ProjectStage[] = [
   },
 ];
 
-export const PROJECT_STAGE_LABELS: Record<ProjectStatus, string> = PROJECT_STAGES.reduce(
-  (labels, stage) => ({
-    ...labels,
-    [stage.id]: stage.label,
-  }),
-  {} as Record<ProjectStatus, string>
-);
+export const PROJECT_STAGE_LABELS: Record<ProjectStatus, string> =
+  PROJECT_STAGES.reduce(
+    (labels, stage) => ({
+      ...labels,
+      [stage.id]: stage.label,
+    }),
+    {} as Record<ProjectStatus, string>
+  );
 
 export function getProjectStageLabel(stage: ProjectStatus) {
   return PROJECT_STAGE_LABELS[stage];
