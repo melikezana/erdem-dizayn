@@ -5,15 +5,17 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-export type VillaPointerState = {
-  x: number;
-  targetInfluence: number;
-  influence: number;
-  yawOffset: number;
+export type VillaSceneState = {
+  scrollProgress: number;
+  pointerX: number;
+  pointerY: number;
+  pointerInfluence: number;
+  isReducedMotion: boolean;
+  isDesktop: boolean;
 };
 
 interface ArchitecturalModelProps {
-  pointerRef: React.MutableRefObject<VillaPointerState>;
+  storyRef: React.MutableRefObject<VillaSceneState>;
   isTechnicalMode?: boolean;
   isIntroActive?: boolean;
   enableRealtimeShadows?: boolean;
@@ -27,15 +29,18 @@ type ModelInfo = {
 };
 
 const MODEL_PATH = "/models/erdem-villa.glb";
-const FULL_REVOLUTION_SECONDS = 64;
-const AUTO_ROTATION_SPEED = (Math.PI * 2) / FULL_REVOLUTION_SECONDS;
-const POINTER_YAW_LIMIT = Math.PI / 110;
-const INTRO_ROTATION_PAUSE_SECONDS = 1.2;
+const POINTER_YAW_LIMIT = Math.PI / 95;
+const POINTER_LIFT_LIMIT = 0.13;
 const INITIAL_YAW = -0.36;
-const DESKTOP_TARGET_FOOTPRINT = 8.4;
+const DESKTOP_TARGET_FOOTPRINT = 5.45;
 const MOBILE_TARGET_FOOTPRINT = 6.05;
 
 useGLTF.preload(MODEL_PATH);
+
+function smoothRange(value: number, start: number, end: number) {
+  if (end <= start) return value >= end ? 1 : 0;
+  return THREE.MathUtils.smoothstep(value, start, end);
+}
 
 function createPlanGeometry(width: number, depth: number, accent = false) {
   const geometry = new THREE.BufferGeometry();
@@ -84,6 +89,7 @@ interface GroundingTreatmentProps {
   footprintDepth: number;
   isMobileCanvas: boolean;
   enableRealtimeShadows: boolean;
+  storyRef: React.MutableRefObject<VillaSceneState>;
 }
 
 const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
@@ -92,7 +98,12 @@ const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
   footprintDepth,
   isMobileCanvas,
   enableRealtimeShadows,
+  storyRef,
 }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const primaryMaterialRef = useRef<THREE.LineBasicMaterial>(null);
+  const accentMaterialRef = useRef<THREE.LineBasicMaterial>(null);
+  const shadowMaterialRef = useRef<THREE.ShadowMaterial>(null);
   const planWidth = footprintWidth * (isMobileCanvas ? 0.98 : 1.08);
   const planDepth = footprintDepth * (isMobileCanvas ? 1.02 : 1.16);
   const shadowRadius = Math.max(footprintWidth, footprintDepth) * 0.56;
@@ -113,8 +124,44 @@ const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
     };
   }, [accentPlanGeometry, primaryPlanGeometry]);
 
+  useFrame((_, delta) => {
+    const frameDelta = Math.min(delta, 0.05);
+    const progress = storyRef.current.scrollProgress;
+    const technicalReveal = smoothRange(progress, 0.45, 0.55);
+    const retreat = smoothRange(progress, 0.68, 0.84);
+    const targetPresence = isMobileCanvas
+      ? 0.92
+      : 1 + technicalReveal * 0.42 - retreat * 0.36;
+
+    if (groupRef.current) {
+      const currentScale = groupRef.current.scale.x;
+      const nextScale = THREE.MathUtils.damp(
+        currentScale,
+        targetPresence,
+        4,
+        frameDelta
+      );
+      groupRef.current.scale.setScalar(nextScale);
+    }
+
+    if (primaryMaterialRef.current) {
+      primaryMaterialRef.current.opacity =
+        (isMobileCanvas ? 0.08 : 0.12) + technicalReveal * 0.1 - retreat * 0.04;
+    }
+
+    if (accentMaterialRef.current) {
+      accentMaterialRef.current.opacity =
+        (isMobileCanvas ? 0.07 : 0.1) + technicalReveal * 0.09 - retreat * 0.04;
+    }
+
+    if (shadowMaterialRef.current) {
+      shadowMaterialRef.current.opacity =
+        (isMobileCanvas ? 0.05 : 0.1) - retreat * 0.045;
+    }
+  });
+
   return (
-    <group position={[0, floorY, 0]}>
+    <group ref={groupRef} position={[0, floorY, 0]}>
       <mesh
         receiveShadow={enableRealtimeShadows}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -123,6 +170,7 @@ const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
       >
         <circleGeometry args={[shadowRadius, 48]} />
         <shadowMaterial
+          ref={shadowMaterialRef}
           color="#102B49"
           transparent
           opacity={isMobileCanvas ? 0.055 : 0.105}
@@ -132,6 +180,7 @@ const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
 
       <lineSegments geometry={primaryPlanGeometry} renderOrder={-1}>
         <lineBasicMaterial
+          ref={primaryMaterialRef}
           color="#102B49"
           transparent
           opacity={isMobileCanvas ? 0.095 : 0.13}
@@ -142,6 +191,7 @@ const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
 
       <lineSegments geometry={accentPlanGeometry} renderOrder={-1}>
         <lineBasicMaterial
+          ref={accentMaterialRef}
           color="#9A5C2F"
           transparent
           opacity={isMobileCanvas ? 0.08 : 0.11}
@@ -154,16 +204,17 @@ const GroundingTreatment: React.FC<GroundingTreatmentProps> = ({
 };
 
 export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
-  pointerRef,
+  storyRef,
   isTechnicalMode = false,
   isIntroActive = false,
   enableRealtimeShadows = true,
 }) => {
   const modelGroupRef = useRef<THREE.Group>(null);
-  const autoRotationRef = useRef(INITIAL_YAW);
-  const pauseRemainingRef = useRef(
-    isIntroActive ? Number.POSITIVE_INFINITY : 0
-  );
+  const pointerYawRef = useRef(0);
+  const pointerLiftRef = useRef(0);
+  const cameraPositionRef = useRef(new THREE.Vector3());
+  const cameraTargetRef = useRef(new THREE.Vector3());
+  const cameraDirectionRef = useRef(new THREE.Vector3());
   const { size: canvasSize } = useThree();
 
   const gltf = useGLTF(MODEL_PATH);
@@ -202,7 +253,7 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
   const floorY = modelInfo
     ? (modelInfo.minY - modelInfo.center.y) * modelScale - 0.035
     : -1.8;
-  const sceneOffsetX = isMobileCanvas ? 0 : -0.22;
+  const sceneOffsetX = isMobileCanvas ? 0 : 1.08;
 
   const wireframeMaterial = useMemo(() => {
     return new THREE.MeshBasicMaterial({
@@ -260,12 +311,6 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
     });
   }, [isTechnicalMode, modelInfo, wireframeMaterial]);
 
-  useEffect(() => {
-    pauseRemainingRef.current = isIntroActive
-      ? Number.POSITIVE_INFINITY
-      : INTRO_ROTATION_PAUSE_SECONDS;
-  }, [isIntroActive]);
-
   const cameraFit = useMemo(() => {
     if (!modelInfo || canvasSize.width <= 0 || canvasSize.height <= 0) {
       return null;
@@ -279,19 +324,19 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
     const horizontalFitRadius = isMobileCanvas
       ? Math.max(scaledSize.x, scaledSize.z) * 0.47
       : Math.max(scaledSize.x, scaledSize.z) * 0.5;
-    const fillRatio = isMobileCanvas ? 0.91 : 0.96;
+    const fillRatio = isMobileCanvas ? 0.86 : 0.62;
     const fitDistance =
       Math.max(
         halfHeight / Math.tan(verticalFov / 2),
         horizontalFitRadius / Math.tan(horizontalFov / 2)
       ) / fillRatio;
-    const cameraDirection = new THREE.Vector3(
+    const direction = new THREE.Vector3(
       isMobileCanvas ? 1.22 : 1.55,
       isMobileCanvas ? 0.54 : 0.58,
       isMobileCanvas ? 1.9 : 2.05
     ).normalize();
     const lookTarget = new THREE.Vector3(
-      sceneOffsetX,
+      isMobileCanvas ? sceneOffsetX : sceneOffsetX - 0.95,
       floorY + scaledSize.y * (isMobileCanvas ? 0.4 : 0.36),
       0
     );
@@ -300,7 +345,8 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
       fov,
       far: Math.max(100, fitDistance + 40),
       lookTarget,
-      position: lookTarget.clone().add(cameraDirection.multiplyScalar(fitDistance)),
+      direction,
+      fitDistance,
     };
   }, [
     canvasSize.height,
@@ -313,6 +359,34 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
   ]);
 
   useFrame((state, delta) => {
+    const frameDelta = Math.min(delta, 0.05);
+    const story = storyRef.current;
+    const progress = story.isDesktop
+      ? story.scrollProgress
+      : Math.min(story.scrollProgress * 1.35, 0.48);
+    const closer = smoothRange(progress, 0.2, 0.35);
+    const facade = smoothRange(progress, 0.35, 0.45);
+    const technical = smoothRange(progress, 0.45, 0.55);
+    const supporting = smoothRange(progress, 0.52, 0.7);
+    const retreat = smoothRange(progress, 0.68, 0.86);
+    const pointerTargetYaw =
+      story.pointerX * story.pointerInfluence * POINTER_YAW_LIMIT;
+    const pointerTargetLift =
+      -story.pointerY * story.pointerInfluence * POINTER_LIFT_LIMIT;
+
+    pointerYawRef.current = THREE.MathUtils.damp(
+      pointerYawRef.current,
+      story.isReducedMotion ? 0 : pointerTargetYaw,
+      4,
+      frameDelta
+    );
+    pointerLiftRef.current = THREE.MathUtils.damp(
+      pointerLiftRef.current,
+      story.isReducedMotion ? 0 : pointerTargetLift,
+      4,
+      frameDelta
+    );
+
     if (cameraFit) {
       const perspectiveCamera = state.camera as THREE.PerspectiveCamera;
 
@@ -320,45 +394,50 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
         perspectiveCamera.fov = cameraFit.fov;
         perspectiveCamera.near = 0.1;
         perspectiveCamera.far = cameraFit.far;
-        perspectiveCamera.position.copy(cameraFit.position);
-        perspectiveCamera.lookAt(cameraFit.lookTarget);
+
+        const target = cameraTargetRef.current.copy(cameraFit.lookTarget);
+        target.x += supporting * (isMobileCanvas ? 0.08 : 0.58) - retreat * 0.22;
+        target.y +=
+          technical * scaledSize.y * (isMobileCanvas ? 0.035 : 0.07) +
+          pointerLiftRef.current;
+
+        const direction = cameraDirectionRef.current.copy(cameraFit.direction);
+        direction.x +=
+          facade * -0.08 + supporting * -0.22 + pointerYawRef.current * 1.5;
+        direction.y += technical * 0.16 - retreat * 0.04;
+        direction.z += closer * -0.12 + supporting * 0.08;
+        direction.normalize();
+
+        const distance =
+          cameraFit.fitDistance *
+          (1 - closer * 0.1 - facade * 0.04 + supporting * 0.08 + retreat * 0.32);
+        const targetPosition = cameraPositionRef.current
+          .copy(target)
+          .addScaledVector(direction, distance);
+
+        targetPosition.x += pointerYawRef.current * 1.9;
+        targetPosition.y += pointerLiftRef.current * 0.45;
+
+        const cameraEase = story.isReducedMotion || isIntroActive ? 1 : 0.18;
+        perspectiveCamera.position.lerp(targetPosition, cameraEase);
+        perspectiveCamera.lookAt(target);
         perspectiveCamera.updateProjectionMatrix();
       }
     }
 
     if (!modelGroupRef.current) return;
 
-    const frameDelta = Math.min(delta, 0.05);
-    const pointer = pointerRef.current;
-    pointer.influence = THREE.MathUtils.damp(
-      pointer.influence,
-      pointer.targetInfluence,
-      4,
-      frameDelta
-    );
-    pointer.yawOffset = THREE.MathUtils.damp(
-      pointer.yawOffset,
-      pointer.x * pointer.influence * POINTER_YAW_LIMIT,
-      3,
-      frameDelta
-    );
-
-    if (Number.isFinite(pauseRemainingRef.current)) {
-      if (pauseRemainingRef.current > 0) {
-        pauseRemainingRef.current = Math.max(
-          0,
-          pauseRemainingRef.current - frameDelta
-        );
-      } else {
-        autoRotationRef.current += frameDelta * AUTO_ROTATION_SPEED;
-      }
-    }
-
     modelGroupRef.current.rotation.set(
       0,
-      autoRotationRef.current + pointer.yawOffset,
+      INITIAL_YAW +
+        facade * 0.42 +
+        technical * 0.08 -
+        supporting * 0.12 +
+        pointerYawRef.current,
       0
     );
+    modelGroupRef.current.position.y = technical * 0.08 - retreat * 0.14;
+    modelGroupRef.current.scale.setScalar(1 - retreat * 0.13);
   });
 
   if (!modelInfo) return null;
@@ -383,6 +462,7 @@ export const ArchitecturalModel: React.FC<ArchitecturalModelProps> = ({
         footprintDepth={Math.min(scaledSize.x, scaledSize.z)}
         isMobileCanvas={isMobileCanvas}
         enableRealtimeShadows={enableRealtimeShadows}
+        storyRef={storyRef}
       />
     </group>
   );

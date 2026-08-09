@@ -10,6 +10,8 @@ import React, {
 } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   AlertCircle,
   ArrowRight,
@@ -23,7 +25,9 @@ import {
   Search,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
+import { useLenisController } from "@/components/providers/LenisProvider";
 import { HeroScene } from "@/components/three/HeroScene";
+import type { VillaSceneState } from "@/components/three/ArchitecturalModel";
 import { AppointmentModal } from "@/components/ui/AppointmentModal";
 import { CinematicIntro } from "@/components/ui/CinematicIntro";
 import {
@@ -65,31 +69,31 @@ const SHOWROOM_SERVICES = [
     number: "01",
     title: "İç Mimari Tasarım",
     description:
-      "Mekânı kullanım alışkanlıklarınıza göre planlar, malzeme ve ışık kararlarını netleştiririz.",
+      "Mekanı kullanım alışkanlıklarınıza göre planlar, malzeme ve ışık kararlarını sakin bir mimari dile dönüştürürüz.",
   },
   {
     number: "02",
     title: "Mekanik Çözümler",
     description:
-      "Isıtma, soğutma, havalandırma ve tesisat kararlarını mimari bütünlükle birlikte çözeriz.",
+      "Isıtma, soğutma, havalandırma ve tesisat kararlarını görünmeyen ama hissedilen konfor katmanı olarak çözeriz.",
   },
   {
     number: "03",
     title: "Tadilat & Yenileme",
     description:
-      "Mevcut alanı daha işlevli, güncel ve rafine bir yaşam ya da çalışma mekânına dönüştürürüz.",
+      "Mevcut alanın potansiyelini okur, yeni yaşam veya çalışma senaryosuna göre kontrollü biçimde dönüştürürüz.",
   },
   {
     number: "04",
     title: "Uygulama",
     description:
-      "Tasarımı sahaya indirir, imalat akışını ve detay çözümünü kontrollü biçimde yönetiriz.",
+      "Tasarımı sahaya indirir, imalat akışını, detay çözümünü ve ekip koordinasyonunu tek ritimde yönetiriz.",
   },
   {
     number: "05",
     title: "Anahtar Teslim",
     description:
-      "Planlamadan son kontrole kadar tüm süreci tek elden koordine ederek teslim ederiz.",
+      "Planlamadan son kontrole kadar tüm süreci tek elden ilerletir, teslim anını sürprizsiz hale getiririz.",
   },
 ];
 
@@ -145,13 +149,13 @@ function formatDate(value: string | null) {
 }
 
 export const HorizontalShowroom: React.FC = () => {
+  const { lenis, scrollTo, stop, start, resize } = useLenisController();
   const containerRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const currentXRef = useRef(0);
-  const targetXRef = useRef(0);
+  const activePanelRef = useRef<PanelId>("hero");
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const maxXRef = useRef(0);
-  const scrollStartRef = useRef(0);
   const sectionOffsetsRef = useRef<Record<PanelId, number>>({
     hero: 0,
     services: 0,
@@ -166,12 +170,20 @@ export const HorizontalShowroom: React.FC = () => {
     tracking: 0,
     contact: 0,
   });
-  const activePanelRef = useRef<PanelId>("hero");
+  const sceneStateRef = useRef<VillaSceneState>({
+    scrollProgress: 0,
+    pointerX: 0,
+    pointerY: 0,
+    pointerInfluence: 0,
+    isReducedMotion: false,
+    isDesktop: false,
+  });
+
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [isIntroActive, setIsIntroActive] = useState(true);
-  const [scrollHeight, setScrollHeight] = useState<number | null>(null);
   const [activePanel, setActivePanel] = useState<PanelId>("hero");
   const [activeServiceIndex, setActiveServiceIndex] = useState(0);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [progress, setProgress] = useState(0);
 
   const isDesktop = useSyncExternalStore(
@@ -186,121 +198,29 @@ export const HorizontalShowroom: React.FC = () => {
     () => false
   );
 
-  useEffect(() => {
-    activePanelRef.current = activePanel;
-  }, [activePanel]);
-
   const setActivePanelSafely = useCallback((nextPanel: PanelId) => {
-    setActivePanel((current) => {
-      if (current === nextPanel) return current;
-      return nextPanel;
-    });
+    activePanelRef.current = nextPanel;
+    setActivePanel((current) => (current === nextPanel ? current : nextPanel));
   }, []);
 
   const setActiveServiceSafely = useCallback((nextIndex: number) => {
-    setActiveServiceIndex((current) => {
-      if (current === nextIndex) return current;
-      return nextIndex;
-    });
+    setActiveServiceIndex((current) =>
+      current === nextIndex ? current : nextIndex
+    );
   }, []);
 
-  const updateMobileState = useCallback(() => {
-    let nextPanel: PanelId = "hero";
-
-    PANEL_IDS.forEach((panelId) => {
-      const panel = document.getElementById(panelId);
-      if (!panel) return;
-
-      const rect = panel.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.46) {
-        nextPanel = panelId;
-      }
-
-      if (panelId === "services") {
-        const serviceProgress = clamp(
-          (window.innerHeight * 0.46 - rect.top) / Math.max(rect.height, 1),
-          0,
-          0.999
-        );
-        setActiveServiceSafely(
-          Math.min(
-            SHOWROOM_SERVICES.length - 1,
-            Math.floor(serviceProgress * SHOWROOM_SERVICES.length)
-          )
-        );
-      }
-    });
-
-    const maxScroll =
-      document.documentElement.scrollHeight - window.innerHeight || 1;
-    setProgress(clamp(window.scrollY / maxScroll, 0, 1));
-    setActivePanelSafely(nextPanel);
-  }, [setActivePanelSafely, setActiveServiceSafely]);
-
-  const updateFromScroll = useCallback(() => {
-    if (!isDesktop) {
-      targetXRef.current = 0;
-      currentXRef.current = 0;
-      if (trackRef.current) {
-        trackRef.current.style.transform = "translate3d(0, 0, 0)";
-      }
-      updateMobileState();
-      return;
-    }
-
-    const range = maxXRef.current;
-    const rawX = clamp(window.scrollY - scrollStartRef.current, 0, range);
-    const nextProgress = range > 0 ? rawX / range : 0;
-
-    targetXRef.current = -rawX;
-    setProgress((current) =>
-      Math.abs(current - nextProgress) > 0.002 ? nextProgress : current
+  const setActiveProjectSafely = useCallback((nextIndex: number) => {
+    setActiveProjectIndex((current) =>
+      current === nextIndex ? current : nextIndex
     );
+  }, []);
 
-    const focusX = rawX + window.innerWidth * 0.46;
-    let nextPanel: PanelId = "hero";
-
-    PANEL_IDS.forEach((panelId) => {
-      if (focusX >= sectionOffsetsRef.current[panelId] - 4) {
-        nextPanel = panelId;
-      }
-    });
-
-    const serviceStart = sectionOffsetsRef.current.services;
-    const serviceWidth = Math.max(sectionWidthsRef.current.services, 1);
-    const serviceProgress = clamp(
-      (focusX - serviceStart) / serviceWidth,
-      0,
-      0.999
-    );
-
-    setActivePanelSafely(nextPanel);
-    setActiveServiceSafely(
-      Math.min(
-        SHOWROOM_SERVICES.length - 1,
-        Math.floor(serviceProgress * SHOWROOM_SERVICES.length)
-      )
-    );
-  }, [
-    isDesktop,
-    setActivePanelSafely,
-    setActiveServiceSafely,
-    updateMobileState,
-  ]);
-
-  const measureHorizontalTrack = useCallback(() => {
-    const container = containerRef.current;
+  const measureTrack = useCallback(() => {
     const track = trackRef.current;
 
-    if (!container || !track || !isDesktop) {
-      maxXRef.current = 0;
-      setScrollHeight(null);
-      updateFromScroll();
-      return;
-    }
+    if (!track) return;
 
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
     const nextOffsets = { ...sectionOffsetsRef.current };
     const nextWidths = { ...sectionWidthsRef.current };
 
@@ -313,10 +233,118 @@ export const HorizontalShowroom: React.FC = () => {
     sectionOffsetsRef.current = nextOffsets;
     sectionWidthsRef.current = nextWidths;
     maxXRef.current = Math.max(0, track.scrollWidth - viewportWidth);
-    scrollStartRef.current = container.offsetTop;
-    setScrollHeight(maxXRef.current + viewportHeight);
-    updateFromScroll();
-  }, [isDesktop, updateFromScroll]);
+  }, []);
+
+  const updateStoryState = useCallback(
+    (timelineProgress: number) => {
+      const normalizedProgress = clamp(timelineProgress, 0, 1);
+      const focusX = normalizedProgress * maxXRef.current + window.innerWidth * 0.5;
+      let nextPanel: PanelId = "hero";
+
+      PANEL_IDS.forEach((panelId) => {
+        if (focusX >= sectionOffsetsRef.current[panelId] - 4) {
+          nextPanel = panelId;
+        }
+      });
+
+      const serviceStart = sectionOffsetsRef.current.services;
+      const serviceWidth = Math.max(sectionWidthsRef.current.services, 1);
+      const serviceProgress = clamp((focusX - serviceStart) / serviceWidth, 0, 0.999);
+
+      const projectStart = sectionOffsetsRef.current.projects;
+      const projectWidth = Math.max(sectionWidthsRef.current.projects, 1);
+      const projectProgress = clamp((focusX - projectStart) / projectWidth, 0, 0.999);
+
+      sceneStateRef.current.scrollProgress = normalizedProgress;
+      sceneStateRef.current.isDesktop = isDesktop;
+      sceneStateRef.current.isReducedMotion = prefersReducedMotion;
+
+      setProgress((current) =>
+        Math.abs(current - normalizedProgress) > 0.002
+          ? normalizedProgress
+          : current
+      );
+      setActivePanelSafely(nextPanel);
+      setActiveServiceSafely(
+        Math.min(
+          SHOWROOM_SERVICES.length - 1,
+          Math.floor(serviceProgress * SHOWROOM_SERVICES.length)
+        )
+      );
+      setActiveProjectSafely(
+        Math.min(
+          PROJECTS_DATA.length - 1,
+          Math.floor(projectProgress * PROJECTS_DATA.length)
+        )
+      );
+    },
+    [
+      isDesktop,
+      prefersReducedMotion,
+      setActivePanelSafely,
+      setActiveProjectSafely,
+      setActiveServiceSafely,
+    ]
+  );
+
+  const updateMobileState = useCallback(() => {
+    let nextPanel: PanelId = "hero";
+
+    PANEL_IDS.forEach((panelId) => {
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+
+      const rect = panel.getBoundingClientRect();
+
+      if (rect.top <= window.innerHeight * 0.45) {
+        nextPanel = panelId;
+      }
+
+      if (panelId === "services") {
+        const serviceProgress = clamp(
+          (window.innerHeight * 0.45 - rect.top) / Math.max(rect.height, 1),
+          0,
+          0.999
+        );
+        setActiveServiceSafely(
+          Math.min(
+            SHOWROOM_SERVICES.length - 1,
+            Math.floor(serviceProgress * SHOWROOM_SERVICES.length)
+          )
+        );
+      }
+
+      if (panelId === "projects") {
+        const projectProgress = clamp(
+          (window.innerHeight * 0.45 - rect.top) / Math.max(rect.height, 1),
+          0,
+          0.999
+        );
+        setActiveProjectSafely(
+          Math.min(
+            PROJECTS_DATA.length - 1,
+            Math.floor(projectProgress * PROJECTS_DATA.length)
+          )
+        );
+      }
+    });
+
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight || 1;
+    const nextProgress = clamp(window.scrollY / maxScroll, 0, 1);
+
+    sceneStateRef.current.scrollProgress = nextProgress;
+    sceneStateRef.current.isDesktop = false;
+    sceneStateRef.current.isReducedMotion = prefersReducedMotion;
+
+    setProgress(nextProgress);
+    setActivePanelSafely(nextPanel);
+  }, [
+    prefersReducedMotion,
+    setActivePanelSafely,
+    setActiveProjectSafely,
+    setActiveServiceSafely,
+  ]);
 
   const scrollToPanel = useCallback(
     (panelId: PanelId) => {
@@ -327,97 +355,227 @@ export const HorizontalShowroom: React.FC = () => {
         window.history.replaceState(null, "", hash);
       }
 
-      if (!isDesktop) {
-        document.getElementById(panelId)?.scrollIntoView({
-          block: "start",
-          behavior: prefersReducedMotion ? "auto" : "smooth",
-        });
+      if (!isDesktop || prefersReducedMotion) {
+        const target = document.getElementById(panelId);
+        if (target) {
+          scrollTo(target, {
+            offset: -84,
+            immediate: prefersReducedMotion,
+            lock: true,
+          });
+        }
         return;
       }
 
+      const trigger = scrollTriggerRef.current;
       const targetX = clamp(
         sectionOffsetsRef.current[panelId] ?? 0,
         0,
         maxXRef.current
       );
 
-      window.scrollTo({
-        top: scrollStartRef.current + targetX,
-        behavior: prefersReducedMotion ? "auto" : "smooth",
+      scrollTo((trigger?.start ?? 0) + targetX, {
+        duration: 1.05,
+        lock: true,
       });
     },
-    [isDesktop, prefersReducedMotion]
+    [isDesktop, prefersReducedMotion, scrollTo]
   );
 
   useEffect(() => {
-    measureHorizontalTrack();
-
-    const handleResize = () => {
-      window.requestAnimationFrame(measureHorizontalTrack);
-    };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", updateFromScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", updateFromScroll);
-    };
-  }, [measureHorizontalTrack, updateFromScroll]);
-
-  useEffect(() => {
-    if (!isDesktop) {
-      if (trackRef.current) {
-        trackRef.current.style.transform = "translate3d(0, 0, 0)";
-      }
-      return;
-    }
-
-    let frameId = window.requestAnimationFrame(function animate() {
-      const track = trackRef.current;
-      if (track) {
-        const targetX = targetXRef.current;
-        const currentX = currentXRef.current;
-        const nextX = prefersReducedMotion
-          ? targetX
-          : Math.abs(targetX - currentX) < 0.35
-            ? targetX
-            : currentX + (targetX - currentX) * 0.14;
-
-        currentXRef.current = nextX;
-        track.style.transform = `translate3d(${nextX}px, 0, 0)`;
-      }
-
-      frameId = window.requestAnimationFrame(animate);
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
+    sceneStateRef.current.isDesktop = isDesktop;
+    sceneStateRef.current.isReducedMotion = prefersReducedMotion;
   }, [isDesktop, prefersReducedMotion]);
 
   useEffect(() => {
+    if (isAppointmentOpen) {
+      stop();
+      return;
+    }
+
+    start();
+    window.requestAnimationFrame(() => {
+      resize();
+      ScrollTrigger.refresh();
+    });
+  }, [isAppointmentOpen, resize, start, stop]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const container = containerRef.current;
     const viewport = viewportRef.current;
-    if (!viewport || !isDesktop) return;
+    const track = trackRef.current;
 
-    const handleWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+    if (!container || !viewport || !track || !isDesktop || prefersReducedMotion) {
+      track?.style.removeProperty("transform");
+      window.requestAnimationFrame(updateMobileState);
+      return;
+    }
 
-      const scrollY = window.scrollY;
-      const start = scrollStartRef.current;
-      const end = start + maxXRef.current;
+    const removeLenisUpdate = lenis?.on("scroll", ScrollTrigger.update);
 
-      if (scrollY < start - 2 || scrollY > end + 2) return;
+    const ctx = gsap.context(() => {
+      measureTrack();
 
-      event.preventDefault();
-      window.scrollBy({
-        top: event.deltaX,
-        behavior: "auto",
+      const headlineTargets = Array.from(
+        container.querySelectorAll<HTMLElement>("[data-reveal]")
+      );
+      const scrubbedRevealTargets = headlineTargets.filter(
+        (target) => !target.closest("[data-panel='hero']")
+      );
+      const projectCards = Array.from(
+        container.querySelectorAll<HTMLElement>("[data-project-card]")
+      );
+      const projectImages = Array.from(
+        container.querySelectorAll<HTMLElement>("[data-project-image]")
+      );
+      const planLayers = Array.from(
+        container.querySelectorAll<HTMLElement>("[data-plan-layer]")
+      );
+
+      gsap.set(track, { x: 0, force3D: true });
+      gsap.set(scrubbedRevealTargets, { autoAlpha: 0, y: 42 });
+      gsap.set(projectCards, {
+        clipPath: "inset(0% 0% 0% 16%)",
+        yPercent: 8,
       });
+      gsap.set(projectImages, { scale: 1.08 });
+
+      const master = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          end: () => `+=${maxXRef.current}`,
+          pin: viewport,
+          scrub: 0.72,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onRefresh: (self) => {
+            measureTrack();
+            updateStoryState(self.progress);
+          },
+          onUpdate: (self) => updateStoryState(self.progress),
+        },
+      });
+
+      master.to(
+        track,
+        {
+          x: () => -maxXRef.current,
+          duration: 1,
+          ease: "none",
+          force3D: true,
+        },
+        0
+      );
+
+      master.to(
+        planLayers,
+        {
+          xPercent: (index) => [-5, -12, -18][index % 3],
+          yPercent: (index) => [3, -4, 6][index % 3],
+          autoAlpha: 0.62,
+          duration: 1,
+        },
+        0
+      );
+
+      scrubbedRevealTargets.forEach((target, index) => {
+        master.to(
+          target,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.14,
+          },
+          Math.min(0.86, 0.04 + index * 0.035)
+        );
+      });
+
+      projectCards.forEach((card, index) => {
+        const start = 0.36 + index * 0.045;
+
+        master.to(
+          card,
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            yPercent: index % 2 === 0 ? -3 : 3,
+            duration: 0.18,
+          },
+          start
+        );
+      });
+
+      projectImages.forEach((image, index) => {
+        master.to(
+          image,
+          {
+            scale: 1,
+            xPercent: index % 2 === 0 ? -4 : 4,
+            duration: 0.28,
+          },
+          0.36 + index * 0.045
+        );
+      });
+
+      scrollTriggerRef.current = master.scrollTrigger ?? null;
+    }, container);
+
+    ScrollTrigger.refresh();
+
+    const handleResize = () => {
+      resize();
+      ScrollTrigger.refresh();
     };
 
-    viewport.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("resize", handleResize);
 
-    return () => viewport.removeEventListener("wheel", handleWheel);
-  }, [isDesktop]);
+    return () => {
+      removeLenisUpdate?.();
+      window.removeEventListener("resize", handleResize);
+      scrollTriggerRef.current = null;
+      ctx.revert();
+    };
+  }, [
+    isDesktop,
+    lenis,
+    measureTrack,
+    prefersReducedMotion,
+    resize,
+    updateMobileState,
+    updateStoryState,
+  ]);
+
+  useEffect(() => {
+    if (isDesktop && !prefersReducedMotion) return;
+
+    const initialFrame = window.requestAnimationFrame(updateMobileState);
+
+    const handleScroll = () => updateMobileState();
+    const handleResize = () => updateMobileState();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.cancelAnimationFrame(initialFrame);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isDesktop, prefersReducedMotion, updateMobileState]);
+
+  useEffect(() => {
+    const hashValue = window.location.hash.slice(1);
+    if (!isPanelId(hashValue)) return;
+
+    const timer = window.setTimeout(() => scrollToPanel(hashValue), 140);
+
+    return () => window.clearTimeout(timer);
+  }, [scrollToPanel]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -451,14 +609,31 @@ export const HorizontalShowroom: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isDesktop, scrollToPanel]);
 
-  useEffect(() => {
-    const hashValue = window.location.hash.slice(1);
-    if (!isPanelId(hashValue)) return;
+  const handlePointerMove = useCallback(
+    (event: React.PointerEvent<HTMLElement>) => {
+      if (!isDesktop || prefersReducedMotion) return;
 
-    const timer = window.setTimeout(() => scrollToPanel(hashValue), 80);
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
+      const y = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
 
-    return () => window.clearTimeout(timer);
-  }, [scrollToPanel]);
+      sceneStateRef.current.pointerX = x;
+      sceneStateRef.current.pointerY = y;
+      sceneStateRef.current.pointerInfluence = 1;
+      event.currentTarget.style.setProperty("--cursor-x", x.toFixed(3));
+      event.currentTarget.style.setProperty("--cursor-y", y.toFixed(3));
+    },
+    [isDesktop, prefersReducedMotion]
+  );
+
+  const handlePointerLeave = useCallback(() => {
+    sceneStateRef.current.pointerX = 0;
+    sceneStateRef.current.pointerY = 0;
+    sceneStateRef.current.pointerInfluence = 0;
+
+    viewportRef.current?.style.setProperty("--cursor-x", "0");
+    viewportRef.current?.style.setProperty("--cursor-y", "0");
+  }, []);
 
   const handleIntroComplete = useCallback(() => {
     setIsIntroActive(false);
@@ -485,26 +660,42 @@ export const HorizontalShowroom: React.FC = () => {
         onComplete={handleIntroComplete}
       />
 
-      <div
-        ref={containerRef}
-        className="relative"
-        style={isDesktop && scrollHeight ? { height: `${scrollHeight}px` } : undefined}
-      >
+      <div ref={containerRef} className="relative">
         <main
           ref={viewportRef}
-          className="relative min-h-[100svh] overflow-hidden md:sticky md:top-0 md:h-[100svh]"
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          className="relative min-h-[100svh] overflow-hidden [--cursor-x:0] [--cursor-y:0] md:h-[100svh]"
         >
+          <ArchitecturalAtmosphere />
+
+          <div
+            className="pointer-events-none absolute inset-x-0 top-[18.5rem] z-0 h-[34svh] md:inset-0 md:top-0 md:h-full"
+            style={{
+              opacity:
+                isDesktop && !prefersReducedMotion
+                  ? 1 - clamp((progress - 0.62) / 0.24, 0, 0.55)
+                  : isDesktop
+                    ? 1
+                    : 0.58,
+            }}
+          >
+            <HeroScene
+              storyRef={sceneStateRef}
+              isIntroActive={isIntroActive}
+            />
+          </div>
+
           <div
             ref={trackRef}
-            className="flex min-h-[100svh] flex-col will-change-transform md:h-[100svh] md:flex-row"
+            className="relative z-10 flex min-h-[100svh] flex-col md:h-[100svh] md:flex-row md:will-change-transform"
           >
             <HeroPanel
-              isIntroActive={isIntroActive}
               onOpenAppointment={openAppointment}
               onNavigate={scrollToPanel}
             />
             <ServicesPanel activeServiceIndex={activeServiceIndex} />
-            <ProjectsPanel />
+            <ProjectsPanel activeProjectIndex={activeProjectIndex} />
             <TrackingPanel onOpenAppointment={openAppointment} />
             <ContactPanel onOpenAppointment={openAppointment} />
           </div>
@@ -522,14 +713,42 @@ export const HorizontalShowroom: React.FC = () => {
   );
 };
 
+const ArchitecturalAtmosphere: React.FC = () => (
+  <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+    <div className="absolute inset-0 bg-blueprint-light opacity-45" />
+    <div
+      data-plan-layer
+      className="absolute left-[8vw] top-[19vh] hidden h-[42vh] w-[38vw] border-l border-t border-[#102B49]/12 md:block"
+      style={{
+        transform:
+          "translate3d(calc(var(--cursor-x) * -0.45rem), calc(var(--cursor-y) * -0.25rem), 0)",
+      }}
+    />
+    <div
+      data-plan-layer
+      className="absolute right-[9vw] top-[12vh] hidden h-[68vh] w-px bg-[#9A5C2F]/18 md:block"
+      style={{
+        transform:
+          "translate3d(calc(var(--cursor-x) * 0.6rem), calc(var(--cursor-y) * 0.22rem), 0)",
+      }}
+    />
+    <div
+      data-plan-layer
+      className="absolute bottom-[13vh] right-[16vw] hidden h-px w-[32vw] bg-[#102B49]/14 md:block"
+      style={{
+        transform:
+          "translate3d(calc(var(--cursor-x) * 0.35rem), calc(var(--cursor-y) * -0.4rem), 0)",
+      }}
+    />
+  </div>
+);
+
 interface HeroPanelProps {
-  isIntroActive: boolean;
   onOpenAppointment: () => void;
   onNavigate: (panelId: PanelId) => void;
 }
 
 const HeroPanel: React.FC<HeroPanelProps> = ({
-  isIntroActive,
   onOpenAppointment,
   onNavigate,
 }) => {
@@ -537,29 +756,35 @@ const HeroPanel: React.FC<HeroPanelProps> = ({
     <section
       id="hero"
       data-panel="hero"
-      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden bg-[#F6F2EA] px-5 pb-10 pt-28 text-[#102B49] sm:px-10 md:h-[100svh] md:min-w-[100vw] md:px-12 md:pb-12 md:pt-28 lg:px-16"
+      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden px-5 pb-12 pt-28 text-[#102B49] sm:px-10 md:h-[100svh] md:min-w-[100vw] md:px-12 md:pb-14 md:pt-28 lg:px-16"
     >
-      <div className="pointer-events-none absolute inset-0 bg-blueprint-light opacity-35" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#F6F2EA] to-transparent" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-[42vh] w-[60vw] bg-[#9A5C2F]/10 blur-3xl" />
-
-      <div className="relative z-10 mx-auto grid h-full w-full max-w-[1900px] grid-cols-1 items-center gap-8 md:grid-cols-[minmax(340px,0.42fr)_minmax(0,0.58fr)] md:gap-0">
-        <div className="max-w-2xl md:pr-4">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#F6F2EA] to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[72svh] bg-gradient-to-b from-[#F6F2EA] via-[#F6F2EA]/96 to-transparent md:hidden" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[64vw] bg-gradient-to-r from-[#F6F2EA] via-[#F6F2EA]/92 to-transparent md:block" />
+      <div className="relative z-10 mx-auto grid h-full w-full max-w-[1900px] grid-cols-1 items-end gap-10 md:grid-cols-[minmax(340px,0.44fr)_minmax(0,0.56fr)] md:items-center md:gap-0">
+        <div
+          data-reveal
+          className="max-w-2xl md:pb-[8vh] md:pr-4"
+          style={{
+            transform:
+              "translate3d(calc(var(--cursor-x) * -0.22rem), calc(var(--cursor-y) * -0.12rem), 0)",
+          }}
+        >
           <div className="mb-7 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9A5C2F]">
-            <span className="h-2 w-2 rounded-full bg-[#9A5C2F]" />
+            <span className="h-px w-10 bg-[#9A5C2F]" />
             <span>ERDEM DİZAYN & MEKANİK</span>
           </div>
 
-          <h1 className="font-serif text-4xl font-semibold leading-[1.08] tracking-normal text-[#102B49] sm:text-5xl lg:text-6xl xl:text-7xl">
-            Hayal ettiğiniz mekânı,
+          <h1 className="font-serif text-[clamp(3rem,8vw,7.8rem)] font-semibold leading-[0.96] tracking-normal text-[#102B49]">
+            Mekanın içinden{" "}
             <span className="block font-normal italic text-[#9A5C2F]">
-              birlikte gerçeğe dönüştürelim.
+              geçerek tasarlayın.
             </span>
           </h1>
 
-          <p className="mt-7 max-w-xl text-base leading-8 text-[#102B49]/76 sm:text-lg">
-            İç mimari, mekanik çözüm ve saha uygulamasını tek masada buluşturan
-            premium bir proje yolculuğu.
+          <p className="mt-7 max-w-xl text-base leading-8 text-[#102B49]/74 sm:text-lg">
+            İç mimari, mekanik çözüm ve saha uygulamasını tek akışta buluşturan
+            kontrollü bir proje yolculuğu.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -574,7 +799,7 @@ const HeroPanel: React.FC<HeroPanelProps> = ({
             <button
               type="button"
               onClick={() => onNavigate("projects")}
-              className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full border border-[#102B49]/25 bg-[#FBFAF7]/70 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#102B49] transition-colors duration-200 hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+              className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full border border-[#102B49]/25 bg-[#FBFAF7]/72 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#102B49] backdrop-blur-sm transition-colors duration-200 hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
             >
               <span>Projeleri İncele</span>
               <ArrowRight className="h-4 w-4" />
@@ -582,10 +807,7 @@ const HeroPanel: React.FC<HeroPanelProps> = ({
           </div>
         </div>
 
-        <div className="relative h-[48vh] min-h-[360px] w-full md:h-[calc(100svh-6rem)] md:min-h-0 md:translate-x-8 lg:translate-x-16 xl:translate-x-24">
-          <div className="absolute inset-x-4 bottom-6 h-px bg-[#102B49]/12 md:inset-x-0" />
-          <HeroScene isIntroActive={isIntroActive} />
-        </div>
+        <div className="relative min-h-[42vh] md:min-h-0" aria-hidden="true" />
       </div>
     </section>
   );
@@ -602,31 +824,30 @@ const ServicesPanel: React.FC<ServicesPanelProps> = ({ activeServiceIndex }) => 
     <section
       id="services"
       data-panel="services"
-      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden border-t border-[#102B49]/10 bg-[#FBFAF7] px-5 py-24 text-[#102B49] sm:px-10 md:h-[100svh] md:min-w-[120vw] md:border-l md:border-t-0 md:px-16 md:py-0"
+      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden border-t border-[#102B49]/10 bg-[#FBFAF7]/88 px-5 py-24 text-[#102B49] sm:px-10 md:h-[100svh] md:min-w-[128vw] md:border-l md:border-t-0 md:bg-[#FBFAF7]/78 md:px-16 md:py-0"
     >
       <div className="pointer-events-none absolute inset-0 bg-blueprint-light opacity-25" />
 
-      <div className="relative z-10 grid w-full grid-cols-1 gap-12 self-center md:grid-cols-[0.72fr_1fr] md:items-end md:gap-[7vw]">
-        <div className="max-w-xl md:pb-[13vh]">
+      <div className="relative z-10 grid w-full grid-cols-1 gap-12 self-center md:grid-cols-[0.64fr_1fr] md:items-end md:gap-[7vw]">
+        <div data-reveal className="max-w-xl md:pb-[13vh]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9A5C2F]">
             Hizmetler
           </p>
-          <h2 className="mt-5 font-serif text-3xl font-semibold leading-tight tracking-normal text-[#102B49] sm:text-5xl lg:text-6xl">
-            Tasarım, mekanik ve uygulama aynı hatta ilerler.
+          <h2 className="mt-5 font-serif text-4xl font-semibold leading-tight tracking-normal text-[#102B49] sm:text-6xl lg:text-7xl">
+            Standart kartlar yok.
           </h2>
           <p className="mt-6 text-base leading-8 text-[#102B49]/68">
-            Uzun listeler yerine, proje kararlarını bir mimari indeks gibi
-            netleştiririz.
+            Her hizmet, projede karar verilen ayrı bir mimari an gibi görünür.
           </p>
         </div>
 
-        <div className="border-y border-[#102B49]/12 py-9 md:mb-[12vh] md:max-w-3xl">
-          <div className="flex items-start gap-6 sm:gap-9">
-            <span className="font-serif text-6xl font-semibold leading-none text-[#9A5C2F]/70 sm:text-8xl lg:text-9xl">
+        <div className="border-y border-[#102B49]/12 py-9 md:mb-[12vh] md:max-w-4xl">
+          <div className="grid grid-cols-[auto_1fr] items-start gap-6 sm:gap-9">
+            <span className="font-serif text-6xl font-semibold leading-none text-[#9A5C2F]/72 sm:text-8xl lg:text-9xl">
               {activeService.number}
             </span>
-            <div>
-              <h3 className="font-serif text-4xl font-semibold leading-tight tracking-normal text-[#102B49] sm:text-6xl">
+            <div data-reveal>
+              <h3 className="font-serif text-[clamp(2.5rem,5vw,5.8rem)] font-semibold leading-[0.98] tracking-normal text-[#102B49]">
                 {activeService.title}
               </h3>
               <p className="mt-6 max-w-2xl text-base leading-8 text-[#102B49]/76 sm:text-lg">
@@ -664,62 +885,94 @@ const ServicesPanel: React.FC<ServicesPanelProps> = ({ activeServiceIndex }) => 
   );
 };
 
-const ProjectsPanel: React.FC = () => {
+interface ProjectsPanelProps {
+  activeProjectIndex: number;
+}
+
+const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ activeProjectIndex }) => {
+  const activeProject = PROJECTS_DATA[activeProjectIndex] ?? PROJECTS_DATA[0];
+
   return (
     <section
       id="projects"
       data-panel="projects"
-      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden border-t border-[#102B49]/10 bg-[#F6F2EA] px-5 py-24 text-[#102B49] sm:px-10 md:h-[100svh] md:min-w-[140vw] md:border-l md:border-t-0 md:px-16 md:py-0"
+      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden border-t border-[#102B49]/10 bg-[#F6F2EA]/92 px-5 py-24 text-[#102B49] sm:px-10 md:h-[100svh] md:min-w-[168vw] md:border-l md:border-t-0 md:px-16 md:py-0"
     >
       <div className="pointer-events-none absolute inset-0 bg-blueprint-light opacity-20" />
 
-      <div className="relative z-10 grid w-full grid-cols-1 gap-10 self-center md:grid-cols-[0.28fr_1fr] md:gap-[5vw]">
-        <div className="max-w-md md:pt-[10vh]">
+      <div className="relative z-10 grid w-full grid-cols-1 gap-10 self-center md:grid-cols-[0.25fr_1fr] md:gap-[5vw]">
+        <div data-reveal className="max-w-md md:pt-[8vh]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9A5C2F]">
             Seçili Projeler
           </p>
-          <h2 className="mt-5 font-serif text-3xl font-semibold leading-tight tracking-normal text-[#102B49] sm:text-5xl">
-            Bir galeri duvarı gibi; sadece işin kendisi konuşur.
+          <h2 className="mt-5 font-serif text-4xl font-semibold leading-tight tracking-normal text-[#102B49] sm:text-5xl lg:text-6xl">
+            Bir galeri duvarı gibi; işin kendisi konuşur.
           </h2>
+
+          <div className="mt-9 border-y border-[#102B49]/12 py-6">
+            <span className="font-serif text-4xl font-semibold text-[#9A5C2F]/76">
+              {formatStageNumber(activeProjectIndex)}
+            </span>
+            <h3 className="mt-3 font-serif text-2xl font-semibold text-[#102B49]">
+              {activeProject.title}
+            </h3>
+            <p className="mt-4 text-sm leading-7 text-[#102B49]/68">
+              {activeProject.summary}
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-7 md:h-[74vh] md:flex-row md:items-center md:gap-[4vw] md:overflow-visible">
-          {PROJECTS_DATA.map((project, index) => (
-            <Link
-              key={project.id}
-              href={`/projeler/${project.slug}`}
-              className={`group relative block shrink-0 overflow-hidden border border-[#102B49]/10 bg-[#102B49]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F] md:h-full ${
-                index % 2 === 0 ? "md:w-[34vw]" : "md:w-[28vw] md:self-end"
-              }`}
-            >
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="hidden object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035] md:block"
-                sizes="(max-width: 768px) 100vw, 34vw"
-                priority={index === 0}
-              />
-              <Image
-                src={project.image}
-                alt={project.title}
-                width={900}
-                height={1100}
-                className="aspect-[4/5] w-full object-cover md:hidden"
-                sizes="100vw"
-                priority={index === 0}
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0A1B2E]/86 via-[#0A1B2E]/28 to-transparent p-5 text-white sm:p-7">
-                <h3 className="font-serif text-2xl font-semibold tracking-normal sm:text-3xl">
-                  {project.title}
-                </h3>
-                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/72">
-                  <span>{project.type}</span>
-                  <span>{project.location}</span>
+        <div className="flex flex-col gap-7 md:h-[76vh] md:flex-row md:items-center md:gap-[3.6vw] md:overflow-visible">
+          {PROJECTS_DATA.map((project, index) => {
+            const isActive = index === activeProjectIndex;
+
+            return (
+              <Link
+                key={project.id}
+                href={`/projeler/${project.slug}`}
+                data-project-card
+                className={`group relative block shrink-0 overflow-hidden border bg-[#102B49]/5 transition-[border-color,opacity] duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F] md:h-full ${
+                  index % 2 === 0 ? "md:w-[36vw]" : "md:w-[30vw] md:self-end"
+                } ${
+                  isActive
+                    ? "border-[#9A5C2F]/60 opacity-100"
+                    : "border-[#102B49]/12 opacity-82"
+                }`}
+              >
+                <div data-project-image className="absolute inset-0 hidden md:block">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                    sizes="36vw"
+                    preload={index === 0}
+                  />
                 </div>
-              </div>
-            </Link>
-          ))}
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  width={900}
+                  height={1100}
+                  className="aspect-[4/5] w-full object-cover md:hidden"
+                  sizes="100vw"
+                  preload={index === 0}
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0A1B2E]/88 via-[#0A1B2E]/28 to-transparent p-5 text-white sm:p-7">
+                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B8733E]">
+                    {formatStageNumber(index)}
+                  </span>
+                  <h3 className="mt-3 font-serif text-2xl font-semibold tracking-normal sm:text-3xl">
+                    {project.title}
+                  </h3>
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/72">
+                    <span>{project.type}</span>
+                    <span>{project.location}</span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -807,22 +1060,22 @@ const TrackingPanel: React.FC<TrackingPanelProps> = ({ onOpenAppointment }) => {
     <section
       id="tracking"
       data-panel="tracking"
-      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden border-t border-[#102B49]/10 bg-[#102B49] px-5 py-24 text-[#F6F2EA] sm:px-10 md:h-[100svh] md:min-w-[110vw] md:border-l md:border-t-0 md:px-16 md:py-0"
+      className="relative flex min-h-[100svh] w-full shrink-0 overflow-hidden border-t border-[#102B49]/10 bg-[#102B49] px-5 py-24 text-[#F6F2EA] sm:px-10 md:h-[100svh] md:min-w-[126vw] md:border-l md:border-t-0 md:px-16 md:py-0"
     >
       <div className="pointer-events-none absolute inset-0 bg-blueprint-dark opacity-25" />
-      <div className="pointer-events-none absolute right-[-8rem] top-[-8rem] h-96 w-96 rounded-full border border-white/10" />
 
       <div className="relative z-10 grid w-full grid-cols-1 gap-10 self-center md:grid-cols-[0.42fr_0.58fr] md:items-center md:gap-[5vw]">
-        <div className="max-w-xl">
+        <div data-reveal className="max-w-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#B8733E]">
             Projem Nerede?
           </p>
           <h2 className="mt-5 font-serif text-4xl font-semibold leading-tight tracking-normal text-white sm:text-6xl">
-            Projenizin hangi aşamada olduğunu tek bakışta görün.
+            Hareket burada yavaşlar; proje okunur hale gelir.
           </h2>
 
           <form
             onSubmit={handleSubmit}
+            data-lenis-prevent
             className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]"
           >
             <label className="block">
@@ -1052,7 +1305,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ onOpenAppointment }) => {
       <div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-[#102B49]/10 to-transparent" />
 
       <div className="relative z-10 grid w-full grid-cols-1 gap-10 self-center md:grid-cols-[0.68fr_0.32fr] md:items-end md:gap-[5vw]">
-        <div>
+        <div data-reveal>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9A5C2F]">
             İletişim
           </p>
@@ -1094,7 +1347,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ onOpenAppointment }) => {
           </div>
         </div>
 
-        <div className="border-y border-[#102B49]/12 py-7">
+        <div data-reveal className="border-y border-[#102B49]/12 py-7">
           <a
             href={BUSINESS_CONTACT.phoneHref}
             className="flex min-h-11 items-center gap-3 text-base font-semibold text-[#102B49] transition-colors duration-200 hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
@@ -1145,7 +1398,9 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
                 type="button"
                 onClick={() => onNavigate(panel.id)}
                 className={`pointer-events-auto min-h-11 cursor-pointer text-left text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F] ${
-                  isActive ? "text-[#102B49]" : "text-[#102B49]/42 hover:text-[#9A5C2F]"
+                  isActive
+                    ? "text-[#102B49]"
+                    : "text-[#102B49]/42 hover:text-[#9A5C2F]"
                 }`}
               >
                 <span className="font-serif text-base">{panel.number}</span>

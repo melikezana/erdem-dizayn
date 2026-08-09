@@ -3,9 +3,13 @@
 import React, { Suspense, useRef, useSyncExternalStore } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { ArchitecturalModel, type VillaPointerState } from "./ArchitecturalModel";
+import {
+  ArchitecturalModel,
+  type VillaSceneState,
+} from "./ArchitecturalModel";
 
 interface HeroSceneProps {
+  storyRef?: React.MutableRefObject<VillaSceneState>;
   isTechnicalMode?: boolean;
   isIntroActive?: boolean;
 }
@@ -51,15 +55,19 @@ function SceneFallback() {
 }
 
 export const HeroScene: React.FC<HeroSceneProps> = ({
+  storyRef,
   isTechnicalMode = false,
   isIntroActive = false,
 }) => {
-  const pointerRef = useRef<VillaPointerState>({
-    x: 0,
-    targetInfluence: 0,
-    influence: 0,
-    yawOffset: 0,
+  const fallbackStoryRef = useRef<VillaSceneState>({
+    scrollProgress: 0,
+    pointerX: 0,
+    pointerY: 0,
+    pointerInfluence: 0,
+    isReducedMotion: false,
+    isDesktop: false,
   });
+  const sceneStoryRef = storyRef ?? fallbackStoryRef;
 
   const isMounted = useSyncExternalStore(
     emptySubscribe,
@@ -82,18 +90,6 @@ export const HeroScene: React.FC<HeroSceneProps> = ({
   const maxDpr = isMobileViewport ? 1.25 : 1.5;
   const enableRealtimeShadows = !isMobileViewport;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    pointerRef.current.x = x;
-    pointerRef.current.targetInfluence = 1;
-  };
-
-  const handleMouseLeave = () => {
-    pointerRef.current.x = 0;
-    pointerRef.current.targetInfluence = 0;
-  };
-
   if (!isMounted) return <SceneFallback />;
 
   if (!hasWebGL) {
@@ -108,11 +104,7 @@ export const HeroScene: React.FC<HeroSceneProps> = ({
   }
 
   return (
-    <div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative h-full w-full select-none"
-    >
+    <div aria-hidden="true" className="relative h-full w-full select-none">
       <Canvas
         shadows={enableRealtimeShadows}
         dpr={[1, maxDpr]}
@@ -152,7 +144,7 @@ export const HeroScene: React.FC<HeroSceneProps> = ({
 
         <Suspense fallback={null}>
           <ArchitecturalModel
-            pointerRef={pointerRef}
+            storyRef={sceneStoryRef}
             isTechnicalMode={isTechnicalMode}
             isIntroActive={isIntroActive}
             enableRealtimeShadows={enableRealtimeShadows}
