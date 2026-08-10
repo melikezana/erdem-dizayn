@@ -102,19 +102,19 @@ function PageTransition({ children }: React.PropsWithChildren) {
         initial={
           shouldReduceMotion
             ? false
-            : { opacity: 0, clipPath: "inset(0 0 100% 0)" }
+            : { opacity: 0, y: 12, clipPath: "inset(0 0 4% 0)" }
         }
         animate={
           shouldReduceMotion
             ? undefined
-            : { opacity: 1, clipPath: "inset(0 0 0% 0)" }
+            : { opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }
         }
         exit={
           shouldReduceMotion
             ? undefined
-            : { opacity: 0, clipPath: "inset(100% 0 0 0)" }
+            : { opacity: 0, y: -10, clipPath: "inset(4% 0 0 0)" }
         }
-        transition={{ duration: 0.62, ease: [0.76, 0, 0.24, 1] }}
+        transition={{ duration: 0.42, ease: [0.76, 0, 0.24, 1] }}
         className="min-h-full bg-[#151310]"
       >
         {children}

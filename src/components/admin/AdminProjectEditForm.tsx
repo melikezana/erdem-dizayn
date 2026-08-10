@@ -124,7 +124,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
 
           return (
             <label key={name} className="block">
-              <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+              <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
                 {label}
               </span>
               <input
@@ -143,7 +143,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
         })}
 
         <label className="block">
-          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+          <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
             Proje Türü
           </span>
           <select
@@ -166,7 +166,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+          <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
             Güncel Aşama
           </span>
           <select
@@ -189,7 +189,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+          <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
             İlerleme
           </span>
           <input
@@ -208,7 +208,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
       </div>
 
       <label className="block">
-        <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+        <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
           Müşteriye Görünecek Not
         </span>
         <textarea
@@ -242,7 +242,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] disabled:cursor-not-allowed disabled:bg-[#102B49]/60"
+          className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] disabled:cursor-not-allowed disabled:bg-[#102B49]/60"
         >
           {isPending ? (
             <LoaderCircle className="h-4 w-4 animate-spin" />

@@ -229,10 +229,10 @@ function Reveal({
 
   return (
     <motion.div
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 34 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
       whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount }}
-      transition={{ duration: 0.82, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.56, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       data-cinema-reveal
     >
@@ -276,8 +276,8 @@ function Magnetic({
     }
 
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 18;
-    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 14;
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 8;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 6;
 
     ref.current?.style.setProperty(
       "transform",
@@ -357,7 +357,7 @@ function SpatialNav({
           </span>
         </button>
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Ana menü">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Ana menü">
           {NAV_LINKS.map((link) => {
             const isActive = activeSection === link.target;
 
@@ -380,14 +380,14 @@ function SpatialNav({
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <a
             href={BUSINESS_CONTACT.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram profilini aç"
             data-cursor="İncele"
-            className="grid h-11 w-11 place-items-center rounded-full border border-[#f8f0e5]/18 text-[#f8f0e5] transition-colors hover:border-[#c8a34c] hover:text-[#e6c777]"
+            className="ed-interactive grid h-11 w-11 place-items-center rounded-full border border-[#f8f0e5]/18 text-[#f8f0e5] transition-colors hover:border-[#c8a34c] hover:text-[#e6c777]"
           >
             <Camera className="h-4 w-4" />
           </a>
@@ -407,7 +407,7 @@ function SpatialNav({
         <button
           type="button"
           onClick={() => setMobileOpen((open) => !open)}
-          className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-[#f8f0e5]/18 bg-[#f8f0e5]/8 text-[#f8f0e5] backdrop-blur-md md:hidden"
+          className="ed-interactive grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-[#f8f0e5]/18 bg-[#f8f0e5]/8 text-[#f8f0e5] backdrop-blur-md lg:hidden"
           aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
           aria-expanded={mobileOpen}
         >
@@ -422,7 +422,7 @@ function SpatialNav({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-            className="px-4 md:hidden"
+            className="px-4 lg:hidden"
           >
             <div className="mt-3 border border-[#f8f0e5]/12 bg-[#151310]/96 p-4 shadow-2xl">
               <nav className="flex flex-col" aria-label="Mobil menü">
@@ -431,7 +431,7 @@ function SpatialNav({
                     key={link.target}
                     type="button"
                     onClick={() => navigate(link.target)}
-                    className="min-h-12 cursor-pointer border-b border-[#f8f0e5]/10 px-2 py-3 text-left text-sm font-semibold uppercase text-[#f8f0e5]"
+                    className="ed-interactive min-h-12 cursor-pointer border-b border-[#f8f0e5]/10 px-2 py-3 text-left text-sm font-semibold uppercase text-[#f8f0e5]"
                   >
                     {link.label}
                   </button>
@@ -519,20 +519,20 @@ function HeroSection({
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
                 animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#d5a85f]"
+                className="ed-eyebrow mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#d5a85f]"
               >
                 <span className="h-px w-12 bg-[#c8a34c]" />
                 <span>İç mimari · mekanik · anahtar teslim</span>
               </motion.div>
 
-              <h1 className="hero-title-line font-serif text-6xl font-semibold leading-[0.88] sm:text-7xl md:text-8xl xl:text-9xl 2xl:text-[10rem]">
+              <h1 className="ed-display-title hero-title-line font-serif text-6xl font-semibold leading-[0.88] sm:text-7xl md:text-8xl xl:text-9xl 2xl:text-[10rem]">
                 Erdem
                 <span className="block font-normal italic text-[#e6c777]">
                   Dizayn
                 </span>
               </h1>
 
-              <p className="mt-7 max-w-2xl text-base font-light leading-8 text-[#f8f0e5]/76 sm:text-lg lg:text-xl lg:leading-9">
+              <p className="ed-body-copy mt-7 max-w-2xl text-base font-light leading-8 text-[#f8f0e5]/76 sm:text-lg lg:text-xl lg:leading-9">
                 Tasarım fikrini; ışık, malzeme, mekanik altyapı ve saha
                 uygulamasıyla tek bir mekân deneyimine dönüştürüyoruz.
               </p>
@@ -554,7 +554,7 @@ function HeroSection({
                     type="button"
                     onClick={() => onNavigate("projects")}
                     data-cursor="Bak"
-                    className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full border border-[#f8f0e5]/22 px-7 text-sm font-semibold uppercase text-[#f8f0e5] transition-colors hover:border-[#e6c777] hover:text-[#e6c777]"
+                    className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full border border-[#f8f0e5]/22 px-7 text-sm font-semibold uppercase text-[#f8f0e5] transition-colors hover:border-[#e6c777] hover:text-[#e6c777]"
                   >
                     <span>Projeleri İncele</span>
                     <ArrowRight className="h-4 w-4" />
@@ -583,7 +583,7 @@ function HeroSection({
                     <span>{chapter.label}</span>
                     <span>{chapter.number}</span>
                   </div>
-                  <h2 className="font-serif text-3xl font-semibold leading-tight">
+                  <h2 className="ed-panel-title font-serif text-3xl font-semibold leading-tight">
                     {chapter.title}
                   </h2>
                   <p className="mt-4 text-sm font-light leading-7 text-[#f8f0e5]/64">
@@ -606,7 +606,7 @@ function HeroSection({
                 <span className="font-serif text-4xl font-semibold leading-none text-[#e6c777]">
                   {metric.value}
                 </span>
-                <span className="max-w-[12rem] pb-1 text-xs font-semibold uppercase leading-5 text-[#f8f0e5]/58">
+                <span className="ed-data-label max-w-[12rem] pb-1 text-xs font-semibold uppercase leading-5 text-[#f8f0e5]/58">
                   {metric.label}
                 </span>
               </div>
@@ -625,7 +625,7 @@ function HeroSection({
               type="button"
               onClick={() => onNavigate("about")}
               data-cursor="Kay"
-              className="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-[#f8f0e5]/14 text-[#e6c777] transition-colors hover:border-[#c8a34c] hover:bg-[#c8a34c] hover:text-[#151310]"
+              className="ed-interactive grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-[#f8f0e5]/14 text-[#e6c777] transition-colors hover:border-[#c8a34c] hover:bg-[#c8a34c] hover:text-[#151310]"
               aria-label="Sonraki bölüme git"
             >
               <ArrowDownRight className="h-4 w-4" />
@@ -641,22 +641,22 @@ function ManifestoSection() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-[#f8f0e5] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
+      className="ed-section-shell relative overflow-hidden bg-[#f8f0e5] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
     >
       <div className="pointer-events-none absolute inset-0 bg-architectural-grid opacity-35" />
       <div className="relative z-10 mx-auto max-w-[1520px]">
         <Reveal>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8">
-              <div className="mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#8e5533]">
+              <div className="ed-eyebrow mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#8e5533]">
                 <Sparkles className="h-4 w-4" />
                 <span>Yaklaşım</span>
               </div>
-              <h2 className="max-w-6xl font-serif text-5xl font-semibold leading-[1.02] sm:text-7xl lg:text-8xl">
+              <h2 className="ed-section-title max-w-6xl font-serif text-5xl font-semibold leading-[1.02] sm:text-7xl lg:text-8xl">
                 Bir mekânı önce görünür kılmayız; önce hissettiririz.
               </h2>
             </div>
-            <p className="max-w-xl text-base font-light leading-8 text-[#151310]/68 sm:text-lg lg:col-span-4">
+            <p className="ed-body-copy max-w-xl text-base font-light leading-8 text-[#151310]/68 sm:text-lg lg:col-span-4">
               Erdem Dizayn; konut, ofis ve ticari alanlarda iç mimari
               tasarımı, mekanik koordinasyonu ve uygulama sürecini tek ritimde
               yönetir. Sonuç yalnızca güzel bir yüzey değil, içinde yaşanabilen
@@ -668,11 +668,11 @@ function ManifestoSection() {
         <div className="mt-16 grid grid-cols-1 gap-px bg-[#151310]/10 md:grid-cols-4">
           {MANIFESTO_LINES.map((line, index) => (
             <Reveal key={line} delay={index * 0.05}>
-              <article className="min-h-52 bg-[#fbfaf7] p-6 transition-colors duration-300 hover:bg-[#151310] hover:text-[#f8f0e5]">
+              <article className="ed-card-lift min-h-52 bg-[#fbfaf7] p-6 transition-colors duration-300 hover:bg-[#151310] hover:text-[#f8f0e5]">
                 <span className="font-serif text-4xl font-semibold text-[#a0613a]">
                   {formatStageNumber(index)}
                 </span>
-                <p className="mt-8 text-lg font-light leading-8">{line}</p>
+                <p className="ed-body-copy mt-8 text-lg font-light leading-8">{line}</p>
               </article>
             </Reveal>
           ))}
@@ -684,17 +684,17 @@ function ManifestoSection() {
 
 function ProcessSection() {
   return (
-    <section className="relative overflow-hidden bg-[#151310] px-5 py-24 text-[#f8f0e5] sm:px-8 sm:py-32 lg:px-12">
+    <section className="ed-section-shell relative overflow-hidden bg-[#151310] px-5 py-24 text-[#f8f0e5] sm:px-8 sm:py-32 lg:px-12">
       <div className="pointer-events-none absolute inset-0 bg-architectural-grid-dark opacity-25" />
       <div className="relative z-10 mx-auto max-w-[1520px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
             <div className="sticky top-28">
-              <div className="mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#d5a85f]">
+              <div className="ed-eyebrow mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#d5a85f]">
                 <Layers3 className="h-4 w-4" />
                 <span>Süreç</span>
               </div>
-              <h2 className="font-serif text-5xl font-semibold leading-[1.04] sm:text-6xl">
+              <h2 className="ed-section-title-sm font-serif text-5xl font-semibold leading-[1.04] sm:text-6xl">
                 Tasarım kararları sahada nefesini kaybetmez.
               </h2>
             </div>
@@ -703,7 +703,7 @@ function ProcessSection() {
           <div className="lg:col-span-7">
             {PROCESS_STEPS.map((step, index) => (
               <Reveal key={step.number} delay={index * 0.06}>
-                <article className="group grid grid-cols-1 gap-6 border-t border-[#f8f0e5]/14 py-10 transition-colors duration-300 hover:border-[#c8a34c] sm:grid-cols-[9rem_1fr]">
+                <article className="ed-card-lift group grid grid-cols-1 gap-6 border-t border-[#f8f0e5]/14 py-10 transition-colors duration-300 hover:border-[#c8a34c] sm:grid-cols-[9rem_1fr]">
                   <div>
                     <span className="font-serif text-5xl font-semibold text-[#d5a85f]/70">
                       {step.number}
@@ -713,10 +713,10 @@ function ProcessSection() {
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-serif text-3xl font-semibold leading-tight sm:text-4xl">
+                    <h3 className="ed-card-title font-serif text-3xl font-semibold leading-tight sm:text-4xl">
                       {step.title}
                     </h3>
-                    <p className="mt-4 max-w-2xl text-base font-light leading-8 text-[#f8f0e5]/64">
+                    <p className="ed-body-copy mt-4 max-w-2xl text-base font-light leading-8 text-[#f8f0e5]/64">
                       {step.body}
                     </p>
                   </div>
@@ -776,20 +776,20 @@ function ProjectCard({
           src={project.image}
           alt={project.title}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.055]"
+          className="ed-media-lift object-cover transition-transform duration-700 ease-out group-hover:scale-[1.055]"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority={index === 0}
         />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(21,19,16,0.86)_0%,rgba(21,19,16,0.08)_62%,rgba(21,19,16,0.18)_100%)]" />
         <div className="project-tilt-glow absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         <div className="absolute inset-x-0 bottom-0 p-5 text-[#f8f0e5] sm:p-7">
-          <p className="text-xs font-semibold uppercase text-[#e6c777]">
+          <p className="ed-eyebrow text-xs font-semibold uppercase text-[#e6c777]">
             {project.type} · {project.location}
           </p>
-          <h3 className="mt-3 max-w-xl font-serif text-3xl font-semibold leading-tight sm:text-5xl">
+          <h3 className="ed-card-title mt-3 max-w-xl font-serif text-3xl font-semibold leading-tight sm:text-5xl">
             {project.title}
           </h3>
-          <p className="mt-4 max-w-xl text-sm font-light leading-7 text-[#f8f0e5]/68">
+          <p className="ed-body-copy-sm mt-4 max-w-xl text-sm font-light leading-7 text-[#f8f0e5]/68">
             {project.summary}
           </p>
           <span className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold uppercase text-[#f8f0e5]">
@@ -806,20 +806,20 @@ function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative overflow-hidden bg-[#f8f0e5] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
+      className="ed-section-shell relative overflow-hidden bg-[#f8f0e5] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
     >
       <div className="relative z-10 mx-auto max-w-[1520px]">
         <Reveal>
           <div className="mb-14 grid grid-cols-1 gap-10 border-b border-[#151310]/10 pb-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8">
-              <span className="text-xs font-semibold uppercase text-[#8e5533]">
+              <span className="ed-eyebrow text-xs font-semibold uppercase text-[#8e5533]">
                 Seçili projeler
               </span>
-              <h2 className="mt-5 max-w-5xl font-serif text-5xl font-semibold leading-[1.02] sm:text-7xl">
+              <h2 className="ed-section-title mt-5 max-w-5xl font-serif text-5xl font-semibold leading-[1.02] sm:text-7xl">
                 Görsele bakmak değil, atmosferin içine yaklaşmak.
               </h2>
             </div>
-            <p className="max-w-xl text-base font-light leading-8 text-[#151310]/64 lg:col-span-4">
+            <p className="ed-body-copy max-w-xl text-base font-light leading-8 text-[#151310]/64 lg:col-span-4">
               Büyük format görseller, yavaş hareket ve derinlik hissiyle her
               projeyi ayrı bir mekân kapısı gibi ele alır.
             </p>
@@ -846,22 +846,22 @@ function ServicesSection({
   return (
     <section
       id="services"
-      className="relative overflow-hidden bg-[#ede2d2] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
+      className="ed-section-shell relative overflow-hidden bg-[#ede2d2] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
     >
       <div className="pointer-events-none absolute inset-0 bg-architectural-grid opacity-30" />
       <div className="relative z-10 mx-auto max-w-[1520px]">
         <Reveal>
           <div className="mb-12 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
-              <span className="text-xs font-semibold uppercase text-[#8e5533]">
+              <span className="ed-eyebrow text-xs font-semibold uppercase text-[#8e5533]">
                 Hizmetler
               </span>
-              <h2 className="mt-5 font-serif text-5xl font-semibold leading-[1.04] sm:text-7xl">
+              <h2 className="ed-section-title mt-5 font-serif text-5xl font-semibold leading-[1.04] sm:text-7xl">
                 İç mimari, mekanik ve uygulama aynı nefeste.
               </h2>
             </div>
             <div className="lg:col-span-5">
-              <p className="max-w-xl text-base font-light leading-8 text-[#151310]/68">
+              <p className="ed-body-copy max-w-xl text-base font-light leading-8 text-[#151310]/68">
                 Her başlık ayrı bir ekip karmaşasına dönüşmeden, ölçülebilir ve
                 izlenebilir bir sürece bağlanır.
               </p>
@@ -883,15 +883,15 @@ function ServicesSection({
         <div className="divide-y divide-[#151310]/12 border-y border-[#151310]/12 bg-[#f8f0e5]/34">
           {SERVICES_DATA.map((service, index) => (
             <Reveal key={service.id} delay={index * 0.035}>
-              <article className="group grid grid-cols-1 gap-6 px-0 py-8 transition-colors duration-300 hover:bg-[#151310] hover:px-5 hover:text-[#f8f0e5] sm:grid-cols-[8rem_1fr] lg:grid-cols-12 lg:gap-10">
+              <article className="ed-card-lift group grid grid-cols-1 gap-6 px-0 py-8 transition-colors duration-300 hover:bg-[#151310] hover:text-[#f8f0e5] sm:grid-cols-[8rem_1fr] lg:grid-cols-12 lg:gap-10">
                 <span className="font-serif text-5xl font-semibold text-[#a0613a] group-hover:text-[#e6c777] lg:col-span-2">
                   {service.number}
                 </span>
                 <div className="lg:col-span-4">
-                  <h3 className="font-serif text-3xl font-semibold leading-tight">
+                  <h3 className="ed-card-title font-serif text-3xl font-semibold leading-tight">
                     {service.title}
                   </h3>
-                  <p className="mt-4 text-base font-light leading-8 text-[#151310]/66 group-hover:text-[#f8f0e5]/66">
+                  <p className="ed-body-copy mt-4 text-base font-light leading-8 text-[#151310]/66 group-hover:text-[#f8f0e5]/66">
                     {service.description}
                   </p>
                 </div>
@@ -997,18 +997,18 @@ function TrackingSection({
   return (
     <section
       id="tracking"
-      className="relative overflow-hidden bg-[#151310] px-5 py-24 text-[#f8f0e5] sm:px-8 sm:py-32 lg:px-12"
+      className="ed-section-shell relative overflow-hidden bg-[#151310] px-5 py-24 text-[#f8f0e5] sm:px-8 sm:py-32 lg:px-12"
     >
       <div className="pointer-events-none absolute inset-0 bg-architectural-grid-dark opacity-24" />
       <div className="relative z-10 mx-auto grid max-w-[1520px] grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
         <Reveal className="lg:col-span-5">
-          <span className="text-xs font-semibold uppercase text-[#d5a85f]">
+          <span className="ed-eyebrow text-xs font-semibold uppercase text-[#d5a85f]">
             Projem Nerede?
           </span>
-          <h2 className="mt-5 font-serif text-5xl font-semibold leading-[1.04] sm:text-7xl">
+          <h2 className="ed-section-title mt-5 font-serif text-5xl font-semibold leading-[1.04] sm:text-7xl">
             Saha ritmini görünür kılan sakin bir takip paneli.
           </h2>
-          <p className="mt-6 max-w-xl text-base font-light leading-8 text-[#f8f0e5]/64">
+          <p className="ed-body-copy mt-6 max-w-xl text-base font-light leading-8 text-[#f8f0e5]/64">
             Proje kodunuzu girin; planlamadan teslime kadar güncel aşamayı ve
             sonraki adımı tek bakışta görün.
           </p>
@@ -1063,7 +1063,7 @@ function TrackingSection({
                     />
                   ))}
                 </div>
-                <p className="mt-8 max-w-xl text-lg font-light leading-8 text-[#f8f0e5]/72">
+                <p className="ed-body-copy mt-8 max-w-xl text-lg font-light leading-8 text-[#f8f0e5]/72">
                   Kod girildiğinde proje akışı, aktif aşama ve saha notları bu
                   panelde açılır.
                 </p>
@@ -1085,7 +1085,7 @@ function TrackingSection({
                 role="status"
                 className="flex min-h-[22rem] flex-col justify-center"
               >
-                <p className="font-serif text-3xl font-semibold text-[#f8f0e5]">
+                <p className="ed-panel-title font-serif text-3xl font-semibold text-[#f8f0e5]">
                   Bu kodla eşleşen bir proje bulunamadı.
                 </p>
                 <p className="mt-3 max-w-lg text-sm leading-7 text-[#f8f0e5]/68">
@@ -1114,7 +1114,7 @@ function TrackingSection({
                     ["İlerleme", `${selectedProject.progress}%`],
                   ].map(([label, value]) => (
                     <div key={label} className="border-t border-[#f8f0e5]/15 pt-4">
-                      <span className="block text-[10px] font-semibold uppercase text-[#e6c777]">
+                      <span className="ed-data-label block text-[10px] font-semibold uppercase text-[#e6c777]">
                         {label}
                       </span>
                       <span className="mt-2 block text-sm font-semibold text-[#f8f0e5]">
@@ -1182,7 +1182,7 @@ function TrackingSection({
                               formatStageNumber(index)
                             )}
                           </span>
-                          <span className="text-[10px] font-semibold uppercase">
+                          <span className="ed-data-label text-[10px] font-semibold uppercase">
                             {stage.label}
                           </span>
                         </div>
@@ -1209,7 +1209,7 @@ function TrackingSection({
                     type="button"
                     onClick={onOpenAppointment}
                     data-cursor="Planla"
-                    className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#f8f0e5]/18 px-6 text-sm font-semibold text-[#f8f0e5] transition-colors hover:border-[#e6c777] hover:text-[#e6c777]"
+                    className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#f8f0e5]/18 px-6 text-sm font-semibold text-[#f8f0e5] transition-colors hover:border-[#e6c777] hover:text-[#e6c777]"
                   >
                     <CalendarDays className="h-4 w-4" />
                     <span>Randevu Oluştur</span>
@@ -1228,18 +1228,18 @@ function ContactSection({ onOpenAppointment }: { onOpenAppointment: () => void }
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#f8f0e5] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
+      className="ed-section-shell relative overflow-hidden bg-[#f8f0e5] px-5 py-24 text-[#151310] sm:px-8 sm:py-32 lg:px-12"
     >
       <div className="pointer-events-none absolute inset-0 bg-architectural-grid opacity-35" />
       <div className="relative z-10 mx-auto grid max-w-[1520px] grid-cols-1 gap-12 lg:grid-cols-12 lg:items-end">
         <Reveal className="lg:col-span-8">
-          <span className="text-xs font-semibold uppercase text-[#8e5533]">
+          <span className="ed-eyebrow text-xs font-semibold uppercase text-[#8e5533]">
             İletişim
           </span>
-          <h2 className="mt-5 font-serif text-5xl font-semibold leading-[1.04] sm:text-7xl lg:text-8xl">
+          <h2 className="ed-section-title mt-5 font-serif text-5xl font-semibold leading-[1.04] sm:text-7xl lg:text-8xl">
             Mekân fikriniz varsa, ilk çizgiyi birlikte atalım.
           </h2>
-          <p className="mt-7 max-w-2xl text-base font-light leading-8 text-[#151310]/68 sm:text-lg">
+          <p className="ed-body-copy mt-7 max-w-2xl text-base font-light leading-8 text-[#151310]/68 sm:text-lg">
             Yeni bir konut, yenileme, ofis ya da mekanik ihtiyaç için kapsamı,
             öncelikleri ve en doğru başlangıcı netleştirelim.
           </p>
@@ -1260,7 +1260,7 @@ function ContactSection({ onOpenAppointment }: { onOpenAppointment: () => void }
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="Yaz"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#151310]/18 px-7 text-sm font-semibold uppercase text-[#151310] transition-colors hover:border-[#8e5533] hover:text-[#8e5533]"
+              className="ed-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#151310]/18 px-7 text-sm font-semibold uppercase text-[#151310] transition-colors hover:border-[#8e5533] hover:text-[#8e5533]"
             >
               <MessageCircle className="h-4 w-4" />
               <span>WhatsApp</span>

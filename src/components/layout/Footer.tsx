@@ -18,15 +18,15 @@ export const Footer: React.FC = () => {
 
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 border-b border-white/10 pb-10 md:grid-cols-12">
         <div className="md:col-span-6">
-          <h2 className="font-serif text-2xl font-bold text-white">
+          <h2 className="ed-panel-title font-serif text-2xl font-bold text-white">
             ERDEM DİZAYN & MEKANİK
           </h2>
-          <p className="mt-3 max-w-md text-sm leading-7 text-white/68">
+          <p className="ed-body-copy-sm mt-3 max-w-md text-sm leading-7 text-white/68">
             Tasarımdan uygulamaya güvenilir çözümler.
           </p>
           <a
             href={BUSINESS_CONTACT.phoneHref}
-            className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+            className="ed-interactive mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
             <Phone className="h-4 w-4 text-[#B8733E]" />
             <span>{BUSINESS_CONTACT.phoneDisplay}</span>
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
             <a
               key={link.label}
               href={link.href}
-              className="min-h-8 text-sm font-semibold text-white/72 transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+              className="ed-interactive min-h-8 text-sm font-semibold text-white/72 transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
             >
               {link.label}
             </a>
@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
             href={createWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+            className="ed-interactive inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
             <MessageCircle className="h-4 w-4 text-[#B8733E]" />
             <span>WhatsApp</span>
@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
             href={BUSINESS_CONTACT.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+            className="ed-interactive inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
             <Camera className="h-4 w-4 text-[#B8733E]" />
             <span>Instagram</span>

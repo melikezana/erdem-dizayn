@@ -19,7 +19,7 @@ interface HeroActionsProps {
 const HeroActions: React.FC<HeroActionsProps> = ({ onOpenAppointment }) => {
   return (
     <>
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#9A5C2F]">
+      <div className="ed-eyebrow flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#9A5C2F]">
         <span>İÇ MİMARİ · MEKANİK · UYGULAMA</span>
       </div>
 
@@ -27,7 +27,7 @@ const HeroActions: React.FC<HeroActionsProps> = ({ onOpenAppointment }) => {
         <button
           type="button"
           onClick={onOpenAppointment}
-          className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full bg-[#102B49] px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] shadow-md transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full bg-[#102B49] px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] shadow-md transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
         >
           <CalendarDays className="h-4 w-4" />
           <span>Randevu Oluştur</span>
@@ -35,7 +35,7 @@ const HeroActions: React.FC<HeroActionsProps> = ({ onOpenAppointment }) => {
 
         <a
           href="#projects"
-          className="inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#102B49]/25 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#102B49]/25 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
         >
           <span>Projeleri İncele</span>
           <ArrowRight className="h-4 w-4" />
@@ -46,7 +46,7 @@ const HeroActions: React.FC<HeroActionsProps> = ({ onOpenAppointment }) => {
         href={createWhatsAppUrl()}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+        className="ed-interactive inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
       >
         <MessageCircle className="h-4 w-4 text-[#9A5C2F]" />
         <span>WhatsApp&apos;tan Yaz</span>
@@ -84,7 +84,7 @@ export const Hero: React.FC<HeroProps> = ({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.05 }}
-            className="mb-4 inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.24em] text-[#9A5C2F] sm:text-sm"
+            className="ed-eyebrow mb-4 inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.24em] text-[#9A5C2F] sm:text-sm"
           >
             <span className="h-2 w-2 rounded-full bg-[#9A5C2F]" />
             <span>ERDEM DİZAYN & MEKANİK</span>
@@ -103,7 +103,7 @@ export const Hero: React.FC<HeroProps> = ({
             <span className="block text-3xl font-normal normal-case leading-[1.16] text-[#102B49]/85 sm:text-4xl lg:text-4xl 2xl:text-5xl">
               Hayal ettiğiniz mekânı,
             </span>
-            <span className="mt-2 block text-4xl font-semibold normal-case leading-[1.08] text-[#102B49] sm:text-5xl lg:text-5xl 2xl:text-6xl">
+            <span className="ed-section-title-sm mt-2 block text-4xl font-semibold normal-case leading-[1.08] text-[#102B49] sm:text-5xl lg:text-5xl 2xl:text-6xl">
               Birlikte gerçeğe dönüştürelim.
             </span>
           </motion.h1>
@@ -122,7 +122,7 @@ export const Hero: React.FC<HeroProps> = ({
           transition={{ duration: 0.55, delay: 0.18 }}
           className="relative z-10 order-3 flex max-w-[470px] flex-col gap-5 lg:col-start-1 lg:row-start-2 lg:self-start lg:pt-6"
         >
-          <p className="text-base leading-8 text-[#102B49]/80 sm:text-lg">
+          <p className="ed-body-copy text-base leading-8 text-[#102B49]/80 sm:text-lg">
             İç mimari tasarımdan mekanik uygulamaya kadar, mekânınızı
             ihtiyaçlarınıza göre planlıyor ve süreci tek elden yönetiyoruz.
           </p>

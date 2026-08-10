@@ -45,7 +45,7 @@ function TimelineStageForm({
   return (
     <form
       action={formAction}
-      className={`rounded-lg border bg-white p-4 transition-colors ${
+      className={`ed-card-lift rounded-lg border bg-white p-4 transition-colors ${
         isActive ? "border-[#9A5C2F]/45" : "border-[#102B49]/10"
       }`}
     >
@@ -59,30 +59,30 @@ function TimelineStageForm({
             <span className="font-serif text-xl font-bold text-[#9A5C2F]">
               {formatStageNumber(update.sortOrder)}
             </span>
-            <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[#102B49]">
+            <h3 className="ed-data-label text-sm font-bold uppercase tracking-[0.16em] text-[#102B49]">
               {update.stageLabel}
             </h3>
             {isActive && (
-              <span className="inline-flex min-h-7 items-center gap-1 rounded-full bg-[#102B49] px-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#F6F2EA]">
+              <span className="ed-data-label inline-flex min-h-7 items-center gap-1 rounded-full bg-[#102B49] px-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#F6F2EA]">
                 <RadioTower className="h-3.5 w-3.5" />
                 Güncel
               </span>
             )}
             {update.completed && (
-              <span className="inline-flex min-h-7 items-center gap-1 rounded-full bg-[#F0FAF4] px-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#24583E]">
+              <span className="ed-data-label inline-flex min-h-7 items-center gap-1 rounded-full bg-[#F0FAF4] px-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#24583E]">
                 <Check className="h-3.5 w-3.5" />
                 Tamamlandı
               </span>
             )}
           </div>
-          <p className="mt-2 text-sm leading-6 text-[#102B49]/65">
+          <p className="ed-body-copy-sm mt-2 text-sm leading-6 text-[#102B49]/65">
             {update.title}
           </p>
         </div>
       </div>
 
       <label className="mt-4 block">
-        <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+        <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
           Müşteriye Görünecek Açıklama
         </span>
         <textarea
@@ -105,7 +105,7 @@ function TimelineStageForm({
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+          <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
             Tamamlanma Tarihi
           </span>
           <input
@@ -144,7 +144,7 @@ function TimelineStageForm({
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-[#FBFAF7] px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] disabled:cursor-not-allowed disabled:opacity-60"
+          className="ed-interactive inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-[#FBFAF7] px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? (
             <LoaderCircle className="h-4 w-4 animate-spin" />

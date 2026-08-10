@@ -176,7 +176,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
   const renderLookupFailure = () => (
     <div
       role="status"
-      className="rounded-lg border border-[#102B49]/10 bg-[#F6F2EA] p-5 text-sm leading-7 text-[#102B49]/72"
+      className="ed-body-copy-sm rounded-lg border border-[#102B49]/10 bg-[#F6F2EA] p-5 text-sm leading-7 text-[#102B49]/72"
     >
       <div className="flex gap-3">
         <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#9A5C2F]" />
@@ -230,18 +230,18 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
 
             <div className="relative z-10 flex items-start justify-between gap-5 border-b border-[#102B49]/10 pb-5">
               <div>
-                <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9A5C2F]">
+                <span className="ed-eyebrow text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9A5C2F]">
                   PROJEM NEREDE?
                 </span>
                 <h2
                   id={titleId}
-                  className="mt-2 font-serif text-2xl font-bold leading-tight text-[#102B49] sm:text-3xl"
+                  className="ed-panel-title mt-2 font-serif text-2xl font-bold leading-tight text-[#102B49] sm:text-3xl"
                 >
                   Projeniz hangi aşamada?
                 </h2>
                 <p
                   id={descriptionId}
-                  className="mt-3 max-w-xl text-sm leading-6 text-[#102B49]/72 sm:text-base"
+                  className="ed-body-copy-sm mt-3 max-w-xl text-sm leading-6 text-[#102B49]/72 sm:text-base"
                 >
                   Planlamadan teslime kadar süreci tek bakışta takip edin.
                 </p>
@@ -250,7 +250,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#102B49]/15 bg-white text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+                className="ed-interactive flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#102B49]/15 bg-white text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
                 aria-label="Kapat"
               >
                 <X className="h-5 w-5" />
@@ -262,7 +262,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
               className="relative z-10 mt-6 grid grid-cols-1 gap-3 border-b border-[#102B49]/10 pb-6 sm:grid-cols-[1fr_auto]"
             >
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/72">
+                <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/72">
                   Proje Kodu
                 </span>
                 <input
@@ -280,7 +280,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
               <button
                 type="submit"
                 disabled={lookupState === "loading"}
-                className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] disabled:cursor-not-allowed disabled:bg-[#102B49]/60 sm:self-end"
+                className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] disabled:cursor-not-allowed disabled:bg-[#102B49]/60 sm:self-end"
               >
                 {lookupState === "loading" ? (
                   <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -320,7 +320,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
                         ["Güncel Aşama", selectedProject.currentStageLabel],
                       ].map(([label, value]) => (
                         <div key={label} className="bg-[#FBFAF7] p-4">
-                          <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9A5C2F]">
+                          <span className="ed-data-label block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9A5C2F]">
                             {label}
                           </span>
                           <span className="mt-2 block text-sm font-semibold text-[#102B49]">
@@ -331,7 +331,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
                     </div>
 
                     <div className="mt-6 border-y border-[#102B49]/10 py-6">
-                      <h3 className="font-serif text-2xl font-bold text-[#102B49]">
+                      <h3 className="ed-panel-title font-serif text-2xl font-bold text-[#102B49]">
                         Şu anda buradayız.
                       </h3>
                       <p className="mt-3 text-sm font-semibold text-[#9A5C2F]">
@@ -360,7 +360,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
                         </div>
                       </div>
                       {selectedProject.publicNote && (
-                        <p className="mt-5 rounded-lg border border-[#102B49]/10 bg-white p-4 text-sm leading-6 text-[#102B49]/72">
+                        <p className="ed-body-copy-sm mt-5 rounded-lg border border-[#102B49]/10 bg-white p-4 text-sm leading-6 text-[#102B49]/72">
                           {selectedProject.publicNote}
                         </p>
                       )}
@@ -371,7 +371,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
                         href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+                        className="ed-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
                       >
                         <MessageCircle className="h-4 w-4" />
                         <span>WhatsApp&apos;tan Sor</span>
@@ -379,7 +379,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
                       <button
                         type="button"
                         onClick={handleAppointmentClick}
-                        className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-6 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+                        className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-6 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
                       >
                         <CalendarDays className="h-4 w-4" />
                         <span>Randevu Oluştur</span>
@@ -438,11 +438,11 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
                               <span className="font-serif text-lg font-bold text-[#9A5C2F]/70">
                                 {formatStageNumber(index)}
                               </span>
-                              <h4 className="text-xs font-bold uppercase tracking-[0.16em] text-[#102B49]">
+                              <h4 className="ed-data-label text-xs font-bold uppercase tracking-[0.16em] text-[#102B49]">
                                 {stage.label}
                               </h4>
                             </div>
-                            <p className="mt-2 text-sm leading-6 text-[#102B49]/68">
+                            <p className="ed-body-copy-sm mt-2 text-sm leading-6 text-[#102B49]/68">
                               {update?.description ?? stage.description}
                             </p>
                           </div>
@@ -454,7 +454,7 @@ export const ProjectTrackingModal: React.FC<ProjectTrackingModalProps> = ({
               )}
 
               {lookupState === "idle" && (
-                <div className="flex min-h-24 items-center rounded-lg border border-[#102B49]/10 bg-[#F6F2EA] p-5 text-sm text-[#102B49]/68">
+                <div className="ed-body-copy-sm flex min-h-24 items-center rounded-lg border border-[#102B49]/10 bg-[#F6F2EA] p-5 text-sm text-[#102B49]/68">
                   <span>Proje kodunuzu girerek güncel aşamayı kontrol edin.</span>
                 </div>
               )}

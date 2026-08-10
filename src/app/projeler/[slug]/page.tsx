@@ -10,6 +10,7 @@ import {
   Ruler,
 } from "lucide-react";
 import { getProjectBySlug, getPublishedProjects } from "@/data/projects";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { createWhatsAppUrl } from "@/lib/contact";
 import { projectSlugSchema } from "@/lib/validation/projects";
 
@@ -99,22 +100,25 @@ export default async function ProjectDetailPage({
             </Link>
           </div>
 
-          <div className="mt-auto grid grid-cols-1 gap-10 py-10 lg:grid-cols-12 lg:items-end">
+          <ScrollReveal
+            className="mt-auto grid grid-cols-1 gap-10 py-10 lg:grid-cols-12 lg:items-end"
+            amount={0.08}
+          >
             <div className="lg:col-span-8">
-              <span className="text-xs font-semibold uppercase text-[#e6c777]">
+              <span className="ed-eyebrow text-xs font-semibold uppercase text-[#e6c777]">
                 {project.type}
               </span>
-              <h1 className="mt-5 max-w-6xl font-serif text-6xl font-semibold leading-[0.94] sm:text-7xl lg:text-9xl">
+              <h1 className="ed-page-display-title mt-5 max-w-6xl font-serif text-6xl font-semibold leading-[0.94] sm:text-7xl lg:text-9xl">
                 {project.title}
               </h1>
-              <p className="mt-7 max-w-3xl text-base font-light leading-8 text-[#f8f0e5]/72 sm:text-lg">
+              <p className="ed-body-copy mt-7 max-w-3xl text-base font-light leading-8 text-[#f8f0e5]/72 sm:text-lg">
                 {project.summary}
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-px border border-[#f8f0e5]/12 bg-[#f8f0e5]/12 sm:grid-cols-2 lg:col-span-4">
               <div className="bg-[#151310]/70 p-5 backdrop-blur-md">
-                <span className="block text-[10px] font-semibold uppercase text-[#e6c777]">
+                <span className="ed-data-label block text-[10px] font-semibold uppercase text-[#e6c777]">
                   Konum
                 </span>
                 <span className="mt-2 block text-sm font-semibold text-[#f8f0e5]">
@@ -122,7 +126,7 @@ export default async function ProjectDetailPage({
                 </span>
               </div>
               <div className="bg-[#151310]/70 p-5 backdrop-blur-md">
-                <span className="block text-[10px] font-semibold uppercase text-[#e6c777]">
+                <span className="ed-data-label block text-[10px] font-semibold uppercase text-[#e6c777]">
                   Hizmet
                 </span>
                 <span className="mt-2 block text-sm font-semibold text-[#f8f0e5]">
@@ -130,23 +134,23 @@ export default async function ProjectDetailPage({
                 </span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section className="bg-[#f8f0e5] px-5 py-20 text-[#151310] sm:px-8 sm:py-28 lg:px-12">
+      <section className="ed-section-shell bg-[#f8f0e5] px-5 py-20 text-[#151310] sm:px-8 sm:py-28 lg:px-12">
         <div className="mx-auto grid max-w-[1520px] grid-cols-1 gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <div className="mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#8e5533]">
+          <ScrollReveal className="lg:col-span-5">
+            <div className="ed-eyebrow mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#8e5533]">
               <Layers3 className="h-4 w-4" />
               <span>Kapsam</span>
             </div>
-            <h2 className="font-serif text-5xl font-semibold leading-[1.04] sm:text-6xl">
+            <h2 className="ed-section-title-sm font-serif text-5xl font-semibold leading-[1.04] sm:text-6xl">
               Tasarım kararından saha detayına uzanan tek atmosfer.
             </h2>
-          </div>
+          </ScrollReveal>
 
-          <div className="lg:col-span-7">
+          <ScrollReveal className="lg:col-span-7" delay={0.08}>
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {project.services.map((service) => (
                 <li
@@ -160,11 +164,11 @@ export default async function ProjectDetailPage({
             </ul>
 
             <div className="mt-10 border-y border-[#151310]/12 py-7">
-              <div className="flex items-center gap-3 text-xs font-semibold uppercase text-[#8e5533]">
+              <div className="ed-eyebrow flex items-center gap-3 text-xs font-semibold uppercase text-[#8e5533]">
                 <Ruler className="h-4 w-4" />
                 <span>Seçili proje</span>
               </div>
-              <p className="mt-4 max-w-3xl text-lg font-light leading-8 text-[#151310]/68">
+              <p className="ed-body-copy mt-4 max-w-3xl text-lg font-light leading-8 text-[#151310]/68">
                 Malzeme, ışık ve uygulama koordinasyonunun tek tasarım dilinde
                 birleştiği çalışma. Benzer bir atmosfer için kapsamı, öncelikleri
                 ve uygulanabilir takvimi kısa bir görüşmede netleştirebiliriz.
@@ -185,25 +189,25 @@ export default async function ProjectDetailPage({
               <Link
                 href="/#contact"
                 data-cursor="Git"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#151310]/18 px-7 text-sm font-semibold uppercase text-[#151310] transition-colors hover:border-[#8e5533] hover:text-[#8e5533]"
+                className="ed-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#151310]/18 px-7 text-sm font-semibold uppercase text-[#151310] transition-colors hover:border-[#8e5533] hover:text-[#8e5533]"
               >
                 <span>İletişime Geç</span>
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {relatedProjects.length > 0 && (
-        <section className="bg-[#151310] px-5 py-20 text-[#f8f0e5] sm:px-8 sm:py-28 lg:px-12">
+        <section className="ed-section-shell bg-[#151310] px-5 py-20 text-[#f8f0e5] sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1520px]">
-            <div className="mb-8 flex items-end justify-between gap-4 border-b border-[#f8f0e5]/12 pb-6">
+            <ScrollReveal className="mb-8 flex items-end justify-between gap-4 border-b border-[#f8f0e5]/12 pb-6">
               <div>
-                <span className="text-xs font-semibold uppercase text-[#e6c777]">
+                <span className="ed-eyebrow text-xs font-semibold uppercase text-[#e6c777]">
                   Devam
                 </span>
-                <h2 className="mt-3 font-serif text-4xl font-semibold text-[#f8f0e5]">
+                <h2 className="ed-section-title-sm mt-3 font-serif text-4xl font-semibold text-[#f8f0e5]">
                   Diğer projeler
                 </h2>
               </div>
@@ -214,35 +218,36 @@ export default async function ProjectDetailPage({
               >
                 Tümünü gör
               </Link>
-            </div>
+            </ScrollReveal>
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {relatedProjects.slice(0, 3).map((item) => (
+              {relatedProjects.slice(0, 3).map((item, index) => (
+                <ScrollReveal key={item.id} delay={index * 0.05}>
                 <Link
-                  key={item.id}
                   href={`/projeler/${item.slug}`}
                   data-cursor="Aç"
-                  className="group block"
+                  className="ed-card-lift group block"
                 >
                   <div className="relative aspect-[4/5] overflow-hidden bg-[#151310]">
                     <Image
                       src={item.image}
                       alt={item.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.055]"
+                      className="ed-media-lift object-cover transition-transform duration-700 group-hover:scale-[1.055]"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(21,19,16,0.82)_0%,rgba(21,19,16,0)_58%)]" />
                     <div className="absolute inset-x-0 bottom-0 p-5 text-[#f8f0e5]">
-                      <p className="text-xs font-semibold uppercase text-[#e6c777]">
+                      <p className="ed-eyebrow text-xs font-semibold uppercase text-[#e6c777]">
                         {item.type}
                       </p>
-                      <h3 className="mt-2 font-serif text-2xl font-semibold">
+                      <h3 className="ed-card-title mt-2 font-serif text-2xl font-semibold">
                         {item.title}
                       </h3>
                     </div>
                   </div>
                 </Link>
+                </ScrollReveal>
               ))}
             </div>
           </div>

@@ -44,7 +44,7 @@ export function AdminCustomerPreview({ project }: AdminCustomerPreviewProps) {
           ["Güncel Aşama", project.currentStageLabel],
         ].map(([label, value]) => (
           <div key={label} className="rounded-lg border border-[#102B49]/10 bg-white p-4">
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9A5C2F]">
+            <span className="ed-data-label block text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9A5C2F]">
               {label}
             </span>
             <span className="mt-2 block text-sm font-semibold text-[#102B49]">
@@ -55,7 +55,7 @@ export function AdminCustomerPreview({ project }: AdminCustomerPreviewProps) {
       </div>
 
       <div className="mt-5">
-        <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-[#102B49]/60">
+        <div className="ed-data-label mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-[#102B49]/60">
           <span>İlerleme</span>
           <span>{project.progress}%</span>
         </div>
@@ -68,7 +68,7 @@ export function AdminCustomerPreview({ project }: AdminCustomerPreviewProps) {
       </div>
 
       {project.publicNote && (
-        <p className="mt-5 rounded-lg border border-[#102B49]/10 bg-white p-4 text-sm leading-6 text-[#102B49]/72">
+        <p className="ed-body-copy-sm mt-5 rounded-lg border border-[#102B49]/10 bg-white p-4 text-sm leading-6 text-[#102B49]/72">
           {project.publicNote}
         </p>
       )}
@@ -110,11 +110,11 @@ export function AdminCustomerPreview({ project }: AdminCustomerPreviewProps) {
                   <span className="font-serif text-lg font-bold text-[#9A5C2F]/70">
                     {formatStageNumber(index)}
                   </span>
-                  <h4 className="text-xs font-bold uppercase tracking-[0.16em] text-[#102B49]">
+                  <h4 className="ed-data-label text-xs font-bold uppercase tracking-[0.16em] text-[#102B49]">
                     {stage.label}
                   </h4>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-[#102B49]/68">
+                <p className="ed-body-copy-sm mt-2 text-sm leading-6 text-[#102B49]/68">
                   {update?.description ?? stage.description}
                 </p>
               </div>

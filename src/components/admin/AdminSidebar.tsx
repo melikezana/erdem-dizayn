@@ -30,7 +30,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
       <div className="flex items-center justify-between gap-4 px-5 py-4 lg:block lg:px-6 lg:py-7">
         <Link
           href="/admin"
-          className="inline-flex min-h-11 items-center gap-3 font-serif text-base font-bold text-[#102B49] transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-11 items-center gap-3 font-serif text-base font-bold text-[#102B49] transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
         >
           <PanelLeft className="h-5 w-5 text-[#9A5C2F]" />
           <span>ERDEM ADMIN</span>
@@ -49,7 +49,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
             <Link
               key={href}
               href={href}
-              className={`inline-flex min-h-11 shrink-0 items-center gap-3 rounded-lg px-4 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] ${
+              className={`ed-interactive inline-flex min-h-11 shrink-0 items-center gap-3 rounded-lg px-4 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] ${
                 active
                   ? "bg-[#102B49] text-[#F6F2EA]"
                   : "text-[#102B49]/72 hover:bg-[#F6F2EA] hover:text-[#102B49]"
@@ -65,7 +65,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
       <div className="mt-auto hidden px-4 pb-5 pt-6 lg:block">
         <Link
           href="/"
-          className="mb-2 inline-flex min-h-11 w-full items-center gap-3 rounded-lg px-4 text-sm font-semibold text-[#102B49]/72 transition-colors hover:bg-[#F6F2EA] hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive mb-2 inline-flex min-h-11 w-full items-center gap-3 rounded-lg px-4 text-sm font-semibold text-[#102B49]/72 transition-colors hover:bg-[#F6F2EA] hover:text-[#102B49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
         >
           <RotateCcw className="h-4 w-4" />
           <span>Siteye Dön</span>
@@ -73,7 +73,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
         <form action={logoutAdminAction}>
           <button
             type="submit"
-            className="inline-flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-lg px-4 text-sm font-semibold text-[#8A2E24] transition-colors hover:bg-[#FFF7F4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+            className="ed-interactive inline-flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-lg px-4 text-sm font-semibold text-[#8A2E24] transition-colors hover:bg-[#FFF7F4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
           >
             <LogOut className="h-4 w-4" />
             <span>Çıkış Yap</span>
@@ -84,7 +84,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
       <div className="flex gap-2 border-t border-[#102B49]/10 px-5 py-3 lg:hidden">
         <Link
           href="/"
-          className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-[#102B49]/10 bg-white px-3 text-sm font-semibold text-[#102B49]/72"
+          className="ed-interactive inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-[#102B49]/10 bg-white px-3 text-sm font-semibold text-[#102B49]/72"
         >
           <RotateCcw className="h-4 w-4" />
           <span>Siteye Dön</span>
@@ -92,7 +92,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
         <form action={logoutAdminAction} className="flex-1">
           <button
             type="submit"
-            className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#9A3D2F]/20 bg-white px-3 text-sm font-semibold text-[#8A2E24]"
+            className="ed-interactive inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#9A3D2F]/20 bg-white px-3 text-sm font-semibold text-[#8A2E24]"
           >
             <LogOut className="h-4 w-4" />
             <span>Çıkış Yap</span>

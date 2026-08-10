@@ -141,14 +141,14 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
         <div className="flex w-full items-center justify-between pointer-events-auto">
           <div className="inline-flex items-center gap-2.5 rounded-full border border-[#102B49]/15 bg-[#F6F2EA]/90 px-4 py-2 shadow-xs backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-[#9A5C2F] animate-pulse" />
-            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#102B49]">
+            <span className="ed-data-label font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#102B49]">
               {"ERDEM D\u0130ZAYN & MEKAN\u0130K"}
             </span>
           </div>
 
           <button
             onClick={handleFinish}
-            className="flex cursor-pointer items-center gap-2 rounded-full border border-[#102B49]/20 bg-[#F6F2EA]/95 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#102B49] shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-[#102B49] hover:text-[#F6F2EA]"
+            className="ed-interactive flex cursor-pointer items-center gap-2 rounded-full border border-[#102B49]/20 bg-[#F6F2EA]/95 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#102B49] shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-[#102B49] hover:text-[#F6F2EA]"
             aria-label={"Giri\u015f animasyonunu ge\u00e7"}
           >
             <span>{"Ge\u00e7"}</span>
@@ -156,7 +156,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
           </button>
         </div>
 
-        <div className="flex w-full items-end justify-between font-mono text-xs uppercase tracking-widest text-[#102B49]/70 pointer-events-none">
+        <div className="ed-data-label flex w-full items-end justify-between font-mono text-xs uppercase tracking-widest text-[#102B49]/70 pointer-events-none">
           <div className="flex items-center gap-2 rounded-full border border-[#102B49]/10 bg-[#F6F2EA]/90 px-4 py-1.5 backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-[#9A5C2F]" />
             <span>{"S\u0130NEMAT\u0130K M\u0130MAR\u0130 TANITIM"}</span>

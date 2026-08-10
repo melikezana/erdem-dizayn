@@ -40,11 +40,11 @@ export const LenisProvider: React.FC<React.PropsWithChildren> = ({
 
   useEffect(() => {
     const controller = new Lenis({
-      lerp: 0.105,
-      duration: 1.05,
+      lerp: 0.085,
+      duration: 1.12,
       smoothWheel: true,
       syncTouch: false,
-      wheelMultiplier: 0.86,
+      wheelMultiplier: 0.82,
       touchMultiplier: 1,
       gestureOrientation: "vertical",
       anchors: false,
@@ -79,8 +79,8 @@ export const LenisProvider: React.FC<React.PropsWithChildren> = ({
       lenis,
       scrollTo: (target, options) => {
         lenisRef.current?.scrollTo(target, {
-          duration: 1.05,
-          lerp: 0.11,
+          duration: 1.12,
+          lerp: 0.09,
           ...options,
         });
       },

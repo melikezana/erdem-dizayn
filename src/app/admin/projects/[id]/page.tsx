@@ -7,6 +7,7 @@ import { AdminProjectCodeActions } from "@/components/admin/AdminProjectCodeActi
 import { AdminProjectEditForm } from "@/components/admin/AdminProjectEditForm";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { AdminTimelineManager } from "@/components/admin/AdminTimelineManager";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { requireAdminAccess } from "@/lib/admin/auth";
 import {
   getAdminProjectByIdentifier,
@@ -101,22 +102,22 @@ export default async function AdminProjectDetailPage({
 
   return (
     <AdminShell userEmail={access.user.email}>
-      <div className="flex flex-col gap-4 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
+      <ScrollReveal className="flex flex-col gap-4 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/admin/projects"
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#102B49]/72 transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#102B49]/72 transition-colors hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9A5C2F]"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Projeler</span>
         </Link>
         <Link
           href="/admin/projects/new"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-[#FBFAF7] px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-[#FBFAF7] px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
         >
           <Plus className="h-4 w-4" />
           <span>Yeni Proje</span>
         </Link>
-      </div>
+      </ScrollReveal>
 
       {resolvedSearchParams.created === "1" && (
         <div className="mt-6 flex gap-3 rounded-lg border border-[#2F6F4E]/20 bg-[#F0FAF4] p-4 text-sm font-semibold text-[#24583E]">
@@ -125,21 +126,21 @@ export default async function AdminProjectDetailPage({
         </div>
       )}
 
-      <section className="mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-6 shadow-sm sm:p-7">
+      <ScrollReveal as="section" className="mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-6 shadow-sm sm:p-7">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9A5C2F]">
+            <p className="ed-eyebrow text-xs font-semibold uppercase tracking-[0.22em] text-[#9A5C2F]">
               Proje Takip Kodu
             </p>
-            <h1 className="mt-3 font-serif text-5xl font-bold tracking-normal text-[#102B49] sm:text-6xl">
+            <h1 className="ed-admin-code-title mt-3 font-serif text-5xl font-bold tracking-normal text-[#102B49] sm:text-6xl">
               {project.projectCode}
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-[#102B49]/72">
+            <p className="ed-body-copy-sm mt-4 max-w-2xl text-sm leading-6 text-[#102B49]/72">
               {project.title} · {project.customerName}
             </p>
           </div>
           <div className="min-w-52">
-            <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-[#102B49]/60">
+            <div className="ed-data-label mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-[#102B49]/60">
               <span>İlerleme</span>
               <span>{project.progress}%</span>
             </div>
@@ -161,12 +162,12 @@ export default async function AdminProjectDetailPage({
           projectCode={project.projectCode}
           customerPhone={project.customerPhone}
         />
-      </section>
+      </ScrollReveal>
 
-      <section className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-[#102B49]/10 bg-[#102B49]/10 sm:grid-cols-2 xl:grid-cols-4">
+      <ScrollReveal as="section" className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-[#102B49]/10 bg-[#102B49]/10 sm:grid-cols-2 xl:grid-cols-4">
         {detailItems.map(([label, value]) => (
           <div key={label} className="bg-[#FBFAF7] p-5">
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9A5C2F]">
+            <span className="ed-data-label block text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9A5C2F]">
               {label}
             </span>
             <span className="mt-2 block text-sm font-semibold leading-6 text-[#102B49]">
@@ -174,38 +175,38 @@ export default async function AdminProjectDetailPage({
             </span>
           </div>
         ))}
-      </section>
+      </ScrollReveal>
 
       <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[1fr_0.95fr]">
-        <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 sm:p-6">
-          <h2 className="font-serif text-2xl font-bold text-[#102B49]">
+        <ScrollReveal as="section" className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 sm:p-6">
+          <h2 className="ed-panel-title font-serif text-2xl font-bold text-[#102B49]">
             Proje Bilgileri
           </h2>
           <div className="mt-5">
             <AdminProjectEditForm project={project} />
           </div>
-        </section>
+        </ScrollReveal>
 
-        <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 sm:p-6">
-          <h2 className="font-serif text-2xl font-bold text-[#102B49]">
+        <ScrollReveal as="section" className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 sm:p-6">
+          <h2 className="ed-panel-title font-serif text-2xl font-bold text-[#102B49]">
             Müşterinin Gördüğü Ekranı Önizle
           </h2>
           <details className="mt-5 group">
-            <summary className="inline-flex min-h-11 cursor-pointer list-none items-center justify-center rounded-full border border-[#102B49]/20 bg-white px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]">
+            <summary className="ed-interactive inline-flex min-h-11 cursor-pointer list-none items-center justify-center rounded-full border border-[#102B49]/20 bg-white px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]">
               Önizlemeyi Aç
             </summary>
             <div className="mt-5">
               <AdminCustomerPreview project={project} />
             </div>
           </details>
-        </section>
+        </ScrollReveal>
       </div>
 
-      <section className="mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 sm:p-6">
-        <h2 className="font-serif text-2xl font-bold text-[#102B49]">
+      <ScrollReveal as="section" className="mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5 sm:p-6">
+        <h2 className="ed-panel-title font-serif text-2xl font-bold text-[#102B49]">
           Proje Aşamaları
         </h2>
-        <p className="mt-2 text-sm leading-6 text-[#102B49]/68">
+        <p className="ed-body-copy-sm mt-2 text-sm leading-6 text-[#102B49]/68">
           Güncel aşama tekil olarak proje kaydında tutulur. Bir aşamayı güncel
           yaptığınızda müşterinin gördüğü “Projem Nerede?” ekranı da aynı aşamayı
           gösterir.
@@ -213,7 +214,7 @@ export default async function AdminProjectDetailPage({
         <div className="mt-5">
           <AdminTimelineManager project={project} />
         </div>
-      </section>
+      </ScrollReveal>
     </AdminShell>
   );
 }

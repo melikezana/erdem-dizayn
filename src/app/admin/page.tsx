@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { AdminLockedState } from "@/components/admin/AdminLockedState";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { requireAdminAccess } from "@/lib/admin/auth";
 import { getAdminDashboardData } from "@/lib/admin/dashboard";
 
@@ -74,23 +75,23 @@ export default async function AdminPage() {
 
   return (
     <AdminShell userEmail={access.user.email}>
-      <div className="flex flex-col gap-5 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <ScrollReveal className="flex flex-col gap-5 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
+          <p className="ed-eyebrow text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
             Genel Bakış
           </p>
-          <h1 className="mt-2 font-serif text-4xl font-bold text-[#102B49]">
+          <h1 className="ed-admin-title mt-2 font-serif text-4xl font-bold text-[#102B49]">
             Yönetim Paneli
           </h1>
         </div>
         <Link
           href="/admin/projects/new"
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
         >
           <Plus className="h-4 w-4" />
           <span>Yeni Proje Oluştur</span>
         </Link>
-      </div>
+      </ScrollReveal>
 
       {loadError || !dashboard ? (
         <div
@@ -120,23 +121,23 @@ export default async function AdminPage() {
                 icon: TimerReset,
               },
             ].map(({ label, value, icon: Icon }) => (
-              <div
+              <ScrollReveal
                 key={label}
-                className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5"
+                className="ed-card-lift rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5"
               >
                 <Icon className="h-5 w-5 text-[#9A5C2F]" />
                 <p className="mt-4 text-sm font-semibold text-[#102B49]/65">
                   {label}
                 </p>
-                <p className="mt-2 font-serif text-4xl font-bold text-[#102B49]">
+                <p className="mt-2 font-serif text-4xl font-bold leading-none text-[#102B49]">
                   {value}
                 </p>
-              </div>
+              </ScrollReveal>
             ))}
           </section>
 
-          <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
-            <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+          <ScrollReveal as="section" className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
+            <div className="ed-eyebrow mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
               <TimerReset className="h-4 w-4" />
               <span>Teslime Yaklaşan Projeler</span>
             </div>
@@ -150,7 +151,7 @@ export default async function AdminPage() {
                     <div>
                       <Link
                         href={`/admin/projects/${project.id}`}
-                        className="font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
+                        className="ed-interactive font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
                       >
                         {project.title}
                       </Link>
@@ -165,15 +166,15 @@ export default async function AdminPage() {
                 ))}
               </ul>
             ) : (
-              <p className="text-sm leading-6 text-[#102B49]/68">
+              <p className="ed-body-copy-sm text-sm leading-6 text-[#102B49]/68">
                 Yaklaşan teslim tarihi olan aktif proje bulunmuyor.
               </p>
             )}
-          </section>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-            <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
-              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+            <ScrollReveal as="section" className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
+              <div className="ed-eyebrow mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
                 <Gauge className="h-4 w-4" />
                 <span>Son Projeler</span>
               </div>
@@ -183,7 +184,7 @@ export default async function AdminPage() {
                     <li key={project.id} className="py-3">
                       <Link
                         href={`/admin/projects/${project.id}`}
-                        className="font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
+                        className="ed-interactive font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
                       >
                         {project.title}
                       </Link>
@@ -195,14 +196,14 @@ export default async function AdminPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm leading-6 text-[#102B49]/68">
+                <p className="ed-body-copy-sm text-sm leading-6 text-[#102B49]/68">
                   Henüz proje oluşturulmadı.
                 </p>
               )}
-            </section>
+            </ScrollReveal>
 
-            <section className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
-              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+            <ScrollReveal as="section" className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
+              <div className="ed-eyebrow mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
                 <CalendarDays className="h-4 w-4" />
                 <span>Son Randevular</span>
               </div>
@@ -212,7 +213,7 @@ export default async function AdminPage() {
                     <li key={appointment.id} className="py-3">
                       <Link
                         href="/admin/appointments"
-                        className="font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
+                        className="ed-interactive font-semibold text-[#102B49] transition-colors hover:text-[#9A5C2F]"
                       >
                         {appointment.fullName}
                       </Link>
@@ -224,11 +225,11 @@ export default async function AdminPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm leading-6 text-[#102B49]/68">
+                <p className="ed-body-copy-sm text-sm leading-6 text-[#102B49]/68">
                   Yeni randevu talebi bulunmuyor.
                 </p>
               )}
-            </section>
+            </ScrollReveal>
           </div>
         </div>
       )}

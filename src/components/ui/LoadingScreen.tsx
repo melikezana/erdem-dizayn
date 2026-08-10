@@ -49,7 +49,7 @@ export const LoadingScreen: React.FC = () => {
                 <span className="font-serif text-xl sm:text-2xl font-bold tracking-wider text-[#102B49] block">
                   ERDEM
                 </span>
-                <span className="text-[10px] tracking-[0.24em] text-[#9A5C2F] uppercase block -mt-1 font-mono font-semibold">
+                <span className="ed-data-label text-[10px] tracking-[0.24em] text-[#9A5C2F] uppercase block -mt-1 font-mono font-semibold">
                   DİZAYN & MEKANİK
                 </span>
               </div>
@@ -60,7 +60,7 @@ export const LoadingScreen: React.FC = () => {
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 0.9 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-xs sm:text-sm font-serif italic text-gray-700 tracking-widest max-w-sm mb-10"
+              className="ed-body-copy-sm mb-10 max-w-sm font-serif text-xs italic tracking-widest text-gray-700 sm:text-sm"
             >
               &quot;Tasarımdan Uygulamaya Güvenilir Çözümler.&quot;
             </motion.p>
@@ -79,7 +79,7 @@ export const LoadingScreen: React.FC = () => {
               <span className="font-mono text-xs text-[#9A5C2F] font-bold">
                 {progress}%
               </span>
-              <span className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">
+              <span className="ed-data-label text-[10px] text-gray-500 font-mono tracking-widest uppercase">
                 Yükleniyor
               </span>
             </div>

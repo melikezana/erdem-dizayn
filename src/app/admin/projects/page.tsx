@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Eye, Pencil, Plus, Search } from "lucide-react";
 import { AdminLockedState } from "@/components/admin/AdminLockedState";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { requireAdminAccess } from "@/lib/admin/auth";
 import { listAdminProjects, type AdminProject } from "@/lib/admin/projects";
 
@@ -56,30 +57,31 @@ export default async function AdminProjectsPage({
 
   return (
     <AdminShell userEmail={access.user.email}>
-      <div className="flex flex-col gap-5 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <ScrollReveal className="flex flex-col gap-5 border-b border-[#102B49]/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
+          <p className="ed-eyebrow text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
             Projeler
           </p>
-          <h1 className="mt-2 font-serif text-4xl font-bold text-[#102B49]">
+          <h1 className="ed-admin-title mt-2 font-serif text-4xl font-bold text-[#102B49]">
             Proje Yönetimi
           </h1>
         </div>
         <Link
           href="/admin/projects/new"
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+          className="ed-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#102B49] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
         >
           <Plus className="h-4 w-4" />
           <span>Yeni Proje Oluştur</span>
         </Link>
-      </div>
+      </ScrollReveal>
 
+      <ScrollReveal className="mt-6">
       <form
         action="/admin/projects"
-        className="mt-6 grid grid-cols-1 gap-3 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-4 sm:grid-cols-[1fr_auto]"
+        className="grid grid-cols-1 gap-3 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-4 sm:grid-cols-[1fr_auto]"
       >
         <label className="block">
-          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+          <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
             Proje kodu, müşteri adı veya proje adı
           </span>
           <input
@@ -91,12 +93,13 @@ export default async function AdminProjectsPage({
         </label>
         <button
           type="submit"
-          className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-6 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] sm:self-end"
+          className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-6 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F] sm:self-end"
         >
           <Search className="h-4 w-4" />
           <span>Ara</span>
         </button>
       </form>
+      </ScrollReveal>
 
       {loadError ? (
         <p
@@ -106,8 +109,8 @@ export default async function AdminProjectsPage({
           {loadError}
         </p>
       ) : projects.length > 0 ? (
-        <section className="mt-6 overflow-hidden rounded-lg border border-[#102B49]/10 bg-[#FBFAF7]">
-          <div className="hidden grid-cols-[0.75fr_1.1fr_1fr_0.8fr_0.9fr_0.65fr_0.8fr_0.8fr] gap-4 border-b border-[#102B49]/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#102B49]/55 lg:grid">
+        <ScrollReveal as="section" className="mt-6 overflow-hidden rounded-lg border border-[#102B49]/10 bg-[#FBFAF7]">
+          <div className="ed-data-label hidden grid-cols-[0.75fr_1.1fr_1fr_0.8fr_0.9fr_0.65fr_0.8fr_0.8fr] gap-4 border-b border-[#102B49]/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#102B49]/55 lg:grid">
             <span>Proje Kodu</span>
             <span>Proje Adı</span>
             <span>Müşteri</span>
@@ -147,14 +150,14 @@ export default async function AdminProjectsPage({
                 <span className="flex flex-wrap gap-2">
                   <Link
                     href={`/admin/projects/${project.id}`}
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#102B49]/15 bg-white px-4 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]"
+                    className="ed-interactive inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#102B49]/15 bg-white px-4 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]"
                   >
                     <Eye className="h-4 w-4" />
                     <span>Görüntüle</span>
                   </Link>
                   <Link
                     href={`/admin/projects/${project.id}#edit`}
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#102B49] px-4 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F]"
+                    className="ed-interactive inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#102B49] px-4 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F]"
                   >
                     <Pencil className="h-4 w-4" />
                     <span>Düzenle</span>
@@ -163,18 +166,18 @@ export default async function AdminProjectsPage({
               </li>
             ))}
           </ul>
-        </section>
+        </ScrollReveal>
       ) : (
-        <div className="mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-6 text-sm leading-6 text-[#102B49]/72">
+        <ScrollReveal className="ed-body-copy-sm mt-6 rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-6 text-sm leading-6 text-[#102B49]/72">
           <p>Henüz proje oluşturulmadı.</p>
           <Link
             href="/admin/projects/new"
-            className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#102B49] px-5 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F]"
+            className="ed-interactive mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#102B49] px-5 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F]"
           >
             <Plus className="h-4 w-4" />
             <span>Yeni Proje Oluştur</span>
           </Link>
-        </div>
+        </ScrollReveal>
       )}
     </AdminShell>
   );

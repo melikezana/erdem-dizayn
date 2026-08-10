@@ -66,7 +66,7 @@ export function AdminAppointmentsClient({
 
   if (!appointments.length) {
     return (
-      <div className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-6 text-sm leading-6 text-[#102B49]/72">
+      <div className="ed-body-copy-sm rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-6 text-sm leading-6 text-[#102B49]/72">
         <p>Yeni randevu talebi bulunmuyor.</p>
       </div>
     );
@@ -75,7 +75,7 @@ export function AdminAppointmentsClient({
   return (
     <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_360px]">
       <div className="overflow-hidden rounded-lg border border-[#102B49]/10 bg-[#FBFAF7]">
-        <div className="hidden grid-cols-[1.1fr_0.9fr_0.9fr_0.75fr_0.9fr_0.75fr] gap-4 border-b border-[#102B49]/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#102B49]/55 lg:grid">
+        <div className="ed-data-label hidden grid-cols-[1.1fr_0.9fr_0.9fr_0.75fr_0.9fr_0.75fr] gap-4 border-b border-[#102B49]/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#102B49]/55 lg:grid">
           <span>Ad Soyad</span>
           <span>Telefon</span>
           <span>Proje Türü</span>
@@ -94,7 +94,7 @@ export function AdminAppointmentsClient({
                 <button
                   type="button"
                   onClick={() => setSelectedId(appointment.id)}
-                  className={`grid w-full cursor-pointer grid-cols-1 gap-3 px-4 py-4 text-left transition-colors hover:bg-white lg:grid-cols-[1.1fr_0.9fr_0.9fr_0.75fr_0.9fr_0.75fr] lg:items-center ${
+                  className={`ed-interactive grid w-full cursor-pointer grid-cols-1 gap-3 px-4 py-4 text-left transition-colors hover:bg-white lg:grid-cols-[1.1fr_0.9fr_0.9fr_0.75fr_0.9fr_0.75fr] lg:items-center ${
                     selected ? "bg-white" : "bg-transparent"
                   }`}
                 >
@@ -124,7 +124,7 @@ export function AdminAppointmentsClient({
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#102B49] px-4 text-sm font-semibold text-[#F6F2EA]"
+                      className="ed-interactive inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#102B49] px-4 text-sm font-semibold text-[#F6F2EA]"
                     >
                       <MessageCircle className="h-4 w-4" />
                       <span>WhatsApp&apos;tan Yaz</span>
@@ -133,7 +133,7 @@ export function AdminAppointmentsClient({
                   {appointment.phone && (
                     <a
                       href={`tel:${appointment.phone}`}
-                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-4 text-sm font-semibold text-[#102B49]"
+                      className="ed-interactive inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-4 text-sm font-semibold text-[#102B49]"
                     >
                       <Phone className="h-4 w-4" />
                       <span>Ara</span>
@@ -149,11 +149,11 @@ export function AdminAppointmentsClient({
       <aside className="rounded-lg border border-[#102B49]/10 bg-[#FBFAF7] p-5">
         {selectedAppointment ? (
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
+            <div className="ed-eyebrow flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9A5C2F]">
               <CalendarDays className="h-4 w-4" />
               <span>Randevu Detayı</span>
             </div>
-            <h2 className="mt-3 font-serif text-2xl font-bold text-[#102B49]">
+            <h2 className="ed-panel-title mt-3 font-serif text-2xl font-bold text-[#102B49]">
               {selectedAppointment.fullName}
             </h2>
             <dl className="mt-5 space-y-3 text-sm">
@@ -166,7 +166,7 @@ export function AdminAppointmentsClient({
                 ["Not", selectedAppointment.note ?? "Not eklenmedi."],
               ].map(([label, value]) => (
                 <div key={label} className="border-b border-[#102B49]/10 pb-3">
-                  <dt className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#102B49]/50">
+                  <dt className="ed-data-label text-[10px] font-bold uppercase tracking-[0.16em] text-[#102B49]/50">
                     {label}
                   </dt>
                   <dd className="mt-1 font-semibold leading-6 text-[#102B49]">
@@ -179,7 +179,7 @@ export function AdminAppointmentsClient({
             <form action={updateAppointmentStatusAction} className="mt-5 space-y-3">
               <input type="hidden" name="id" value={selectedAppointment.id} />
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+                <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
                   Durum
                 </span>
                 <select
@@ -196,7 +196,7 @@ export function AdminAppointmentsClient({
               </label>
               <button
                 type="submit"
-                className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-5 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
+                className="ed-interactive inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#102B49] px-5 text-sm font-semibold text-[#F6F2EA] transition-colors hover:bg-[#9A5C2F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A5C2F]"
               >
                 <Save className="h-4 w-4" />
                 <span>Durumu Güncelle</span>
@@ -209,7 +209,7 @@ export function AdminAppointmentsClient({
                   href={getWhatsAppUrl(selectedAppointment) ?? undefined}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]"
+                  className="ed-interactive inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]"
                 >
                   <MessageCircle className="h-4 w-4" />
                   <span>WhatsApp&apos;tan Yaz</span>
@@ -218,7 +218,7 @@ export function AdminAppointmentsClient({
               {selectedAppointment.phone && (
                 <a
                   href={`tel:${selectedAppointment.phone}`}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]"
+                  className="ed-interactive inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#102B49]/20 bg-white px-5 text-sm font-semibold text-[#102B49] transition-colors hover:border-[#9A5C2F] hover:text-[#9A5C2F]"
                 >
                   <Phone className="h-4 w-4" />
                   <span>Ara</span>

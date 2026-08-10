@@ -55,7 +55,7 @@ export const OpeningIntro: React.FC<OpeningIntroProps> = ({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-full bg-[#F6F2EA]/95 border border-[#102B49]/15 backdrop-blur-md shadow-xs"
+              className="inline-flex items-center gap-2 rounded-full border border-[#102B49]/15 bg-[#F6F2EA]/95 px-3.5 py-1.5 shadow-xs backdrop-blur-md sm:gap-3"
             >
               {PHASES.map((phase, idx) => {
                 const isActive = phase.id === currentPhase;
@@ -80,7 +80,7 @@ export const OpeningIntro: React.FC<OpeningIntroProps> = ({
                         }`}
                       />
                       <span
-                        className={`text-[10px] sm:text-xs font-mono tracking-widest uppercase transition-colors duration-300 ${
+                        className={`ed-data-label text-[10px] sm:text-xs font-mono tracking-widest uppercase transition-colors duration-300 ${
                           isActive
                             ? "text-[#102B49] font-bold"
                             : isPast
@@ -103,7 +103,7 @@ export const OpeningIntro: React.FC<OpeningIntroProps> = ({
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={onSkip}
-              className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#102B49]/20 bg-[#F6F2EA]/95 backdrop-blur-md text-[#102B49] hover:bg-[#102B49] hover:text-[#F6F2EA] text-xs font-mono tracking-wider uppercase font-semibold transition-all duration-300 shadow-sm flex items-center gap-2 cursor-pointer pointer-events-auto"
+              className="ed-interactive flex cursor-pointer items-center gap-2 rounded-full border border-[#102B49]/20 bg-[#F6F2EA]/95 px-3.5 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#102B49] shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-[#102B49] hover:text-[#F6F2EA] pointer-events-auto sm:px-4 sm:py-2"
               aria-label="Giriş animasyonunu geç"
             >
               <span>Geç</span>
@@ -116,7 +116,7 @@ export const OpeningIntro: React.FC<OpeningIntroProps> = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="w-full flex justify-between items-end text-[10px] sm:text-xs font-mono tracking-widest text-[#102B49]/40 uppercase pointer-events-none"
+            className="ed-data-label flex w-full items-end justify-between font-mono text-[10px] uppercase tracking-widest text-[#102B49]/40 pointer-events-none sm:text-xs"
           >
             <div className="flex items-center gap-2 bg-[#F6F2EA]/80 px-3 py-1 rounded-full backdrop-blur-xs border border-[#102B49]/05">
               <span className="w-1.5 h-1.5 rounded-full bg-[#9A5C2F]" />
@@ -131,4 +131,3 @@ export const OpeningIntro: React.FC<OpeningIntroProps> = ({
     </AnimatePresence>
   );
 };
-

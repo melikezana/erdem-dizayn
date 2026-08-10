@@ -169,18 +169,18 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
             <div className="relative z-10 flex items-start justify-between gap-5 border-b border-[#1d1b18]/10 pb-5">
               <div>
-                <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#a0613a]">
+                <span className="ed-eyebrow text-[11px] font-semibold uppercase tracking-[0.24em] text-[#a0613a]">
                   Randevu
                 </span>
                 <h2
                   id={titleId}
-                  className="mt-2 max-w-2xl font-serif text-3xl font-semibold leading-tight text-[#1d1b18] sm:text-4xl"
+                  className="ed-panel-title mt-2 max-w-2xl font-serif text-3xl font-semibold leading-tight text-[#1d1b18] sm:text-4xl"
                 >
                   Projenizi konuşmak için sakin bir başlangıç noktası seçelim.
                 </h2>
                 <p
                   id={descriptionId}
-                  className="mt-3 max-w-xl text-sm font-light leading-6 text-[#1d1b18]/72 sm:text-base"
+                  className="ed-body-copy-sm mt-3 max-w-xl text-sm font-light leading-6 text-[#1d1b18]/72 sm:text-base"
                 >
                   Kısa bilgileri bırakın; kapsamı ve doğru ilk adımı birlikte
                   netleştirmek için size dönüş yapalım.
@@ -191,7 +191,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                 type="button"
                 onClick={handleClose}
                 data-cursor="Kapat"
-                className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#1d1b18]/15 bg-[#fbfaf7] text-[#1d1b18] transition-colors hover:border-[#a0613a] hover:text-[#a0613a]"
+                className="ed-interactive flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#1d1b18]/15 bg-[#fbfaf7] text-[#1d1b18] transition-colors hover:border-[#a0613a] hover:text-[#a0613a]"
                 aria-label="Kapat"
               >
                 <X className="h-5 w-5" />
@@ -201,10 +201,10 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
             {submitState === "success" ? (
               <div className="relative z-10 mt-6 border border-[#a0613a]/25 bg-[#fbfaf7] p-5 sm:p-6">
                 <CheckCircle2 className="h-10 w-10 text-[#a0613a]" />
-                <h3 className="mt-4 font-serif text-3xl font-semibold text-[#1d1b18]">
+                <h3 className="ed-panel-title mt-4 font-serif text-3xl font-semibold text-[#1d1b18]">
                   Randevu talebiniz alındı.
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-[#1d1b18]/72">
+                <p className="ed-body-copy-sm mt-2 text-sm leading-6 text-[#1d1b18]/72">
                   En kısa sürede sizinle iletişime geçeceğiz.
                 </p>
                 <a
@@ -240,7 +240,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                 {submitState === "error" && (
                   <div
                     role="alert"
-                    className="flex gap-3 border border-[#a0613a]/30 bg-[#fbfaf7] p-4 text-sm leading-6 text-[#1d1b18]/76"
+                    className="ed-body-copy-sm flex gap-3 border border-[#a0613a]/30 bg-[#fbfaf7] p-4 text-sm leading-6 text-[#1d1b18]/76"
                   >
                     <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#a0613a]" />
                     <p>
@@ -252,7 +252,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <label className="group block">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
+                    <span className="ed-data-label mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
                       <User className="h-4 w-4 text-[#a0613a]" />
                       Ad Soyad
                     </span>
@@ -270,7 +270,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   </label>
 
                   <label className="group block">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
+                    <span className="ed-data-label mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
                       <Phone className="h-4 w-4 text-[#a0613a]" />
                       Telefon
                     </span>
@@ -287,7 +287,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   </label>
 
                   <label className="group block">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
+                    <span className="ed-data-label mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
                       <BriefcaseBusiness className="h-4 w-4 text-[#a0613a]" />
                       Proje Türü
                     </span>
@@ -307,7 +307,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   </label>
 
                   <label className="group block">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
+                    <span className="ed-data-label mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
                       <CalendarDays className="h-4 w-4 text-[#a0613a]" />
                       Tarih
                     </span>
@@ -322,7 +322,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   </label>
 
                   <label className="group block">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
+                    <span className="ed-data-label mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
                       <Clock className="h-4 w-4 text-[#a0613a]" />
                       Saat
                     </span>
@@ -338,7 +338,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                 </div>
 
                 <label className="block">
-                  <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
+                  <span className="ed-data-label mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#1d1b18]/72">
                     <MessageSquareText className="h-4 w-4 text-[#a0613a]" />
                     Kısa Not
                   </span>
@@ -354,7 +354,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                 </label>
 
                 <div className="flex flex-col gap-3 border-t border-[#1d1b18]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs leading-5 text-[#1d1b18]/62">
+                  <p className="ed-body-copy-sm text-xs leading-5 text-[#1d1b18]/62">
                     Form bilgileri yalnızca randevu talebinizi yanıtlamak için
                     kullanılır.
                   </p>

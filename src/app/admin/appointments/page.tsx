@@ -2,6 +2,7 @@ import { AlertCircle } from "lucide-react";
 import { AdminAppointmentsClient } from "@/components/admin/AdminAppointmentsClient";
 import { AdminLockedState } from "@/components/admin/AdminLockedState";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { requireAdminAccess } from "@/lib/admin/auth";
 import { listAdminAppointments } from "@/lib/admin/appointments";
 import type { Appointment } from "@/types/appointments";
@@ -33,14 +34,14 @@ export default async function AdminAppointmentsPage() {
 
   return (
     <AdminShell userEmail={access.user.email}>
-      <div className="border-b border-[#102B49]/10 pb-6">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
+      <ScrollReveal className="border-b border-[#102B49]/10 pb-6">
+        <p className="ed-eyebrow text-xs font-bold uppercase tracking-[0.18em] text-[#9A5C2F]">
           Randevular
         </p>
-        <h1 className="mt-2 font-serif text-4xl font-bold text-[#102B49]">
+        <h1 className="ed-admin-title mt-2 font-serif text-4xl font-bold text-[#102B49]">
           Randevu Talepleri
         </h1>
-      </div>
+      </ScrollReveal>
 
       {loadError ? (
         <div
@@ -51,9 +52,9 @@ export default async function AdminAppointmentsPage() {
           <p>{loadError}</p>
         </div>
       ) : (
-        <section className="mt-6">
+        <ScrollReveal as="section" className="mt-6">
           <AdminAppointmentsClient appointments={appointments} />
-        </section>
+        </ScrollReveal>
       )}
     </AdminShell>
   );
