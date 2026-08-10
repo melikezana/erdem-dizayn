@@ -1,10 +1,5 @@
-import { LenisProvider } from "@/components/providers/LenisProvider";
-import { HorizontalShowroom } from "@/components/sections/HorizontalShowroom";
+import { PremiumLandingPage } from "@/components/landing/PremiumLandingPage";
 
 export default function Home() {
-  return (
-    <LenisProvider>
-      <HorizontalShowroom />
-    </LenisProvider>
-  );
+  return <PremiumLandingPage />;
 }

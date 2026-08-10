@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { Cinzel, Plus_Jakarta_Sans } from "next/font/google";
+import { Cinzel, Josefin_Sans } from "next/font/google";
+import { ExperienceProviders } from "@/components/providers/ExperienceProviders";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
+const josefinSans = Josefin_Sans({
+  variable: "--font-josefin",
   subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -49,10 +51,10 @@ export default function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${plusJakartaSans.variable} ${cinzel.variable} h-full scroll-smooth antialiased`}
+      className={`${josefinSans.variable} ${cinzel.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-[#F6F2EA] font-sans text-[#171717] selection:bg-[#9A5C2F] selection:text-white">
-        {children}
+      <body className="flex min-h-full flex-col bg-[#151310] font-sans text-[#171717] selection:bg-[#a0613a] selection:text-white">
+        <ExperienceProviders>{children}</ExperienceProviders>
       </body>
     </html>
   );
