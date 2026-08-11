@@ -17,9 +17,13 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  title: "Erdem Dizayn & Mekanik | Tasarımdan Uygulamaya Güvenilir Çözümler",
+  metadataBase: new URL("https://erdemdizaynmekanik.com"),
+  title: {
+    default: "Erdem Dizayn & Mekanik | İç Mimarlık, Mekanik ve Anahtar Teslim",
+    template: "%s | Erdem Dizayn & Mekanik",
+  },
   description:
-    "İç mimari tasarım, mekanik çözümler, tadilat ve anahtar teslim uygulama süreçlerini tek elden yöneten premium tasarım ve uygulama hizmeti.",
+    "İç mimari tasarım, mekanik çözümler, tadilat ve anahtar teslim uygulama süreçlerini keşiften teslime tek elden yöneten Erdem Dizayn & Mekanik.",
   keywords: [
     "Erdem Dizayn",
     "Erdem Mekanik",
@@ -34,12 +38,26 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Erdem Çeken" }],
   openGraph: {
-    title: "Erdem Dizayn & Mekanik | Tasarım · Mekanik · Uygulama",
-    description: "Tasarımdan uygulamaya güvenilir çözümler.",
+    title: "Erdem Dizayn & Mekanik | İç Mimarlık ve Anahtar Teslim Uygulama",
+    description:
+      "Konut, ofis ve ticari alanlarda iç mimari, mekanik koordinasyon ve uygulamayı tek merkezden yöneten profesyonel ekip.",
     url: "https://erdemdizaynmekanik.com",
     siteName: "Erdem Dizayn & Mekanik",
     locale: "tr_TR",
     type: "website",
+    images: [
+      {
+        url: "/images/project-1.jpg",
+        alt: "Erdem Dizayn iç mimari proje atmosferi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Erdem Dizayn & Mekanik | İç Mimarlık ve Anahtar Teslim Uygulama",
+    description:
+      "Keşiften teslime iç mimari, mekanik koordinasyon ve uygulama süreçleri.",
+    images: ["/images/project-1.jpg"],
   },
 };
 

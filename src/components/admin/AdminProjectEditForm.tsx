@@ -70,6 +70,36 @@ const EDIT_TEXT_FIELDS: Array<{
   },
 ];
 
+const EDIT_SEO_TEXT_FIELDS: Array<{
+  label: string;
+  name: keyof AdminProjectFormState["values"];
+  type: "text";
+  autoComplete: string;
+  maxLength: number;
+}> = [
+  {
+    label: "Meta Title",
+    name: "seoMetaTitle",
+    type: "text",
+    autoComplete: "off",
+    maxLength: 160,
+  },
+  {
+    label: "Slug / URL",
+    name: "seoSlug",
+    type: "text",
+    autoComplete: "off",
+    maxLength: 120,
+  },
+  {
+    label: "Open Graph Görseli",
+    name: "seoOgImage",
+    type: "text",
+    autoComplete: "url",
+    maxLength: 500,
+  },
+];
+
 function FieldError({ id, errors }: FieldErrorProps) {
   if (!errors?.length) {
     return null;
@@ -99,6 +129,10 @@ function getInitialState(project: AdminProject): AdminProjectFormState {
       currentStage: project.currentStage,
       progress: String(project.progress),
       publicNote: project.publicNote ?? "",
+      seoMetaTitle: project.seoMetaTitle ?? "",
+      seoMetaDescription: project.seoMetaDescription ?? "",
+      seoSlug: project.seoSlug ?? "",
+      seoOgImage: project.seoOgImage ?? "",
     },
   };
 }
@@ -111,6 +145,7 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
   const typeErrorId = "edit-projectType-error";
   const stageErrorId = "edit-currentStage-error";
   const noteErrorId = "edit-publicNote-error";
+  const seoDescriptionErrorId = "edit-seoMetaDescription-error";
 
   return (
     <form id="edit" action={formAction} className="space-y-5">
@@ -224,6 +259,71 @@ export function AdminProjectEditForm({ project }: AdminProjectEditFormProps) {
         />
         <FieldError id={noteErrorId} errors={state.fieldErrors.publicNote} />
       </label>
+
+      <div className="border-t border-[#102B49]/10 pt-6">
+        <div className="mb-5">
+          <p className="ed-panel-title font-serif text-2xl font-bold text-[#102B49]">
+            SEO Görünümü
+          </p>
+          <p className="ed-body-copy-sm mt-2 text-sm leading-6 text-[#102B49]/68">
+            Proje sayfasının arama ve sosyal paylaşım metinlerini düzenleyin.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          {EDIT_SEO_TEXT_FIELDS.map(
+            ({ label, name, type, autoComplete, maxLength }) => {
+              const fieldName = name;
+              const errorId = `edit-${name}-error`;
+              const hasError = Boolean(state.fieldErrors[fieldName]?.length);
+
+              return (
+                <label key={name} className="block">
+                  <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+                    {label}
+                  </span>
+                  <input
+                    name={name}
+                    type={type}
+                    maxLength={maxLength}
+                    defaultValue={state.values[fieldName]}
+                    autoComplete={autoComplete}
+                    aria-invalid={hasError}
+                    aria-describedby={hasError ? errorId : undefined}
+                    className="min-h-12 w-full rounded-lg border border-[#102B49]/15 bg-white px-4 text-sm font-semibold text-[#102B49] shadow-xs transition-colors focus:border-[#9A5C2F] focus:outline-none focus:ring-2 focus:ring-[#9A5C2F]/20"
+                  />
+                  <FieldError
+                    id={errorId}
+                    errors={state.fieldErrors[fieldName]}
+                  />
+                </label>
+              );
+            }
+          )}
+        </div>
+
+        <label className="mt-5 block">
+          <span className="ed-data-label mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#102B49]/70">
+            Meta Description
+          </span>
+          <textarea
+            name="seoMetaDescription"
+            rows={4}
+            maxLength={320}
+            defaultValue={state.values.seoMetaDescription}
+            aria-invalid={Boolean(state.fieldErrors.seoMetaDescription?.length)}
+            aria-describedby={
+              state.fieldErrors.seoMetaDescription?.length
+                ? seoDescriptionErrorId
+                : undefined
+            }
+            className="w-full rounded-lg border border-[#102B49]/15 bg-white px-4 py-3 text-sm leading-6 text-[#102B49] shadow-xs transition-colors focus:border-[#9A5C2F] focus:outline-none focus:ring-2 focus:ring-[#9A5C2F]/20"
+          />
+          <FieldError
+            id={seoDescriptionErrorId}
+            errors={state.fieldErrors.seoMetaDescription}
+          />
+        </label>
+      </div>
 
       {state.message && (
         <p

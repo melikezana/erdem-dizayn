@@ -42,6 +42,11 @@ export type PortfolioProject = {
   summary: string;
   images: string[];
   services: string[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    openGraphImage?: string;
+  };
 };
 
 export function isProjectStatus(value: string): value is ProjectStatus {

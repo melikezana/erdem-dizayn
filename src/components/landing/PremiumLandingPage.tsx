@@ -122,9 +122,27 @@ const HERO_CHAPTERS = [
 ];
 
 const METRICS = [
-  { value: "12+", label: "yıl saha ve tasarım disiplini" },
-  { value: "05", label: "entegre hizmet başlığı" },
-  { value: "01", label: "tek merkezden yönetilen süreç" },
+  {
+    value: "12+",
+    label: "yıl deneyim",
+    detail: "Tasarım ve saha uygulaması aynı ekip ritminde ilerler.",
+  },
+  {
+    value: "05",
+    label: "entegre hizmet",
+    detail: "İç mimari, mekanik, yenileme, uygulama ve teslim tek hatta bağlanır.",
+  },
+  {
+    value: "01",
+    label: "tek muhatap",
+    detail: "Keşiften teslim gününe kadar kapsam, takvim ve kararlar net kalır.",
+  },
+];
+
+const TRUST_SIGNALS = [
+  "Ücretsiz keşif görüşmesi",
+  "Net kapsam ve uygulanabilir takvim",
+  "Mekanik altyapı ile tasarım bütünlüğü",
 ];
 
 const MANIFESTO_LINES = [
@@ -522,19 +540,21 @@ function HeroSection({
                 className="ed-eyebrow mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase text-[#d5a85f]"
               >
                 <span className="h-px w-12 bg-[#c8a34c]" />
-                <span>İç mimari · mekanik · anahtar teslim</span>
+                <span>İç mimari · mekanik · anahtar teslim dönüşüm</span>
               </motion.div>
 
               <h1 className="ed-display-title hero-title-line font-serif text-6xl font-semibold leading-[0.88] sm:text-7xl md:text-8xl xl:text-9xl 2xl:text-[10rem]">
-                Erdem
+                Hayalinizdeki
                 <span className="block font-normal italic text-[#e6c777]">
-                  Dizayn
+                  Mekân
                 </span>
               </h1>
 
               <p className="ed-body-copy mt-7 max-w-2xl text-base font-light leading-8 text-[#f8f0e5]/76 sm:text-lg lg:text-xl lg:leading-9">
-                Tasarım fikrini; ışık, malzeme, mekanik altyapı ve saha
-                uygulamasıyla tek bir mekân deneyimine dönüştürüyoruz.
+                Erdem Dizayn ile evinizi, ofisinizi ya da ticari alanınızı;
+                keşiften projeye, mekanik altyapıdan son teslim dokunuşuna kadar
+                tek elden planlanmış, güven veren ve yaşanabilir bir atmosfere
+                dönüştürüyoruz.
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -546,8 +566,22 @@ function HeroSection({
                     className="ed-button inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full bg-[#c8a34c] px-7 text-sm font-semibold uppercase text-[#151310] transition-colors hover:bg-[#e6c777]"
                   >
                     <CalendarDays className="h-4 w-4" />
-                    <span>Randevu Oluştur</span>
+                    <span>Ücretsiz Keşif</span>
                   </button>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href={createWhatsAppUrl(
+                      "Merhaba Erdem Bey, projemi konuşmak ve ücretsiz keşif için bilgi almak istiyorum."
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor="Yaz"
+                    className="ed-interactive inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#c8a34c]/40 bg-[#f8f0e5]/8 px-7 text-sm font-semibold uppercase text-[#f8f0e5] backdrop-blur-md transition-colors hover:border-[#e6c777] hover:text-[#e6c777]"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    <span>Projenizi Konuşalım</span>
+                  </a>
                 </Magnetic>
                 <Magnetic>
                   <button
@@ -556,10 +590,21 @@ function HeroSection({
                     data-cursor="Bak"
                     className="ed-interactive inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full border border-[#f8f0e5]/22 px-7 text-sm font-semibold uppercase text-[#f8f0e5] transition-colors hover:border-[#e6c777] hover:text-[#e6c777]"
                   >
-                    <span>Projeleri İncele</span>
+                    <span>İlhamı İncele</span>
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </Magnetic>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {TRUST_SIGNALS.map((signal) => (
+                  <span
+                    key={signal}
+                    className="inline-flex min-h-9 items-center rounded-full border border-[#f8f0e5]/14 bg-[#151310]/38 px-4 text-xs font-semibold text-[#f8f0e5]/72 backdrop-blur-md"
+                  >
+                    {signal}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -601,13 +646,18 @@ function HeroSection({
               <div
                 key={metric.label}
                 data-hero-metric
-                className="grid grid-cols-[auto_1fr] items-end gap-4"
+                className="grid grid-cols-[auto_1fr] gap-4 border-t border-[#f8f0e5]/12 pt-4"
               >
                 <span className="font-serif text-4xl font-semibold leading-none text-[#e6c777]">
                   {metric.value}
                 </span>
-                <span className="ed-data-label max-w-[12rem] pb-1 text-xs font-semibold uppercase leading-5 text-[#f8f0e5]/58">
-                  {metric.label}
+                <span>
+                  <span className="ed-data-label block max-w-[12rem] text-xs font-semibold uppercase leading-5 text-[#f8f0e5]/74">
+                    {metric.label}
+                  </span>
+                  <span className="mt-2 block max-w-xs text-xs leading-5 text-[#f8f0e5]/48">
+                    {metric.detail}
+                  </span>
                 </span>
               </div>
             ))}
@@ -780,8 +830,16 @@ function ProjectCard({
           sizes="(max-width: 768px) 100vw, 50vw"
           priority={index === 0}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(21,19,16,0.86)_0%,rgba(21,19,16,0.08)_62%,rgba(21,19,16,0.18)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(21,19,16,0.88)_0%,rgba(21,19,16,0.12)_58%,rgba(21,19,16,0.24)_100%)]" />
         <div className="project-tilt-glow absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5 text-[#f8f0e5] sm:p-7">
+          <span className="grid h-12 w-12 place-items-center rounded-full border border-[#f8f0e5]/18 bg-[#151310]/42 font-serif text-sm font-semibold backdrop-blur-md">
+            {formatStageNumber(index)}
+          </span>
+          <span className="inline-flex min-h-9 items-center rounded-full border border-[#f8f0e5]/16 bg-[#151310]/42 px-4 text-xs font-semibold uppercase text-[#f8f0e5]/76 backdrop-blur-md transition-colors group-hover:border-[#e6c777] group-hover:text-[#e6c777]">
+            Case study
+          </span>
+        </div>
         <div className="absolute inset-x-0 bottom-0 p-5 text-[#f8f0e5] sm:p-7">
           <p className="ed-eyebrow text-xs font-semibold uppercase text-[#e6c777]">
             {project.type} · {project.location}
@@ -792,9 +850,21 @@ function ProjectCard({
           <p className="ed-body-copy-sm mt-4 max-w-xl text-sm font-light leading-7 text-[#f8f0e5]/68">
             {project.summary}
           </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {project.services.slice(0, 2).map((service) => (
+              <span
+                key={service}
+                className="inline-flex min-h-8 items-center rounded-full border border-[#f8f0e5]/16 px-3 text-xs font-semibold text-[#f8f0e5]/70"
+              >
+                {service}
+              </span>
+            ))}
+          </div>
           <span className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold uppercase text-[#f8f0e5]">
-            İçine gir
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+            Detaya geç
+            <span className="grid h-9 w-9 place-items-center rounded-full border border-[#f8f0e5]/18 transition-colors group-hover:border-[#e6c777] group-hover:bg-[#c8a34c] group-hover:text-[#151310]">
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
           </span>
         </div>
       </div>
@@ -813,15 +883,16 @@ function ProjectsSection() {
           <div className="mb-14 grid grid-cols-1 gap-10 border-b border-[#151310]/10 pb-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8">
               <span className="ed-eyebrow text-xs font-semibold uppercase text-[#8e5533]">
-                Seçili projeler
+                İlham projeleri
               </span>
               <h2 className="ed-section-title mt-5 max-w-5xl font-serif text-5xl font-semibold leading-[1.02] sm:text-7xl">
-                Görsele bakmak değil, atmosferin içine yaklaşmak.
+                Görsele bakmak değil, yaşayacağınız atmosferi hissetmek.
               </h2>
             </div>
             <p className="ed-body-copy max-w-xl text-base font-light leading-8 text-[#151310]/64 lg:col-span-4">
-              Büyük format görseller, yavaş hareket ve derinlik hissiyle her
-              projeyi ayrı bir mekân kapısı gibi ele alır.
+              Büyük format görseller, malzeme kararları ve kapsam notlarıyla her
+              projeyi yalnızca bir portföy kartı değil, karar verebileceğiniz bir
+              ilham sahnesi gibi açar.
             </p>
           </div>
         </Reveal>
@@ -1269,13 +1340,15 @@ function ContactSection({ onOpenAppointment }: { onOpenAppointment: () => void }
         </Reveal>
 
         <Reveal delay={0.1} className="lg:col-span-4">
-          <div className="border-y border-[#151310]/12 py-7">
+          <div className="grid gap-3 border-y border-[#151310]/12 py-7">
             <a
               href={BUSINESS_CONTACT.phoneHref}
               data-cursor="Ara"
-              className="ed-link mb-5 flex min-h-11 items-center gap-3 text-base font-semibold text-[#151310] transition-colors hover:text-[#8e5533]"
+              className="ed-interactive group relative z-10 flex min-h-14 w-full items-center gap-4 rounded-lg px-1 text-base font-semibold text-[#151310] transition-colors hover:text-[#8e5533]"
             >
-              <Phone className="h-5 w-5 text-[#8e5533]" />
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#151310]/12 text-[#8e5533] transition-colors group-hover:border-[#8e5533]/40 group-hover:bg-[#8e5533]/8">
+                <Phone className="h-4 w-4" strokeWidth={1.8} />
+              </span>
               <span>{BUSINESS_CONTACT.phoneDisplay}</span>
             </a>
             <a
@@ -1283,22 +1356,26 @@ function ContactSection({ onOpenAppointment }: { onOpenAppointment: () => void }
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="Yaz"
-              className="ed-link mb-5 flex min-h-11 items-center gap-3 text-base font-semibold text-[#151310] transition-colors hover:text-[#8e5533]"
+              className="ed-interactive group relative z-10 flex min-h-14 w-full items-center gap-4 rounded-lg px-1 text-base font-semibold text-[#151310] transition-colors hover:text-[#8e5533]"
             >
-              <MessageCircle className="h-5 w-5 text-[#8e5533]" />
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#151310]/12 text-[#8e5533] transition-colors group-hover:border-[#8e5533]/40 group-hover:bg-[#8e5533]/8">
+                <MessageCircle className="h-4 w-4" strokeWidth={1.8} />
+              </span>
               <span>WhatsApp&apos;tan yaz</span>
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="ml-auto h-4 w-4 shrink-0" strokeWidth={1.8} />
             </a>
             <a
               href={BUSINESS_CONTACT.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="İncele"
-              className="ed-link flex min-h-11 items-center gap-3 text-base font-semibold text-[#151310] transition-colors hover:text-[#8e5533]"
+              className="ed-interactive group relative z-10 flex min-h-14 w-full items-center gap-4 rounded-lg px-1 text-base font-semibold text-[#151310] transition-colors hover:text-[#8e5533]"
             >
-              <Camera className="h-5 w-5 text-[#8e5533]" />
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#151310]/12 text-[#8e5533] transition-colors group-hover:border-[#8e5533]/40 group-hover:bg-[#8e5533]/8">
+                <Camera className="h-4 w-4" strokeWidth={1.8} />
+              </span>
               <span>Instagram&apos;da inceleyin</span>
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="ml-auto h-4 w-4 shrink-0" strokeWidth={1.8} />
             </a>
           </div>
         </Reveal>
@@ -1307,9 +1384,76 @@ function ContactSection({ onOpenAppointment }: { onOpenAppointment: () => void }
   );
 }
 
+function FloatingContactActions({
+  onOpenAppointment,
+}: {
+  onOpenAppointment: () => void;
+}) {
+  return (
+    <>
+      <aside
+        aria-label="Hızlı iletişim"
+        className="fixed bottom-6 left-6 z-40 hidden items-center gap-2 rounded-full border border-[#f8f0e5]/14 bg-[#151310]/82 p-2 text-[#f8f0e5] shadow-[0_18px_60px_rgba(0,0,0,0.26)] backdrop-blur-xl md:flex"
+      >
+        <a
+          href={createWhatsAppUrl(
+            "Merhaba Erdem Bey, projem için hızlı bilgi almak istiyorum."
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor="Yaz"
+          aria-label="WhatsApp'tan yaz"
+          className="ed-interactive grid h-11 w-11 place-items-center rounded-full border border-[#f8f0e5]/16 text-[#e6c777] transition-colors hover:border-[#c8a34c] hover:bg-[#c8a34c] hover:text-[#151310]"
+        >
+          <MessageCircle className="h-4 w-4" />
+        </a>
+        <a
+          href={BUSINESS_CONTACT.phoneHref}
+          data-cursor="Ara"
+          aria-label="Telefonla ara"
+          className="ed-interactive grid h-11 w-11 place-items-center rounded-full border border-[#f8f0e5]/16 text-[#e6c777] transition-colors hover:border-[#c8a34c] hover:bg-[#c8a34c] hover:text-[#151310]"
+        >
+          <Phone className="h-4 w-4" />
+        </a>
+        <button
+          type="button"
+          onClick={onOpenAppointment}
+          data-cursor="Planla"
+          className="ed-button inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#c8a34c] px-5 text-xs font-semibold uppercase text-[#151310] transition-colors hover:bg-[#e6c777]"
+        >
+          <CalendarDays className="h-4 w-4" />
+          <span>Ücretsiz Keşif</span>
+        </button>
+      </aside>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#151310]/10 bg-[#f8f0e5]/96 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_48px_rgba(21,19,16,0.18)] backdrop-blur-xl md:hidden">
+        <div className="mx-auto grid max-w-md grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={onOpenAppointment}
+            className="ed-button inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#151310] px-4 text-sm font-semibold uppercase text-[#f8f0e5] transition-colors hover:bg-[#8e5533]"
+          >
+            <CalendarDays className="h-4 w-4" />
+            <span>Ücretsiz Keşif</span>
+          </button>
+          <a
+            href={createWhatsAppUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ed-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#151310]/18 bg-white px-4 text-sm font-semibold uppercase text-[#151310] transition-colors hover:border-[#8e5533] hover:text-[#8e5533]"
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function LandingFooter({ onNavigate }: { onNavigate: (target: SectionId) => void }) {
   return (
-    <footer className="bg-[#151310] px-5 py-10 text-[#f8f0e5] sm:px-8 lg:px-12">
+    <footer className="bg-[#151310] px-5 pb-32 pt-10 text-[#f8f0e5] sm:px-8 md:pb-10 lg:px-12">
       <div className="mx-auto flex max-w-[1520px] flex-col gap-6 border-t border-[#f8f0e5]/12 pt-8 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="font-serif text-xl font-semibold">ERDEM DİZAYN</p>
@@ -1501,6 +1645,7 @@ export function PremiumLandingPage() {
       </motion.main>
 
       <LandingFooter onNavigate={navigateTo} />
+      <FloatingContactActions onOpenAppointment={() => setAppointmentOpen(true)} />
 
       <button
         type="button"

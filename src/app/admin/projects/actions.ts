@@ -33,6 +33,10 @@ export type AdminProjectFormValues = {
   currentStage: ProjectStatus;
   progress: string;
   publicNote: string;
+  seoMetaTitle: string;
+  seoMetaDescription: string;
+  seoSlug: string;
+  seoOgImage: string;
 };
 
 export type AdminProjectFormState = {
@@ -78,6 +82,10 @@ function readFormValues(formData: FormData): AdminProjectFormValues {
     currentStage: isProjectStatus(rawStage) ? rawStage : PROJECT_STATUSES[0],
     progress: readFormString(formData, "progress") || "0",
     publicNote: readFormString(formData, "publicNote"),
+    seoMetaTitle: readFormString(formData, "seoMetaTitle"),
+    seoMetaDescription: readFormString(formData, "seoMetaDescription"),
+    seoSlug: readFormString(formData, "seoSlug"),
+    seoOgImage: readFormString(formData, "seoOgImage"),
   };
 }
 
@@ -111,6 +119,10 @@ function parseProjectForm(values: AdminProjectFormValues, formData: FormData) {
     currentStage: readFormString(formData, "currentStage"),
     progress: values.progress,
     publicNote: values.publicNote,
+    seoMetaTitle: values.seoMetaTitle,
+    seoMetaDescription: values.seoMetaDescription,
+    seoSlug: values.seoSlug,
+    seoOgImage: values.seoOgImage,
   });
 }
 
@@ -215,6 +227,10 @@ export async function updateAdminProjectAction(
         currentStage: project.currentStage,
         progress: String(project.progress),
         publicNote: project.publicNote ?? "",
+        seoMetaTitle: project.seoMetaTitle ?? "",
+        seoMetaDescription: project.seoMetaDescription ?? "",
+        seoSlug: project.seoSlug ?? "",
+        seoOgImage: project.seoOgImage ?? "",
       },
     };
   } catch (error) {

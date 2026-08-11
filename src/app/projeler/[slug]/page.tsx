@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -9,24 +10,26 @@ import {
   MessageCircle,
   Ruler,
 } from "lucide-react";
-import { getProjectBySlug, getPublishedProjects } from "@/data/projects";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { createWhatsAppUrl } from "@/lib/contact";
+import {
+  getPublicProjectBySlug,
+  getStaticProjectSlugs,
+  getStaticRelatedProjects,
+} from "@/lib/public/portfolio-projects";
 import { projectSlugSchema } from "@/lib/validation/projects";
 
 export function generateStaticParams() {
-  return getPublishedProjects().map((project) => ({
-    slug: project.slug,
-  }));
+  return getStaticProjectSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getPublicProjectBySlug(slug);
 
   if (!project) {
     return {
@@ -34,9 +37,39 @@ export async function generateMetadata({
     };
   }
 
+  const title = project.seo?.metaTitle ?? `${project.title} | Erdem Dizayn & Mekanik`;
+  const description = project.seo?.metaDescription ?? project.summary;
+  const image = project.seo?.openGraphImage ?? project.images[0];
+  const url = `/projeler/${project.slug}`;
+
   return {
-    title: `${project.title} | Erdem Dizayn & Mekanik`,
-    description: project.summary,
+    title: {
+      absolute: title,
+    },
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      siteName: "Erdem Dizayn & Mekanik",
+      locale: "tr_TR",
+      images: [
+        {
+          url: image,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 
@@ -52,15 +85,13 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
-  const project = getProjectBySlug(parsedSlug.data);
+  const project = await getPublicProjectBySlug(parsedSlug.data);
 
   if (!project) {
     notFound();
   }
 
-  const relatedProjects = getPublishedProjects().filter(
-    (item) => item.slug !== project.slug
-  );
+  const relatedProjects = getStaticRelatedProjects(project.slug);
   const whatsappUrl = createWhatsAppUrl(
     `Merhaba Erdem Bey,\n${project.title} projesi hakkında bilgi almak istiyorum.`
   );

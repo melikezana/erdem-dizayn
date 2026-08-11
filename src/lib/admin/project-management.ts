@@ -18,6 +18,23 @@ const optionalDateString = z.preprocess((value) => {
   return trimmed.length > 0 ? trimmed : undefined;
 }, z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional());
 
+const optionalSlugString = z.preprocess((value) => {
+  if (typeof value !== "string") return value;
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}, z.string().max(120).regex(/^[a-z0-9-]+$/).optional());
+
+const optionalOpenGraphImage = z.preprocess((value) => {
+  if (typeof value !== "string") return value;
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}, z.string().max(500).refine(
+  (value) => value.startsWith("/") || /^https?:\/\//i.test(value),
+  "Site içi görsel yolu veya http(s) görsel URL'si girin."
+).optional());
+
 export const adminProjectSchema = z.object({
   title: trimmedString(2, 160),
   customerName: trimmedString(2, 120),
@@ -29,6 +46,10 @@ export const adminProjectSchema = z.object({
   currentStage: z.enum(PROJECT_STATUSES),
   progress: z.coerce.number().int().min(0).max(100),
   publicNote: optionalTrimmedString(1000),
+  seoMetaTitle: optionalTrimmedString(160),
+  seoMetaDescription: optionalTrimmedString(320),
+  seoSlug: optionalSlugString,
+  seoOgImage: optionalOpenGraphImage,
 });
 
 export const adminTimelineUpdateSchema = z.object({

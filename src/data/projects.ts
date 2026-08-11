@@ -18,6 +18,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     summary:
       "Yaşam alanı, ıslak hacimler ve mekanik altyapı kararları birlikte ele alınan kapsamlı konut yenileme çalışması.",
     services: ["İç mimari tasarım", "Tadilat / yenileme", "Mekanik koordinasyon"],
+    seo: {
+      metaTitle: "Vadi Premium Konutları İç Mimari Projesi | Erdem Dizayn",
+      metaDescription:
+        "Sarıyer'de iç mimari tasarım, yenileme ve mekanik koordinasyonun birlikte çözüldüğü premium konut projesini inceleyin.",
+      openGraphImage: "/images/project-1.jpg",
+    },
     published: true,
   },
   {
@@ -31,6 +37,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     summary:
       "Yoğun kullanıma uygun, okunaklı planlama ve kontrollü uygulama akışıyla tamamlanan ticari alan düzenlemesi.",
     services: ["Ofis planlama", "Uygulama yönetimi", "Mekanik çözümler"],
+    seo: {
+      metaTitle: "Panora İş Merkezi Ofis Tasarım Projesi | Erdem Dizayn",
+      metaDescription:
+        "Ankara'da ofis planlama, uygulama yönetimi ve mekanik çözüm kararlarını birleştiren ticari alan düzenlemesini keşfedin.",
+      openGraphImage: "/images/project-2.jpg",
+    },
     published: true,
   },
   {
@@ -44,6 +56,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     summary:
       "Malzeme seçimi, özel detaylar ve ferah yerleşim kararlarıyla geliştirilen loft residence iç mekan projesi.",
     services: ["İç mimari konsept", "Malzeme seçimi", "Özel detay çözümleri"],
+    seo: {
+      metaTitle: "Artisan Loft & Residence İç Mekan Projesi | Erdem Dizayn",
+      metaDescription:
+        "Urla'da malzeme seçimi, özel detaylar ve ferah yerleşim kararlarıyla tasarlanan loft residence projesini görüntüleyin.",
+      openGraphImage: "/images/project-3.jpg",
+    },
     published: true,
   },
   {
@@ -57,6 +75,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     summary:
       "Teknik ihtiyaçların görünür mimari kararlarla çakışmadan çözüldüğü mekanik uygulama ve saha koordinasyonu.",
     services: ["Mekanik uygulama", "Saha takibi", "Teknik koordinasyon"],
+    seo: {
+      metaTitle: "Ar-Ge ve İnovasyon Merkezi Mekanik Uygulama | Erdem Dizayn",
+      metaDescription:
+        "Gebze'de teknik koordinasyon, mekanik uygulama ve saha takibini mimari bütünlükle ele alan proje detayını inceleyin.",
+      openGraphImage: "/images/project-4.jpg",
+    },
     published: true,
   },
 ];

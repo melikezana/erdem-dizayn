@@ -26,9 +26,11 @@ export const Footer: React.FC = () => {
           </p>
           <a
             href={BUSINESS_CONTACT.phoneHref}
-            className="ed-interactive mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+            className="ed-interactive group relative z-10 mt-5 inline-flex min-h-12 items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
-            <Phone className="h-4 w-4 text-[#B8733E]" />
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/12 text-[#B8733E] transition-colors group-hover:border-[#B8733E]/45 group-hover:bg-[#B8733E]/10">
+              <Phone className="h-4 w-4" strokeWidth={1.8} />
+            </span>
             <span>{BUSINESS_CONTACT.phoneDisplay}</span>
           </a>
         </div>
@@ -50,21 +52,25 @@ export const Footer: React.FC = () => {
             href={createWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="ed-interactive inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+            className="ed-interactive group relative z-10 inline-flex min-h-12 w-full items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
-            <MessageCircle className="h-4 w-4 text-[#B8733E]" />
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/12 text-[#B8733E] transition-colors group-hover:border-[#B8733E]/45 group-hover:bg-[#B8733E]/10">
+              <MessageCircle className="h-4 w-4" strokeWidth={1.8} />
+            </span>
             <span>WhatsApp</span>
-            <ArrowUpRight className="h-4 w-4" />
+            <ArrowUpRight className="ml-auto h-4 w-4 shrink-0" strokeWidth={1.8} />
           </a>
           <a
             href={BUSINESS_CONTACT.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="ed-interactive inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
+            className="ed-interactive group relative z-10 inline-flex min-h-12 w-full items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-[#B8733E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B8733E]"
           >
-            <Camera className="h-4 w-4 text-[#B8733E]" />
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/12 text-[#B8733E] transition-colors group-hover:border-[#B8733E]/45 group-hover:bg-[#B8733E]/10">
+              <Camera className="h-4 w-4" strokeWidth={1.8} />
+            </span>
             <span>Instagram</span>
-            <ArrowUpRight className="h-4 w-4" />
+            <ArrowUpRight className="ml-auto h-4 w-4 shrink-0" strokeWidth={1.8} />
           </a>
         </div>
       </div>

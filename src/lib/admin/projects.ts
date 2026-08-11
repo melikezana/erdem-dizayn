@@ -41,6 +41,10 @@ export type AdminProject = {
   currentStageLabel: string;
   progress: number;
   publicNote: string | null;
+  seoMetaTitle: string | null;
+  seoMetaDescription: string | null;
+  seoSlug: string | null;
+  seoOgImage: string | null;
   createdAt: string;
   updatedAt: string;
   timeline: AdminTimelineUpdate[];
@@ -59,6 +63,10 @@ type AdminProjectRow = {
   current_stage: string;
   progress: number | null;
   public_note: string | null;
+  seo_meta_title: string | null;
+  seo_meta_description: string | null;
+  seo_slug: string | null;
+  seo_og_image: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -85,6 +93,10 @@ const ADMIN_PROJECT_SELECT = [
   "current_stage",
   "progress",
   "public_note",
+  "seo_meta_title",
+  "seo_meta_description",
+  "seo_slug",
+  "seo_og_image",
   "created_at",
   "updated_at",
 ].join(", ");
@@ -160,6 +172,10 @@ function toAdminProject(
     currentStageLabel: getProjectStageLabel(row.current_stage),
     progress: row.progress ?? 0,
     publicNote: row.public_note,
+    seoMetaTitle: row.seo_meta_title,
+    seoMetaDescription: row.seo_meta_description,
+    seoSlug: row.seo_slug,
+    seoOgImage: row.seo_og_image,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     timeline,
@@ -197,6 +213,10 @@ export async function createAdminProject(input: AdminProjectInput) {
     p_current_stage: input.currentStage,
     p_progress: input.progress,
     p_public_note: input.publicNote ?? null,
+    p_seo_meta_title: input.seoMetaTitle ?? null,
+    p_seo_meta_description: input.seoMetaDescription ?? null,
+    p_seo_slug: input.seoSlug ?? null,
+    p_seo_og_image: input.seoOgImage ?? null,
   });
 
   if (error) {
@@ -293,6 +313,10 @@ export async function updateAdminProject(
       current_stage: input.currentStage,
       progress: input.progress,
       public_note: input.publicNote ?? null,
+      seo_meta_title: input.seoMetaTitle ?? null,
+      seo_meta_description: input.seoMetaDescription ?? null,
+      seo_slug: input.seoSlug ?? null,
+      seo_og_image: input.seoOgImage ?? null,
     })
     .eq("id", projectId)
     .select(ADMIN_PROJECT_SELECT)

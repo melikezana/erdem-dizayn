@@ -16,7 +16,11 @@ begin
     estimated_completion,
     current_stage,
     progress,
-    public_note
+    public_note,
+    seo_meta_title,
+    seo_meta_description,
+    seo_slug,
+    seo_og_image
   )
   values (
     'ERD-24018',
@@ -29,7 +33,11 @@ begin
     '2026-10-30',
     'implementation',
     64,
-    'Uygulama ekibi sahada çalışmaya devam ediyor. Bir sonraki aşama son kontroller olacak.'
+    'Uygulama ekibi sahada çalışmaya devam ediyor. Bir sonraki aşama son kontroller olacak.',
+    'Villa Yenileme Proje Takibi | Erdem Dizayn',
+    'Villa yenileme projesinin güncel aşaması, saha notları ve teslim süreci için Erdem Dizayn proje takip kaydı.',
+    'villa-yenileme',
+    '/images/project-1.jpg'
   )
   on conflict (project_code) do update
   set
@@ -42,7 +50,11 @@ begin
     estimated_completion = excluded.estimated_completion,
     current_stage = excluded.current_stage,
     progress = excluded.progress,
-    public_note = excluded.public_note
+    public_note = excluded.public_note,
+    seo_meta_title = excluded.seo_meta_title,
+    seo_meta_description = excluded.seo_meta_description,
+    seo_slug = excluded.seo_slug,
+    seo_og_image = excluded.seo_og_image
   returning id into demo_project_id;
 
   delete from public.project_updates where project_id = demo_project_id;
